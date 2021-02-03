@@ -37,10 +37,10 @@ class  Demux : public LogicComponent, public eDemux
     Q_PROPERTY( bool   Tristate     READ tristate   USER true )
 
     public:
-        Demux( QObject* parent, QString type, QString id );
+        Demux( Circuit* parent, QString type, QString id );
         ~Demux();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         bool tristate() { return true; }

@@ -25,7 +25,7 @@
 class  eCapacitor : public eResistor
 {
     public:
-        eCapacitor( std::string id );
+        eCapacitor( Simulator *sim,  std::string id );
         ~eCapacitor();
 
         virtual void initialize();

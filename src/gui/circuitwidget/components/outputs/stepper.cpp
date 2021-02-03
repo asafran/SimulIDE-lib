@@ -26,7 +26,7 @@ static const char* Stepper_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Steps")
 };
 
-Component*  Stepper::construct( QObject* parent, QString type, QString id )
+Component*  Stepper::construct( Circuit* parent, QString type, QString id )
 {
     return new Stepper( parent, type, id );
 }
@@ -41,13 +41,13 @@ LibraryItem* Stepper::libraryItem()
         Stepper::construct );
 }
 
-Stepper::Stepper( QObject* parent, QString type, QString id )
+Stepper::Stepper( Circuit* parent, QString type, QString id )
         : Component( parent, type, id )
-        , eElement( (id+"-eElement").toStdString() )
-        , m_resA1( (id+"-eEresistorA1").toStdString() )
-        , m_resA2( (id+"-eEresistorA2").toStdString() )
-        , m_resB1( (id+"-eEresistorB1").toStdString() )
-        , m_resB2( (id+"-eEresistorB2").toStdString() )
+        , eElement(m_circ_ptr->getSimulatorPtr(), (id+"-eElement").toStdString() )
+        , m_resA1( m_circ_ptr->getSimulatorPtr(), (id+"-eEresistorA1").toStdString() )
+        , m_resA2( m_circ_ptr->getSimulatorPtr(), (id+"-eEresistorA2").toStdString() )
+        , m_resB1( m_circ_ptr->getSimulatorPtr(), (id+"-eEresistorB1").toStdString() )
+        , m_resB2( m_circ_ptr->getSimulatorPtr(), (id+"-eEresistorB2").toStdString() )
         , m_pinA1( 180, QPoint(-72,-32), id+"-PinA1", 0, this )
         , m_pinA2( 180, QPoint(-72, 16), id+"-PinA2", 0, this )
         , m_pinCo( 180, QPoint(-72, 0 ), id+"-PinCo", 0, this )
@@ -87,7 +87,7 @@ Stepper::Stepper( QObject* parent, QString type, QString id )
     
     setRes( 100 );
     
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
     
     setLabelPos(-32,-62, 0);
     setShowId( true );
@@ -219,7 +219,7 @@ void Stepper::remove()
     if( m_pinB1.isConnected() ) m_pinB1.connector()->remove();
     if( m_pinB2.isConnected() ) m_pinB2.connector()->remove();
     
-    Simulator::self()->remFromUpdateList( this ); 
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this ); 
     
     Component::remove();
 }

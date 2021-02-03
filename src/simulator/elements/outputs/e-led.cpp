@@ -20,8 +20,8 @@
 #include "e-led.h"
 #include "simulator.h"
 
-eLed::eLed( std::string id ) 
-    : eDiode( id )
+eLed::eLed( Simulator *sim,  std::string id ) 
+    : eDiode( sim, id )
 {
     m_threshold  = 2.4;
     m_maxCurrent = 0.03;
@@ -37,7 +37,7 @@ void eLed::initialize()
 
 void eLed::resetState()
 {
-    m_prevStep   = Simulator::self()->step();
+    m_prevStep   = m_sim_ptr->step();
     m_lastCurrent = 0.0;
     m_bright = 25;
     m_disp_brightness  = 0;
@@ -56,7 +56,7 @@ void eLed::updateVI()
 {
     eDiode::updateVI();
     
-    const uint64_t step = Simulator::self()->step();
+    const uint64_t step = m_sim_ptr->step();
     int period = step - m_prevStep;    
 
     m_prevStep = step;
@@ -73,7 +73,7 @@ void eLed::updateVI()
 
 void eLed::updateBright()
 {
-    if( !Simulator::self()->isRunning() )
+    if( !m_sim_ptr->isRunning() )
     {
         m_avg_brightness = 0;
         m_lastUpdatePeriod = 0;
@@ -82,7 +82,7 @@ void eLed::updateBright()
     }
     updateVI();
 
-    if( m_lastUpdatePeriod > Simulator::self()->circuitRate() )
+    if( m_lastUpdatePeriod > m_sim_ptr->circuitRate() )
     {
         m_disp_brightness = m_avg_brightness/m_lastUpdatePeriod;
         

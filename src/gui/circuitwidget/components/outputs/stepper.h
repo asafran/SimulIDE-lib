@@ -34,10 +34,10 @@ class  Stepper : public Component, public eElement
     Q_PROPERTY( QString Unit       READ unit  WRITE setUnit  DESIGNABLE true USER true )
     
     public:
-        Stepper( QObject* parent, QString type, QString id );
+        Stepper( Circuit* parent, QString type, QString id );
         ~Stepper();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem* libraryItem();
         
         int steps();

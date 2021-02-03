@@ -37,10 +37,10 @@ class  BcdTo7S : public LogicComponent, public eBcdTo7S
     Q_PROPERTY( bool   Tristate     READ tristate   USER true )
 
     public:
-        BcdTo7S( QObject* parent, QString type, QString id );
+        BcdTo7S( Circuit* parent, QString type, QString id );
         ~BcdTo7S();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         bool tristate() { return true; }

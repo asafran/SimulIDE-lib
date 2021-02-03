@@ -35,10 +35,10 @@ class  BJT : public Component, public eBJT
     
     public:
 
-        BJT( QObject* parent, QString type, QString id );
+        BJT( Circuit* parent, QString type, QString id );
         ~BJT();
         
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         void updateStep();

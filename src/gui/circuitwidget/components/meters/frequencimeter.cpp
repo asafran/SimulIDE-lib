@@ -20,8 +20,9 @@
 #include "frequencimeter.h"
 #include "simulator.h"
 #include "pin.h"
+#include "circuit.h"
 
-Component* Frequencimeter::construct( QObject* parent, QString type, QString id )
+Component* Frequencimeter::construct( Circuit* parent, QString type, QString id )
 { return new Frequencimeter( parent, type, id ); }
 
 LibraryItem* Frequencimeter::libraryItem()
@@ -34,9 +35,9 @@ LibraryItem* Frequencimeter::libraryItem()
             Frequencimeter::construct);
 }
 
-Frequencimeter::Frequencimeter( QObject* parent, QString type, QString id )
+Frequencimeter::Frequencimeter( Circuit* parent, QString type, QString id )
               : Component( parent, type, id )
-              , eElement( id.toStdString() )
+              , eElement(parent->getSimulatorPtr(), id.toStdString() )
               , m_display( this )
 {
     m_area = QRectF( -32, -10, 75, 20 );
@@ -60,15 +61,15 @@ Frequencimeter::Frequencimeter( QObject* parent, QString type, QString id )
     m_display.setPos( -30, -6 );
     m_display.setVisible( true );
     
-    Simulator::self()->addToSimuClockList( this );
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToSimuClockList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
     
     resetState();
 }
 Frequencimeter::~Frequencimeter()
 {
-    Simulator::self()->remFromSimuClockList( this );
-    Simulator::self()->remFromUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromSimuClockList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this );
 }
 
 void Frequencimeter::resetState()

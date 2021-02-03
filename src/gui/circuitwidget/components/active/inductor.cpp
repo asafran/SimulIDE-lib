@@ -29,7 +29,7 @@ static const char* Inductor_properties[] = {
 };
 
 
-Component* Inductor::construct( QObject* parent, QString type, QString id )
+Component* Inductor::construct( Circuit* parent, QString type, QString id )
 { return new Inductor( parent, type, id ); }
 
 LibraryItem* Inductor::libraryItem()
@@ -42,9 +42,9 @@ LibraryItem* Inductor::libraryItem()
             Inductor::construct);
 }
 
-Inductor::Inductor( QObject* parent, QString type, QString id )
+Inductor::Inductor( Circuit* parent, QString type, QString id )
         : Component( parent, type, id )
-        , eInductor( id.toStdString() )
+        , eInductor(  parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( Inductor_properties );
     

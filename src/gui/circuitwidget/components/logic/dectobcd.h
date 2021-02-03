@@ -37,10 +37,10 @@ class  DecToBcd : public LogicComponent, public eDecToBcd
     Q_PROPERTY( bool   Tristate     READ tristate   USER true )
 
     public:
-        DecToBcd( QObject* parent, QString type, QString id );
+        DecToBcd( Circuit* parent, QString type, QString id );
         ~DecToBcd();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 
         bool tristate() { return true; }

@@ -28,7 +28,7 @@ class  eOpAmp : public eElement
 {
     public:
 
-        eOpAmp( std::string id );
+        eOpAmp( Simulator *sim,  std::string id );
         virtual ~eOpAmp();
 
         virtual void initialize();

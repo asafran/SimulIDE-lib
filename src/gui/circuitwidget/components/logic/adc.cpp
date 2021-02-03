@@ -25,7 +25,7 @@ static const char* ADC_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Vref")
 };
 
-Component* ADC::construct( QObject* parent, QString type, QString id )
+Component* ADC::construct( Circuit* parent, QString type, QString id )
 {
         return new ADC( parent, type, id );
 }
@@ -40,9 +40,9 @@ LibraryItem* ADC::libraryItem()
         ADC::construct );
 }
 
-ADC::ADC( QObject* parent, QString type, QString id )
+ADC::ADC( Circuit* parent, QString type, QString id )
    : LogicComponent( parent, type, id )
-   , eADC( id.toStdString() )
+   , eADC(  parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( ADC_properties );
     

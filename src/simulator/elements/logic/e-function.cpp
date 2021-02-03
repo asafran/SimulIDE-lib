@@ -21,8 +21,8 @@
 #include "simulator.h"
 //#include <QDebug>
 
-eFunction::eFunction( std::string id )
-         : eLogicDevice( id )
+eFunction::eFunction( Simulator *sim,  std::string id )
+         : eLogicDevice( sim, id )
          , m_engine()
          , m_functions()
 {

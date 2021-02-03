@@ -22,13 +22,14 @@
 #include "e-source.h"
 #include "pin.h"
 #include "utils.h"
+#include "circuit.h"
 
 
 #include <math.h>   // fabs(x,y)
 
-Meter::Meter( QObject* parent, QString type, QString id )
+Meter::Meter( Circuit* parent, QString type, QString id )
      : Component( parent, type, id )
-     , eResistor( id.toStdString() )
+     , eResistor(  parent->getSimulatorPtr(), id.toStdString() )
      , m_display( this )
 {
     m_area = QRectF( -24, -24, 48, 32 );
@@ -57,7 +58,7 @@ Meter::Meter( QObject* parent, QString type, QString id )
     m_outpin = m_pin[2];
 
     pinId.append(QString("-eSource"));
-    m_out = new eSource( pinId.toStdString(), m_outpin );
+    m_out = new eSource( m_circ_ptr->getSimulatorPtr(), pinId.toStdString(), m_outpin );
     m_out->setOut( true );
     m_out->setVoltHigh( 0 );
 
@@ -74,7 +75,7 @@ Meter::Meter( QObject* parent, QString type, QString id )
 
     setShowVal( false );
 
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
 }
 Meter::~Meter(){}
 
@@ -110,7 +111,7 @@ void Meter::updateStep()
 
 void Meter::remove()
 {
-    Simulator::self()->remFromUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this );
 
     delete m_out;
 

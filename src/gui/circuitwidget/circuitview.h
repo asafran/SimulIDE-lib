@@ -23,6 +23,7 @@
 #include <QtWidgets>
 
 #include "simviewer-export.h"
+#include "mainwindow.h"
 
 
 class Component;
@@ -33,7 +34,7 @@ class SIMVIEWER_EXPORT CircuitView : public QGraphicsView
     Q_OBJECT
 
     public:
-        CircuitView( QMainWindow *parent );
+        CircuitView( CircuitWidget *parent , MainWindow *mainw );
         ~CircuitView();
 
 // static CircuitView* self() { return m_pSelf; }
@@ -52,17 +53,23 @@ class SIMVIEWER_EXPORT CircuitView : public QGraphicsView
         void zoom( double val );
         
         void setCircTime( uint64_t step);
+        Circuit* getCircPtr() { return m_circuit; }
+        CircuitWidget* getWidgetPtr() { return m_widget_ptr; }
 
     public slots:
         void saveImage();
         void slotPaste();
         void importCirc();
-        
+/*
     protected:
         void contextMenuEvent( QContextMenuEvent* event );
-
+*/
     private:
-// static CircuitView*  m_pSelf;
+//  static CircuitView*  m_pSelf;
+
+        CircuitWidget *m_widget_ptr;
+
+        MainWindow *m_main_ptr;
  
         QPlainTextEdit* m_info;
  

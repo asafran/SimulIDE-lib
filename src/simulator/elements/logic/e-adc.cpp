@@ -22,8 +22,8 @@
 
 #include "e-adc.h"
 
-eADC::eADC( std::string id )
-      : eLogicDevice( id )
+eADC::eADC( Simulator *sim,  std::string id )
+      : eLogicDevice( sim, id )
 {
 }
 eADC::~eADC()

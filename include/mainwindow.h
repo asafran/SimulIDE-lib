@@ -23,11 +23,8 @@
 #include <QtWidgets>
 #include "simviewer-export.h"
 
-class PropertiesWidget;
-class ComponentSelector;
+
 class CircuitWidget;
-class EditorWindow;
-class FileWidget;
 
 class SIMVIEWER_EXPORT MainWindow : public QMainWindow
 {
@@ -37,15 +34,17 @@ class SIMVIEWER_EXPORT MainWindow : public QMainWindow
         MainWindow();
         ~MainWindow();
 
- static MainWindow* self() { return m_pSelf; }
+// static MainWindow* self() { return m_pSelf; }
 
-        QSettings* settings();
+        CircuitWidget* getCircPtr() { return m_circuit;}
+//        void loadPlugins();
 
-        void loadPlugins();
-        void unLoadPugin( QString pluginName );
+//        void unLoadPugin( QString pluginName );
         
         //void readSettings();
         
+        void loadXMLS(QDir dir);
+
         void setTitle( QString title );
         
         double fontScale() { return m_fontScale; }
@@ -53,6 +52,7 @@ class SIMVIEWER_EXPORT MainWindow : public QMainWindow
 
         //int autoBck();
         //void setAutoBck( int secs );
+
 
     protected:
         void closeEvent(QCloseEvent* event);
@@ -62,7 +62,7 @@ class SIMVIEWER_EXPORT MainWindow : public QMainWindow
 
     private:
 
- static MainWindow* m_pSelf;
+// static MainWindow* m_pSelf;
  
         void loadPluginsAt( QDir pluginsDir );
 
@@ -77,7 +77,7 @@ class SIMVIEWER_EXPORT MainWindow : public QMainWindow
         float m_fontScale;
         int m_autoBck;
         
-        QSettings m_settings;
+//        QSettings m_settings;
         
         QString m_version;
         QString m_styleSheet;

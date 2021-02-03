@@ -27,7 +27,7 @@
 class  eShiftReg : public eLogicDevice
 {
     public:
-        eShiftReg( std::string id, int latchClk=0, int serOut=0 );
+        eShiftReg( Simulator *sim,  std::string id, int latchClk=0, int serOut=0 );
         ~eShiftReg();
 
         virtual void initEpins();

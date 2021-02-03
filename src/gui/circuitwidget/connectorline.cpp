@@ -141,7 +141,7 @@ void ConnectorLine::move( QPointF delta )
     /* !( ( m_prevLine && !(m_prevLine->isSelected()) )
                        ||( m_nextLine && !(m_nextLine->isSelected()) ));*/
                        
-    if( Circuit::self()->pasting() || moveSimple )
+    if( m_pConnector->getCircPtr()->pasting() || moveSimple )
     {
         prepareGeometryChange();
         m_p1Y = m_p1Y + delta.y();
@@ -218,16 +218,16 @@ void ConnectorLine::setNextLine( ConnectorLine* nextLine )
 
 void ConnectorLine::remove() 
 { 
-    if( !isSelected() ) Circuit::self()->clearSelection();
+    if( !isSelected() ) m_pConnector->getCircPtr()->clearSelection();
     setSelected( true );
-    Circuit::self()->removeItems();
+    m_pConnector->getCircPtr()->removeItems();
 
     //m_pConnector->remove(); 
 }
 
 void ConnectorLine::mousePressEvent( QGraphicsSceneMouseEvent* event )
 {
-    bool dragging = ( CircuitView::self()->dragMode() == QGraphicsView::ScrollHandDrag );
+    bool dragging = ( m_pConnector->getCircPtr()->getViewPtr()->dragMode() == QGraphicsView::ScrollHandDrag );
 
     if( event->button() == Qt::LeftButton )
     {
@@ -245,16 +245,16 @@ void ConnectorLine::mousePressEvent( QGraphicsSceneMouseEvent* event )
         {
             event->accept();
 
-            if     ( dy() == 0 ) CircuitView::self()->viewport()->setCursor( Qt::SplitVCursor );
-            else if( dx() == 0 ) CircuitView::self()->viewport()->setCursor( Qt::SplitHCursor );
-            else                 CircuitView::self()->viewport()->setCursor( Qt::SizeAllCursor );
+            if     ( dy() == 0 ) m_pConnector->getCircPtr()->getViewPtr()->viewport()->setCursor( Qt::SplitVCursor );
+            else if( dx() == 0 ) m_pConnector->getCircPtr()->getViewPtr()->viewport()->setCursor( Qt::SplitHCursor );
+            else                 m_pConnector->getCircPtr()->getViewPtr()->viewport()->setCursor( Qt::SizeAllCursor );
             m_moving = true;
         }
         else                                   // Connecting a wire here
         {   
-           if( Circuit::self()->is_constarted() )       
+           if( m_pConnector->getCircPtr()->is_constarted() )
            {
-               Connector* con = Circuit::self()->getNewConnector();
+               Connector* con = m_pConnector->getCircPtr()->getNewConnector();
                
                if( con->isBus() != m_isBus ) // Avoid connect Bus with no-Bus
                {
@@ -320,27 +320,27 @@ void ConnectorLine::mousePressEvent( QGraphicsSceneMouseEvent* event )
            QString type = QString("Node");
            QString id = type;
            id.append( "-" );
-           id.append( Circuit::self()->newSceneId() );
+           id.append( m_pConnector->getCircPtr()->newSceneId() );
 
            Node* node = new Node( 0, type, id );     // Now add the Node
            node->setPos( point1.x(), point1.y());
-           Circuit::self()->addItem( node );
+           m_pConnector->getCircPtr()->addItem( node );
 
-           bool pauseSim = Simulator::self()->isRunning();
-           if( pauseSim )  Simulator::self()->pauseSim();
+           bool pauseSim = m_pConnector->getCircPtr()->getSimulatorPtr()->isRunning();
+           if( pauseSim )  m_pConnector->getCircPtr()->getSimulatorPtr()->pauseSim();
 
-           //qDebug() << "line constarted" << Circuit::self()->is_constarted() << Circuit::self();
+           //qDebug() << "line constarted" << m_circ_ptr->is_constarted() << m_circ_ptr;
 
            m_pConnector->splitCon( index, node->getPin(0), node->getPin(2) );
            eNode* enode = m_pConnector->enode();    // get the eNode from my connector
            node->getPin(1)->setEnode( enode );
 
-           if( Circuit::self()->is_constarted() )   // A Connector wants to connect here (ends in a node)
-               Circuit::self()->closeconnector( node->getPin(1) );
+           if( m_pConnector->getCircPtr()->is_constarted() )   // A Connector wants to connect here (ends in a node)
+               m_pConnector->getCircPtr()->closeconnector( node->getPin(1) );
            else                                     // A new Connector created here (starts in a node)
-               Circuit::self()->newconnector( node->getPin(1) );      // start a new connector
+               m_pConnector->getCircPtr()->newconnector( node->getPin(1) );      // start a new connector
 
-           if( pauseSim ) Simulator::self()->runContinuous();
+           if( pauseSim ) m_pConnector->getCircPtr()->getSimulatorPtr()->runContinuous();
         }
     }
     //else setSelected( true );
@@ -373,7 +373,7 @@ void ConnectorLine::mouseMoveEvent( QGraphicsSceneMouseEvent* event )
     }
     updatePos();
     updateLines();
-    Circuit::self()->update();
+    m_pConnector->getCircPtr()->update();
 }
 
 void ConnectorLine::mouseReleaseEvent( QGraphicsSceneMouseEvent* event )
@@ -386,13 +386,13 @@ void ConnectorLine::mouseReleaseEvent( QGraphicsSceneMouseEvent* event )
     if( m_moving )
     {
         m_moving = false;
-        Circuit::self()->setChanged();
+        m_pConnector->getCircPtr()->setChanged();
     }
 }
 
 void ConnectorLine::contextMenuEvent( QGraphicsSceneContextMenuEvent* event )
 {
-    if( Circuit::self()->is_constarted() ) return;
+    if( m_pConnector->getCircPtr()->is_constarted() ) return;
     
     if( m_pConnector->endPin() )
     {
@@ -476,7 +476,7 @@ void ConnectorLine::paint( QPainter* p, const QStyleOptionGraphicsItem* option, 
 
     QColor color;
     if( isSelected() ) color = QColor( Qt::darkGray );
-    else if( !m_isBus  && Circuit::self()->animate() )               //color = QColor( 40, 40, 60 /*Qt::black*/ );
+    else if( !m_isBus  && m_pConnector->getCircPtr()->animate() )               //color = QColor( 40, 40, 60 /*Qt::black*/ );
     {
         if( m_pConnector->getVolt() > 2.5 ) color = QColor( 200, 50, 50 );
         else                                color = QColor( 50, 50, 200 );

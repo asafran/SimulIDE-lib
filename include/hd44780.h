@@ -32,10 +32,10 @@ class  Hd44780 : public Component, public eElement
     Q_PROPERTY( int Rows   READ rows    WRITE setRows   DESIGNABLE true USER true )
     
     public:
-        Hd44780( QObject* parent, QString type, QString id );
+        Hd44780( Circuit* parent, QString type, QString id );
         ~Hd44780();
         
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem* libraryItem();
         
         int cols();

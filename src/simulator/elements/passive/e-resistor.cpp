@@ -22,8 +22,8 @@
 
 #include <sstream>
 
-eResistor::eResistor( std::string id ) 
-         : eElement( id )
+eResistor::eResistor( Simulator *sim,  std::string id ) 
+         : eElement( sim, id )
 {
     m_resist = 100;
     m_admit  = 1/m_resist;
@@ -77,12 +77,12 @@ void eResistor::setAdmit( double admit )               // Admit can be 0
 
 void eResistor::setResSafe( double resist )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_sim_ptr->isRunning();
+    if( pauseSim ) m_sim_ptr->pauseSim();
     
     setRes( resist );
     
-    if( pauseSim ) Simulator::self()->resumeSim();
+    if( pauseSim ) m_sim_ptr->resumeSim();
 }
 
 double eResistor::current()
@@ -107,10 +107,10 @@ void eResistor::initEpins()
 {
     std::stringstream sl;
     sl << m_elmId << "-lPin";
-    m_ePin[0] = new ePin( sl.str(), 0 );
+    m_ePin[0] = new ePin(  sl.str(), 0 );
     
     std::stringstream sr;
     sr << m_elmId << "-rPin";
-    m_ePin[1] = new ePin( sr.str(), 1 );
+    m_ePin[1] = new ePin(  sr.str(), 1 );
 }
 

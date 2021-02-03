@@ -16,7 +16,7 @@ class  TextComponent : public Component
     Q_PROPERTY( int  Border      READ border   WRITE setBorder   DESIGNABLE true USER true )
     
     public:
-        TextComponent( QObject* parent, QString type, QString id );
+        TextComponent( Circuit* parent, QString type, QString id );
         ~TextComponent();
         
         QRectF boundingRect() const 
@@ -25,7 +25,7 @@ class  TextComponent : public Component
                            m_area.width()+m_border+2, m_area.height()+m_border+2 ); 
         }
 
- static Component* construct( QObject* parent, QString type, QString id );
+ static Component* construct( Circuit* parent, QString type, QString id );
  static LibraryItem *libraryItem();
  
         int  margin();

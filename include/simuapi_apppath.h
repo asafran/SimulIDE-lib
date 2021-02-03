@@ -25,7 +25,7 @@
 class  SIMUAPI_AppPath
 {
     public:
-        static SIMUAPI_AppPath* self();
+        //static SIMUAPI_AppPath* self();
 
         QDir ROExamFolder() const;
         void setROExamFolder(const QDir &ROExamFolder);
@@ -41,7 +41,7 @@ class  SIMUAPI_AppPath
 
 private:
         SIMUAPI_AppPath();
-        static SIMUAPI_AppPath* m_pSelf;
+        //static SIMUAPI_AppPath* m_pSelf;
 
         QDir m_ROExamFolder;
         QDir m_RODataFolder;

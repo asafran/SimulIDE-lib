@@ -25,7 +25,7 @@
 class  eLed : public eDiode
 {
     public:
-        eLed( std::string id );
+        eLed( Simulator *sim,  std::string id );
         ~eLed();
 
         virtual double maxCurrent() const             { return m_maxCurrent; }

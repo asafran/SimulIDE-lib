@@ -33,10 +33,10 @@ class  VoltReg : public Component, public eVoltReg
     
     public:
 
-        VoltReg( QObject* parent, QString type, QString id );
+        VoltReg( Circuit* parent, QString type, QString id );
         ~VoltReg();
         
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         virtual void setVRef( double vref );

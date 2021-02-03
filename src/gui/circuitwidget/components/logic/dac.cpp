@@ -19,7 +19,7 @@
 
 #include "dac.h"
 
-Component* DAC::construct( QObject* parent, QString type, QString id )
+Component* DAC::construct( Circuit* parent, QString type, QString id )
 {
         return new DAC( parent, type, id );
 }
@@ -34,9 +34,9 @@ LibraryItem* DAC::libraryItem()
         DAC::construct );
 }
 
-DAC::DAC( QObject* parent, QString type, QString id )
+DAC::DAC( Circuit* parent, QString type, QString id )
    : LogicComponent( parent, type, id )
-   , eDAC( id.toStdString() )
+   , eDAC(  parent->getSimulatorPtr(), id.toStdString() )
 {    
     m_width  = 4;
     m_height = 9;

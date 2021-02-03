@@ -29,9 +29,9 @@ static const char* MechContact_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Norm Close")
 };
 
-MechContact::MechContact( QObject* parent, QString type, QString id )
+MechContact::MechContact( Circuit* parent, QString type, QString id )
            : Component( parent, type, id )
-           , eElement(  id.toStdString() )
+           , eElement( parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( MechContact_properties );
 
@@ -155,7 +155,7 @@ void MechContact::SetupSwitches( int poles, int throws )
             int tN = i*throws+j;
 
             reid.append( QString( "-switch"+QString::number(tN)) );
-            m_switches[ tN ] = new eResistor( reid.toStdString() );
+            m_switches[ tN ] = new eResistor( m_circ_ptr->getSimulatorPtr(), reid.toStdString() );
 
             ePinN = 4+tN*2;
             QString pinp = reid+"pinP";

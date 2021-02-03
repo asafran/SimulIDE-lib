@@ -29,7 +29,7 @@ static const char* BJT_properties[] = {
 };
 
 
-Component* BJT::construct( QObject* parent, QString type, QString id )
+Component* BJT::construct( Circuit* parent, QString type, QString id )
 {
         return new BJT( parent, type, id );
 }
@@ -44,9 +44,9 @@ LibraryItem* BJT::libraryItem()
         BJT::construct );
 }
 
-BJT::BJT( QObject* parent, QString type, QString id )
+BJT::BJT( Circuit* parent, QString type, QString id )
    : Component( parent, type, id )
-   , eBJT( id.toStdString() )
+   , eBJT(  parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( BJT_properties );
     
@@ -75,13 +75,13 @@ BJT::BJT( QObject* parent, QString type, QString id )
     m_pin[2]->setLabelColor( QColor( 0, 0, 0 ) );
     m_ePin[2] = m_pin[2];
 
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
     
     resetState();
 }
 BJT::~BJT()
 {
-    Simulator::self()->remFromUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this );
 }
 
 void BJT::updateStep()
@@ -97,19 +97,19 @@ void BJT::setPnp( bool pnp )
 
 void BJT::setBCd( bool bcd ) 
 { 
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim )  Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim )  m_circ_ptr->getSimulatorPtr()->pauseSim();
     
     eBJT::setBCd( bcd );
     
-    if( pauseSim ) Simulator::self()->runContinuous();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->runContinuous();
 }
 
 void BJT::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget )
 {
     Component::paint( p, option, widget );
     
-    if( Circuit::self()->animate() && m_baseCurr > 1e-4 )  p->setBrush( Qt::yellow );
+    if( m_circ_ptr->animate() && m_baseCurr > 1e-4 )  p->setBrush( Qt::yellow );
     else                                                   p->setBrush( Qt::white );
 
     p->drawEllipse( m_area );

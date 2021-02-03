@@ -34,10 +34,10 @@ class  DAC : public LogicComponent, public eDAC
     Q_PROPERTY( int    Num_Bits     READ numInps    WRITE setNumInps    DESIGNABLE true USER true )
 
     public:
-        DAC( QObject* parent, QString type, QString id );
+        DAC( Circuit* parent, QString type, QString id );
         ~DAC();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         virtual void setNumInps( int inputs );

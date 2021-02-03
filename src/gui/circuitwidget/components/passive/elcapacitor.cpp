@@ -19,8 +19,9 @@
 
 #include "elcapacitor.h"
 #include "simulator.h"
+#include "circuit.h"
 
-Component* elCapacitor::construct( QObject* parent, QString type, QString id )
+Component* elCapacitor::construct( Circuit* parent, QString type, QString id )
 { return new elCapacitor( parent, type, id ); }
 
 LibraryItem* elCapacitor::libraryItem()
@@ -33,13 +34,13 @@ LibraryItem* elCapacitor::libraryItem()
             elCapacitor::construct);
 }
 
-elCapacitor::elCapacitor( QObject* parent, QString type, QString id )
+elCapacitor::elCapacitor( Circuit* parent, QString type, QString id )
            : CapacitorBase( parent, type, id )
 {
     m_reversed = false;
     m_counter = 0;
     
-    Simulator::self()->addToUpdateList( this );
+    parent->getSimulatorPtr()->addToUpdateList( this );
 }
 elCapacitor::~elCapacitor(){}
 
@@ -76,7 +77,7 @@ void elCapacitor::updateStep()
 
 void elCapacitor::remove()
 {
-    Simulator::self()->remFromUpdateList( this ); 
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this ); 
     
     Component::remove();
 }

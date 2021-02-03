@@ -23,8 +23,8 @@
 
 bool eGate::m_oscCtrl = false;
 
-eGate::eGate( std::string id, int inputs )
-     : eLogicDevice( id )
+eGate::eGate( Simulator *sim,  std::string id, int inputs )
+     : eLogicDevice( sim, id )
 {
     m_tristate = false;
     m_oscCtrl  = false;
@@ -46,12 +46,12 @@ void eGate::initialize()
     }
     m_oscCtrl  = false;
     m_oscCount = 0;
-    m_lastStep = Simulator::self()->step();
+    m_lastStep = m_sim_ptr->step();
 }
 
 void eGate::setVChanged()
 {
-    uint64_t step = Simulator::self()->step();
+    uint64_t step = m_sim_ptr->step();
 
     if( step-m_lastStep < 2 )                // Detect Oscillating gates
     {

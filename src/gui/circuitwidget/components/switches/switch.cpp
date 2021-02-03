@@ -23,7 +23,7 @@
 #include "e-node.h"
 #include "pin.h"
 
-Component* Switch::construct( QObject* parent, QString type, QString id )
+Component* Switch::construct( Circuit* parent, QString type, QString id )
 { return new Switch( parent, type, id ); }
 
 LibraryItem* Switch::libraryItem()
@@ -36,7 +36,7 @@ LibraryItem* Switch::libraryItem()
             Switch::construct);
 }
 
-Switch::Switch( QObject* parent, QString type, QString id )
+Switch::Switch( Circuit* parent, QString type, QString id )
       : SwitchBase( parent, type, id )
 {
     m_area =  QRectF( -11, -9, 22, 11 );
@@ -120,8 +120,8 @@ void Switch::setSwitch( bool closed )
 
 void Switch::SetupSwitches( int poles, int throws )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim )  Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim )  m_circ_ptr->getSimulatorPtr()->pauseSim();
     
     m_area = QRectF( -13,-16*poles, 26, 16*poles );
 
@@ -178,7 +178,7 @@ void Switch::SetupSwitches( int poles, int throws )
             int tN = i*throws+j;
 
             reid.append( QString( "-switch"+QString::number(tN)) );
-            m_switches[ tN ] = new eResistor( reid.toStdString() );
+            m_switches[ tN ] = new eResistor( m_circ_ptr->getSimulatorPtr(), reid.toStdString() );
 
             ePinN = tN*2;
             QString pinp = reid+"pinP";
@@ -206,7 +206,7 @@ void Switch::SetupSwitches( int poles, int throws )
     //foreach( Pin* pin, m_pin )
     //    pin->setFlag( QGraphicsItem::ItemStacksBehindParent, false ); // draw Pins on top
     
-    if( pauseSim ) Simulator::self()->runContinuous();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->runContinuous();
 }
 
 int Switch::poles() const

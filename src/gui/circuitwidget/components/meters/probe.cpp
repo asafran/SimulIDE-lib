@@ -25,6 +25,7 @@
 #include "itemlibrary.h"
 #include "circuitwidget.h"
 #include "pin.h"
+#include "circuit.h"
 
 #include <math.h>
 
@@ -32,7 +33,7 @@ static const char* Probe_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","PlotterCh")
 };
 
-Component* Probe::construct( QObject* parent, QString type, QString id )
+Component* Probe::construct( Circuit* parent, QString type, QString id )
 { return new Probe( parent, type, id ); }
 
 LibraryItem* Probe::libraryItem()
@@ -45,9 +46,9 @@ LibraryItem* Probe::libraryItem()
         Probe::construct );
 }
 
-Probe::Probe( QObject* parent, QString type, QString id )
+Probe::Probe( Circuit* parent, QString type, QString id )
      : Component( parent, type, id )
-     , eElement( id.toStdString() )
+     , eElement( parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( Probe_properties );
     
@@ -68,7 +69,7 @@ Probe::Probe( QObject* parent, QString type, QString id )
     m_inputpin->setBoundingRect( QRect(-2, -2, 6, 4) );
     
     nodid.append( QString("-eSource") );
-    m_inSource = new eSource( nodid.toStdString(), m_inputpin );
+    m_inSource = new eSource( parent->getSimulatorPtr(), nodid.toStdString(), m_inputpin );
     m_inSource->setOut(false);
     m_inSource->setImp( 1e9 );
 
@@ -83,7 +84,7 @@ Probe::Probe( QObject* parent, QString type, QString id )
     
     setLabelPos( 16, -16 , 45 );
 
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
 }
 Probe::~Probe()
 {
@@ -95,7 +96,7 @@ void Probe::updateStep()
     m_readPin = 0l;
     m_readConn = 0l;
     
-    if( !Simulator::self()->isRunning() )
+    if( !m_circ_ptr->getSimulatorPtr()->isRunning() )
     {
         setVolt( 0.0 );
         return;
@@ -152,7 +153,7 @@ void Probe::setVolt( double volt )
     
     m_valLabel->setPlainText( QString("%1 V").arg(double(dispVolt)/100) );
 
-    if( m_plotterLine > 0 ) PlotterWidget::self()->setData( m_plotterLine, m_voltIn*100 );
+    //if( m_plotterLine > 0 ) PlotterWidget::self()->setData( m_plotterLine, m_voltIn*100 );
 
     update();       // Repaint
 }
@@ -172,7 +173,7 @@ void Probe::remove()
 
     slotPlotterRem();
     
-    Simulator::self()->remFromUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this );
     
     Component::remove();
 }
@@ -185,7 +186,7 @@ int Probe::plotter()
 void Probe::setPlotter( int channel )
 {
     if( channel == 0 ) return;
-    
+/*
     if( PlotterWidget::self()->addChannel( channel ) )
     {
         slotPlotterRem(); 
@@ -194,6 +195,7 @@ void Probe::setPlotter( int channel )
         m_plotterColor = PlotterWidget::self()->getColor( m_plotterLine );
         update();       // Repaint
     }
+*/
 }
 
 void Probe::slotPlotter1() { setPlotter( 1 ); }
@@ -218,7 +220,7 @@ void Probe::slotPlotterRem()
     //qDebug() << m_plotterLine;
     if( m_plotterLine == 0 ) return;              // No plotter to remove
 
-    PlotterWidget::self()->remChannel( m_plotterLine );
+    //PlotterWidget::self()->remChannel( m_plotterLine );
     m_plotterLine = 0;
     update();       // Repaint
 }

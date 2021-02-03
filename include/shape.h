@@ -34,7 +34,7 @@ class  Shape : public Component
 
     public:
 
-        Shape( QObject* parent, QString type, QString id );
+        Shape( Circuit* parent, QString type, QString id );
         ~Shape();
         
         QRectF boundingRect() const 

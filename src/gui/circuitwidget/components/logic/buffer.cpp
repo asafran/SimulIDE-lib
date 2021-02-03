@@ -21,7 +21,7 @@
 #include "itemlibrary.h"
 
 
-Component* Buffer::construct( QObject* parent, QString type, QString id )
+Component* Buffer::construct( Circuit* parent, QString type, QString id )
 {
         return new Buffer( parent, type, id );
 }
@@ -36,7 +36,7 @@ LibraryItem* Buffer::libraryItem()
         Buffer::construct );
 }
 
-Buffer::Buffer( QObject* parent, QString type, QString id )
+Buffer::Buffer( Circuit* parent, QString type, QString id )
       : Gate( parent, type, id, 1 )
 {
     m_area = QRect( -19, -17, 38, 34 ); 

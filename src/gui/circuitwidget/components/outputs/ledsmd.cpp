@@ -21,7 +21,7 @@
 #include "e-pin.h"
 
 
-LedSmd::LedSmd( QObject* parent, QString type, QString id, QRectF area )
+LedSmd::LedSmd( Circuit* parent, QString type, QString id, QRectF area )
       : LedBase( parent, type, id )
 {
     m_area = area;

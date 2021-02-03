@@ -23,23 +23,18 @@
 #include "circuit.h"
 #include "matrixsolver.h"
 #include "e-element.h"
-#include "oscopewidget.h"
-#include "plotterwidget.h"
-#include "outpaneltext.h"
-#include "mcucomponent.h"
 #include "mainwindow.h"
 #include "circuitwidget.h"
-#include "baseprocessor.h"
 #include "simevent.h"
 #include <QMutexLocker>
 
-QAtomicPointer<Simulator> Simulator::m_pSelf = 0l;
+//QAtomicPointer<Simulator> Simulator::m_pSelf = 0l;
 
-Simulator::Simulator( QObject* parent ) 
+Simulator::Simulator( Circuit* parent )
          : QObject(parent)
          , mutex()
 {
-    m_pSelf.fetchAndStoreOrdered(this);
+//    m_pSelf.fetchAndStoreOrdered(this);
 
     m_isrunning = false;
     m_debugging = false;
@@ -56,6 +51,7 @@ Simulator::Simulator( QObject* parent )
     m_stepsNolin = 10;
     m_simuRate   = 1000000;
     m_noLinAcc = 5; // Non-Linear accuracy
+    m_circ_ptr = parent;
 
     m_RefTimer.start();
 }
@@ -83,8 +79,8 @@ void Simulator::timerEvent( QTimerEvent* e )  //update at m_timerTick rate (50 m
     if( !m_isrunning ) return;
     if( m_error ) 
     {
-        Simulator::self()->stopSim();
-        CircuitWidget::self()->setRate( -1 );
+        this->stopSim();
+        m_circ_ptr->getWidgetPtr()->setRate( -1 );
         return;
     }
     if( !m_CircuitFuture.isFinished() ) // Stop remaining parallel thread 
@@ -103,7 +99,7 @@ void Simulator::timerEvent( QTimerEvent* e )  //update at m_timerTick rate (50 m
     if( deltaRefTime >= 1e9 )          // We want steps per Sec = 1e9 ns
     {
         stepsPerSec = (m_step-m_lastStep)*1e9/deltaRefTime;
-        CircuitWidget::self()->setRate( (stepsPerSec*100)/1e6 /*m_simuRate*/ );
+        m_circ_ptr->getWidgetPtr()->setRate( (stepsPerSec*100)/1e6 /*m_simuRate*/ );
         m_lastStep    = m_step;
         m_lastRefTime = refTime;
     }
@@ -119,9 +115,9 @@ bool event(QEvent *event)
         {
             SimEvent *simEvent = static_cast<SimEvent*>(event);
             if(simEvent->getTransferedBool())
-                Simulator::self()->runContinuous();
+                m_sim_ptr->runContinuous();
             else
-                Simulator::self()->stopSim();
+                m_sim_ptr->stopSim();
             event->accept();
             return true;
         }
@@ -132,13 +128,13 @@ bool event(QEvent *event)
 void Simulator::runGraphicStep()
 {
     //qDebug() <<"Simulator::runGraphicStep";
-    CircuitView::self()->setCircTime( m_step);
+    m_circ_ptr->getViewPtr()->setCircTime( m_step);
 
     foreach( eElement* el, m_updateList ) el->updateStep();
     //TerminalWidget::self()->step();
-    PlotterWidget::self()->updateStep();
+    //PlotterWidget::self()->updateStep();
 
-    if( Circuit::self()->animate() ) Circuit::self()->updateConnectors();
+    if( m_circ_ptr->animate() ) m_circ_ptr->updateConnectors();
     foreach( eNode* enode, m_eNodeList ) enode->setVoltChanged( false );
 }
 
@@ -160,7 +156,7 @@ void Simulator::runCircuitStep()
     if( ++m_updtCounter >= m_circuitRate )
     {
         m_updtCounter = 0;
-        PlotterWidget::self()->step();
+        //PlotterWidget::self()->step();
     }
 
     // Run Reactive Elements
@@ -178,7 +174,7 @@ void Simulator::runCircuitStep()
     foreach( eElement* el, m_changedFast ) el->setVChanged();
     m_changedFast.clear();
 
-    if( BaseProcessor::self() && !m_debugging ) BaseProcessor::self()->step();
+    //if( BaseProcessor::self() && !m_debugging ) BaseProcessor::self()->step();
 
     // Run Non-Linear elements
     if( ++m_noLinCounter >= m_stepsNolin )
@@ -273,8 +269,8 @@ void Simulator::startSim()
     {
         std::cout << "Simulator::startSim, Failed to solve Matrix"
                   <<  std::endl;
-        Simulator::self()->stopSim();
-        CircuitWidget::self()->setRate( -1 );
+        this->stopSim();
+        m_circ_ptr->getWidgetPtr()->setRate( -1 );
         return;
     }
     std::cout << "\nCircuit Matrix looks good" <<  std::endl;
@@ -317,10 +313,10 @@ void Simulator::stopSim()
     }
     foreach( eElement* el, m_updateList )  el->updateStep();
 
-    if( McuComponent::self() ) McuComponent::self()->reset();
+    //if( McuComponent::self() ) McuComponent::self()->reset();
 
-    CircuitWidget::self()->setRate( 0 );
-    Circuit::self()->update();
+    m_circ_ptr->getWidgetPtr()->setRate( 0 );
+    m_circ_ptr->update();
     
     std::cout << "\n    Simulation Stopped \n" << std::endl;
 }
@@ -393,7 +389,7 @@ int Simulator::simuRateChanged( int rate )
         resumeSim();
     }
     
-    PlotterWidget::self()->setPlotterTick( m_circuitRate*mult );
+    //PlotterWidget::self()->setPlotterTick( m_circuitRate*mult );
 
     m_simuRate = m_circuitRate*fps;
 

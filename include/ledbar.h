@@ -36,10 +36,10 @@ class  LedBar : public Component
 
     public:
 
-        LedBar( QObject* parent, QString type, QString id );
+        LedBar( Circuit* parent, QString type, QString id );
         ~LedBar();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         void setColor( LedBase::LedColor color );

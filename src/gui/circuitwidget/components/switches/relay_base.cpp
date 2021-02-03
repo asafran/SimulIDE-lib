@@ -31,9 +31,9 @@ static const char* RelayBase_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Norm Close")
 };
 
-RelayBase::RelayBase( QObject* parent, QString type, QString id )
+RelayBase::RelayBase( Circuit* parent, QString type, QString id )
          : Component( parent, type, id )
-         , eInductor( id.toStdString() )
+         , eInductor( parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( RelayBase_properties );
     
@@ -66,7 +66,7 @@ RelayBase::RelayBase( QObject* parent, QString type, QString id )
 
     QString reid = m_id;
     reid.append(QString("-resistor"));
-    m_resistor = new eResistor( reid.toStdString() );
+    m_resistor = new eResistor( parent->getSimulatorPtr(), reid.toStdString() );
 
     nodid = reid;                  // Internal Left pin to inductor
     nodid.append(QString("-lIntPin"));
@@ -82,7 +82,7 @@ RelayBase::RelayBase( QObject* parent, QString type, QString id )
     m_resistor->setRes( 100 );
     m_trigCurrent = 0.02;
 
-    m_internalEnode = new eNode( m_id+"-internaleNode" );
+    m_internalEnode = new eNode( m_circ_ptr->getSimulatorPtr(), m_id+"-internaleNode" );
     m_ePin[1]->setEnode( m_internalEnode );
     m_ePin[2]->setEnode( m_internalEnode );
 
@@ -158,7 +158,7 @@ void RelayBase::setSwitch( bool closed )
 
 void RelayBase::remove()
 {
-    Simulator::self()->remFromEnodeList( m_internalEnode, true );
+    m_circ_ptr->getSimulatorPtr()->remFromEnodeList( m_internalEnode, true );
 
     foreach( eResistor* res, m_switches ) delete res;
     delete m_resistor;
@@ -168,8 +168,8 @@ void RelayBase::remove()
 
 void RelayBase::SetupSwitches( int poles, int throws )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->pauseSim();
 
     m_area = QRectF( -13, -8-16*poles-4, 26, 8+16*poles+8+4 );
 
@@ -224,7 +224,7 @@ void RelayBase::SetupSwitches( int poles, int throws )
             int tN = i*throws+j;
 
             reid.append( QString( "-switch"+QString::number(tN)) );
-            m_switches[ tN ] = new eResistor( reid.toStdString() );
+            m_switches[ tN ] = new eResistor( m_circ_ptr->getSimulatorPtr(), reid.toStdString() );
 
             ePinN = 4+tN*2;
             QString pinp = reid+"pinP";
@@ -251,8 +251,8 @@ void RelayBase::SetupSwitches( int poles, int throws )
     foreach( Pin* pin, m_pin )
         pin->setFlag( QGraphicsItem::ItemStacksBehindParent, false ); // draw Pins on top
 
-    if( pauseSim ) Simulator::self()->resumeSim();
-    Circuit::self()->update();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->resumeSim();
+    m_circ_ptr->update();
 }
 
 double RelayBase::rCoil() const

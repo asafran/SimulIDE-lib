@@ -30,7 +30,7 @@ class  eOrGate : public eGate
 {
     public:
 
-        eOrGate( std::string id, int inputs );
+        eOrGate( Simulator *sim,  std::string id, int inputs );
         ~eOrGate();
 
     protected:

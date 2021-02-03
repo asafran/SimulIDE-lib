@@ -21,8 +21,8 @@
 
 #include "e-bcdtodec.h"
 
-eBcdToDec::eBcdToDec( std::string id )
-    : eLogicDevice( id )
+eBcdToDec::eBcdToDec( Simulator *sim,  std::string id )
+    : eLogicDevice( sim, id )
 {
 }
 eBcdToDec::~eBcdToDec()

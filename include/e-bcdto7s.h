@@ -26,7 +26,7 @@ class  eBcdTo7S : public eLogicDevice
 {
     public:
 
-        eBcdTo7S( std::string id  );
+        eBcdTo7S( Simulator *sim,  std::string id  );
         ~eBcdTo7S();
 
         virtual void initialize();

@@ -110,9 +110,9 @@ void ePin::setInverted( bool inverted ){ m_inverted = inverted; }
 
 std::string ePin::getId() { return m_id; }
 
-void ePin::setId( std::string id )
+void ePin::setId( Circuit *circ, std::string id )
 {
-    Circuit::self()->updatePin( this, id );
+    circ->updatePin( this, id );
     m_id = id;
 }
 

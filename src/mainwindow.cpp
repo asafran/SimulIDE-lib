@@ -20,45 +20,42 @@
 #include "mainwindow.h"
 #include "appiface.h"
 #include "circuit.h"
-#include "propertieswidget.h"
-#include "componentselector.h"
-#include "editorwindow.h"
 #include "circuitwidget.h"
-#include "filewidget.h"
 #include "utils.h"
 #include "simuapi_apppath.h"
 
 
-MainWindow* MainWindow::m_pSelf = 0l;
+//MainWindow* MainWindow::m_pSelf = 0l;
 
 MainWindow::MainWindow()
           : QMainWindow()
-          , m_settings( "SimulIDE", "SimulIDE" )
+//          , m_settings( "SimulIDE", "SimulIDE" )
 {
     setWindowIcon( QIcon(":/simulide.png") );
-    m_pSelf   = this;
+//    m_pSelf   = this;
     m_circuit = 0l;
     m_version = "SimulIDE-"+QString( APP_VERSION );
     
     this->setWindowTitle(m_version);
 
-    QString userAddonPath = SIMUAPI_AppPath::self()->RWDataFolder().absoluteFilePath("addons");
+    //QString userAddonPath = SIMUAPI_AppPath::self()->RWDataFolder().absoluteFilePath("addons");
 
-    QDir pluginsDir( userAddonPath );
+    //QDir pluginsDir( userAddonPath );
 
-    if( !pluginsDir.exists() ) pluginsDir.mkpath( userAddonPath );
+    //if( !pluginsDir.exists() ) pluginsDir.mkpath( userAddonPath );
 
     m_fontScale = 1.0;
-    if( m_settings.contains( "fontScale" ) ) 
+/*
+    if( m_settings.contains( "fontScale" ) )
     {
         m_fontScale = m_settings.value( "fontScale" ).toFloat();
         if( m_fontScale == 0 ) m_fontScale = 1;
-    }
+    }   
     else
-    {
+    {*/
         double dpiX = qApp->desktop()->logicalDpiX();
         m_fontScale = dpiX/96.0;
-    }
+//    }
     //qDebug()<<dpiX;
     //loadCircHelp();
     createWidgets();
@@ -87,7 +84,7 @@ void MainWindow::readSettings()
 
     int autoBck = 15;
     if( m_settings.contains( "autoBck" )) autoBck = m_settings.value( "autoBck" ).toInt();
-    Circuit::self()->setAutoBck( autoBck );
+    m_circ_ptr->setAutoBck( autoBck );
 }
 
 void MainWindow::writeSettings()
@@ -192,6 +189,36 @@ void MainWindow::createWidgets()
     this->showMaximized();
 }
 
+void MainWindow::loadXMLS(QDir dir)
+{
+
+
+    if( dir.exists() ) m_circuit->getCircPtr()->LoadCompSetAt( dir );
+/*
+    pluginsDir.setPath( userPluginsPath );
+
+    if( !pluginsDir.exists() ) return;
+
+    foreach( QString pluginFolder, pluginsDir.entryList( QDir::Dirs ) )
+    {
+        if( pluginFolder.contains( "." ) ) continue;
+        //qDebug() << pluginFolder;
+        pluginsDir.cd( pluginFolder );
+
+        ComponentSelector::self()->LoadCompSetAt( pluginsDir );
+
+        if( pluginsDir.entryList( QDir::Dirs ).contains( "lib"))
+        {
+            pluginsDir.cd( "lib" );
+            loadPluginsAt( pluginsDir );
+            pluginsDir.cd( "../" );
+        }
+        pluginsDir.cd( "../" );
+    }
+    */
+}
+
+/*
 void MainWindow::loadPlugins()
 {
     // Load main Plugins
@@ -301,7 +328,7 @@ void MainWindow::unLoadPugin( QString pluginName )
         delete pluginLoader;
     }
 }
-
+*/
 void MainWindow::applyStile()
 {
     QFile file(":/simulide.qss");
@@ -312,7 +339,7 @@ void MainWindow::applyStile()
     qApp->setStyleSheet( m_styleSheet );
 }
 
-QSettings* MainWindow::settings() { return &m_settings; }
+//QSettings* MainWindow::settings() { return &m_settings; }
 
 #include  "moc_mainwindow.cpp"
 

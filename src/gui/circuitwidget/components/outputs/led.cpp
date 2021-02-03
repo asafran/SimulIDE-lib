@@ -20,7 +20,7 @@
 #include "led.h"
 #include "pin.h"
 
-Component* Led::construct( QObject* parent, QString type, QString id )
+Component* Led::construct( Circuit* parent, QString type, QString id )
 { return new Led( parent, type, id ); }
 
 LibraryItem* Led::libraryItem()
@@ -33,7 +33,7 @@ LibraryItem* Led::libraryItem()
             Led::construct);
 }
 
-Led::Led( QObject* parent, QString type, QString id )
+Led::Led( Circuit* parent, QString type, QString id )
    : LedBase( parent, type, id )
 {
     m_area = QRect( -8, -10, 20, 20 );

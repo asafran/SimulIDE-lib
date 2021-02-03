@@ -28,7 +28,7 @@ class  eLm555 : public eElement
 {
     public:
 
-        eLm555( std::string id );
+        eLm555( Simulator *sim,  std::string id );
         ~eLm555();
         
         virtual void initialize();

@@ -26,7 +26,7 @@ class  eGate : public eLogicDevice
 {
     public:
 
-        eGate( std::string id, int inputs );
+        eGate( Simulator *sim,  std::string id, int inputs );
         ~eGate();
 
         virtual void initialize();

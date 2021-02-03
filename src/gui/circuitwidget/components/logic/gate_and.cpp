@@ -20,7 +20,7 @@
 #include "gate_and.h"
 #include "itemlibrary.h"
 
-Component* AndGate::construct( QObject* parent, QString type, QString id )
+Component* AndGate::construct( Circuit* parent, QString type, QString id )
 {
     return new AndGate( parent, type, id );
 }
@@ -35,7 +35,7 @@ LibraryItem* AndGate::libraryItem()
         AndGate::construct );
 }
 
-AndGate::AndGate( QObject* parent, QString type, QString id )
+AndGate::AndGate( Circuit* parent, QString type, QString id )
        : Gate( parent, type, id, 2 )
 {
 }

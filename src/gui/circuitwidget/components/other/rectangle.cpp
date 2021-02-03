@@ -20,7 +20,7 @@
 #include "rectangle.h"
 
 
-Component* Rectangle::construct( QObject* parent, QString type, QString id )
+Component* Rectangle::construct( Circuit* parent, QString type, QString id )
 { return new Rectangle( parent, type, id ); }
 
 LibraryItem* Rectangle::libraryItem()
@@ -33,7 +33,7 @@ LibraryItem* Rectangle::libraryItem()
             Rectangle::construct);
 }
 
-Rectangle::Rectangle( QObject* parent, QString type, QString id )
+Rectangle::Rectangle( Circuit* parent, QString type, QString id )
          : Shape( parent, type, id )
 {
 }

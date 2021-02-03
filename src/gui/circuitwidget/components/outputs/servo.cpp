@@ -19,12 +19,13 @@
 
 #include "servo.h"
 #include "simulator.h"
+#include "circuit.h"
 
 static const char* Servo_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Speed")
 };
 
-Component* Servo::construct( QObject* parent, QString type, QString id )
+Component* Servo::construct( Circuit* parent, QString type, QString id )
 {
     return new Servo( parent, type, id );
 }
@@ -39,9 +40,9 @@ LibraryItem* Servo::libraryItem()
         Servo::construct );
 }
 
-Servo::Servo( QObject* parent, QString type, QString id )
+Servo::Servo( Circuit* parent, QString type, QString id )
      : LogicComponent( parent, type, id )
-     , eLogicDevice( id.toStdString() )
+     , eLogicDevice(  parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( Servo_properties );
     
@@ -71,7 +72,7 @@ Servo::Servo( QObject* parent, QString type, QString id )
     
     resetState();
 
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
 }
 Servo::~Servo(){}
 
@@ -95,14 +96,14 @@ void Servo::resetState()
 {
     m_targetPos = 90;
     m_pulseStart = 0;
-    m_lastUpdate = Simulator::self()->step();
+    m_lastUpdate = m_circ_ptr->getSimulatorPtr()->step();
     
     eLogicDevice::resetState();
 }
 
 void Servo::updateStep()
 {
-    uint64_t step = Simulator::self()->step();
+    uint64_t step = m_circ_ptr->getSimulatorPtr()->step();
 
     if( m_targetPos != m_pos )
     {
@@ -131,13 +132,13 @@ void Servo::setVChanged()
     }
     else if( clkState == Rising )
     {
-        m_pulseStart = Simulator::self()->step();
+        m_pulseStart = m_circ_ptr->getSimulatorPtr()->step();
     }
     else if( clkState == Falling )
     {
         if( m_pulseStart == 0 ) return;
         
-        int steps = Simulator::self()->step() - m_pulseStart;
+        int steps = m_circ_ptr->getSimulatorPtr()->step() - m_pulseStart;
         
         m_targetPos = (steps-1000)*180/1000;         // Map 1mS-2mS to 0-180ª
 
@@ -155,7 +156,7 @@ void Servo::remove()
     if( m_inPin[1]->isConnected() ) m_inPin[1]->connector()->remove();
     if( m_inPin[2]->isConnected() ) m_inPin[2]->connector()->remove();
 
-    Simulator::self()->remFromUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this );
 
     Component::remove();
 }

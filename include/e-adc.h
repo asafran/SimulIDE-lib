@@ -25,7 +25,7 @@
 class  eADC : public eLogicDevice
 {
     public:
-        eADC( std::string id  );
+        eADC( Simulator *sim,  std::string id  );
         ~eADC();
 
         double maxVolt()               { return m_maxVolt; }

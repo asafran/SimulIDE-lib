@@ -33,10 +33,10 @@ class  Servo : public LogicComponent, public eLogicDevice
     public:
         QRectF boundingRect() const { return QRect( -40, -40, 96, 80 ); }
 
-        Servo( QObject* parent, QString type, QString id );
+        Servo( Circuit* parent, QString type, QString id );
         ~Servo();
         
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem* libraryItem();
 
         double speed() { return m_speed; }

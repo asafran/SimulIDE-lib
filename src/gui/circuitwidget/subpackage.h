@@ -33,10 +33,10 @@ class  SubPackage : public Chip
     
     public:
 
-        SubPackage( QObject* parent, QString type, QString id );
+        SubPackage( Circuit* parent, QString type, QString id );
         ~SubPackage();
         
-    static Component* construct( QObject* parent, QString type, QString id );
+    static Component* construct( Circuit* parent, QString type, QString id );
     static LibraryItem *libraryItem();
         
         int width();

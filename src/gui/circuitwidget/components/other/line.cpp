@@ -20,7 +20,7 @@
 #include "line.h"
 
 
-Component* Line::construct( QObject* parent, QString type, QString id )
+Component* Line::construct( Circuit* parent, QString type, QString id )
 { return new Line( parent, type, id ); }
 
 LibraryItem* Line::libraryItem()
@@ -33,7 +33,7 @@ LibraryItem* Line::libraryItem()
             Line::construct);
 }
 
-Line::Line( QObject* parent, QString type, QString id )
+Line::Line( Circuit* parent, QString type, QString id )
     : Shape( parent, type, id )
 {
 }

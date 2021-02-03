@@ -20,8 +20,8 @@
 #include "e-fulladder.h"
 
 
-eFullAdder::eFullAdder( std::string id ) 
-          : eLogicDevice( id )
+eFullAdder::eFullAdder( Simulator *sim,  std::string id ) 
+          : eLogicDevice( sim, id )
 {
 }
 

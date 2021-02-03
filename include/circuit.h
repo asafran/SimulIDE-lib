@@ -24,15 +24,15 @@
 
 #include "simulator.h"
 #include "component.h"
-#include "connector.h"
+
 #include "pin.h"
 #include "simviewer-export.h"
+#include "mainwindow.h"
+#include "itemlibrary.h"
+#include "connector.h"
 
-#include "switch.h"
-#include "led.h"
-#include "voltimeter.h"
-#include "voltsource.h"
-#include "amperimeter.h"
+class CircuitView;
+class Connector;
 
 class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
 {
@@ -50,10 +50,10 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
     //Q_PROPERTY( int  Auto_Backup_Secs READ autoBck    WRITE setAutoBck    DESIGNABLE true USER true )
 
     public:
-        Circuit( qreal x, qreal y, qreal width, qreal height, QGraphicsView*  parent );
+        Circuit( qreal x, qreal y, qreal width, qreal height, CircuitView*  parent , MainWindow *mwindow);
         ~Circuit();
 
- static Circuit* self() { return m_pSelf.loadRelaxed(); }
+// static Circuit* self() { return m_pSelf.loadRelaxed(); }
         
         int  reactStep();
         void setReactStep( int steps );
@@ -79,6 +79,11 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
         double fontScale();
         void   setFontScale( double scale );
 
+        void LoadCompSetAt( QDir compSetDir );
+        void loadXml( const QString &setFile );
+
+        QString getXmlFile( QString compName );
+
 //        int autoBck();
 //        void setAutoBck( int secs );
         
@@ -98,6 +103,12 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
         bool saveCircuit( QString &fileName );
 
         Component* createItem( QString name, QString id );
+
+        Simulator* getSimulatorPtr() { return &simulator; }
+
+        CircuitView* getViewPtr() { return m_graphicView; }
+
+        CircuitWidget* getWidgetPtr() { return m_widget_ptr; }
 
         QString newSceneId();
 
@@ -120,13 +131,13 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
         void removePin( QString pinId );
 
         const QString getFileName() const { return m_filePath; }
-
+/*
         Switch* getSwitchPtr(const QString id) const { return this->findChild<Switch *>(id);}
         Led* getLedPtr(const QString id) const { return this->findChild<Led *>(id);}
         Voltimeter* getVoltmtrPtr(const QString id) const { return this->findChild<Voltimeter *>(id);}
         VoltSource* getVoltsrcPtr(const QString id) const { return this->findChild<VoltSource *>(id);}
         Amperimeter* getAmpmtrPtr(const QString id) const { return this->findChild<Amperimeter *>(id);}
-
+*/
     public slots:
         void createSubcircuit();
         void copy( QPointF eventpoint );
@@ -155,7 +166,7 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
 
         QString getCompId( QString name );
 
- static QAtomicPointer<Circuit>  m_pSelf;
+// static QAtomicPointer<Circuit>  m_pSelf;
  
         QDomDocument m_domDoc;
         QDomDocument m_copyDoc;
@@ -164,7 +175,7 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
         QString m_backupPath;
 
         QRect          m_scenerect;
-        QGraphicsView* m_graphicView;
+        CircuitView* m_graphicView;
         Connector*     new_connector;
 
         int m_seqNumber;
@@ -186,15 +197,21 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
         QList<Component*> m_conList;    // Connector list
         
         QHash<QString, Pin*> m_pinMap;    // Pin list
+        QHash<QString, QString> m_xmlFileList;
 
         QList<QDomDocument*> m_undoStack;
         QList<QDomDocument*> m_redoStack;
+        QStringList m_compSetUnique;
 
         Simulator simulator;
 
         ItemLibrary m_itemLibrary;
 
         QTimer m_bckpTimer;
+
+        MainWindow *m_main_ptr;
+
+        CircuitWidget *m_widget_ptr;
 };
 
 #endif

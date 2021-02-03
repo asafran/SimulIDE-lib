@@ -26,7 +26,7 @@ static const char* Potentiometer_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Value Ohm")
 };
 
-Component* Potentiometer::construct( QObject* parent, QString type, QString id )
+Component* Potentiometer::construct( Circuit* parent, QString type, QString id )
 {
     return new Potentiometer( parent, type, id );
 }
@@ -41,16 +41,16 @@ LibraryItem* Potentiometer::libraryItem()
         Potentiometer::construct );
 }
 
-Potentiometer::Potentiometer( QObject* parent, QString type, QString id )
+Potentiometer::Potentiometer( Circuit* parent, QString type, QString id )
              : Component( parent, type, id )
-             , eElement( (id+"-eElement").toStdString() )
+             , eElement(m_circ_ptr->getSimulatorPtr(), (id+"-eElement").toStdString() )
              , m_pinA( 180, QPoint(-16,0 ), id+"-PinA", 0, this )
              , m_pinM( 270, QPoint( 0,16), id+"-PinM", 0, this )
              , m_pinB(   0, QPoint( 16,0 ), id+"-PinB", 0, this )
              , m_ePinA( (id+"-ePinA").toStdString(), 1 )
              , m_ePinB( (id+"-ePinB").toStdString(), 1 )
-             , m_resA(  (id+"-resA").toStdString() )
-             , m_resB(  (id+"-resB").toStdString() )
+             , m_resA( m_circ_ptr->getSimulatorPtr(),  (id+"-resA").toStdString() )
+             , m_resB( m_circ_ptr->getSimulatorPtr(),  (id+"-resB").toStdString() )
 {
     Q_UNUSED( Potentiometer_properties );
     
@@ -67,7 +67,7 @@ Potentiometer::Potentiometer( QObject* parent, QString type, QString id )
     m_dialW.dial->setValue(500);
     m_dialW.dial->setSingleStep(25);
     
-    m_proxy = Circuit::self()->addWidget( &m_dialW );
+    m_proxy = m_circ_ptr->addWidget( &m_dialW );
     m_proxy->setParentItem( this );
     m_proxy->setPos( QPoint( -12, -24-5) );
     //m_proxy->setFlag(QGraphicsItem::ItemNegativeZStacksBehindParent, true );
@@ -86,7 +86,7 @@ Potentiometer::Potentiometer( QObject* parent, QString type, QString id )
     setShowVal( true );
     resChanged( 500 );
     
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
 
     connect( m_dial, SIGNAL(valueChanged(int)),
              this,   SLOT  (resChanged(int)) );
@@ -102,7 +102,7 @@ void Potentiometer::initialize()
 
     if( !enod )                       // Not connected: Create mid eNode
     {
-        m_midEnode = new eNode( m_id+"-mideNode" );
+        m_midEnode = new eNode(m_circ_ptr->getSimulatorPtr(), m_id+"-mideNode" );
         enod = m_midEnode;
         m_pinM.setEnode( enod );
     }
@@ -187,9 +187,9 @@ void Potentiometer::remove()
         if( con ) con->remove();
     }
     
-    //if( m_midEnode ) Simulator::self()->remFromEnodeList( m_midEnode, true );
+    //if( m_midEnode ) m_circ_ptr->getSimulatorPtr()->remFromEnodeList( m_midEnode, true );
     
-    Simulator::self()->remFromUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this );
     
     Component::remove();
 }

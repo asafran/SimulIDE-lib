@@ -22,7 +22,7 @@
 #include "itemlibrary.h"
 
 
-Component* Push::construct( QObject* parent, QString type, QString id )
+Component* Push::construct( Circuit* parent, QString type, QString id )
 { return new Push( parent, type, id ); }
 
 LibraryItem* Push::libraryItem()
@@ -35,7 +35,7 @@ LibraryItem* Push::libraryItem()
             Push::construct);
 }
 
-Push::Push( QObject* parent, QString type, QString id )
+Push::Push( Circuit* parent, QString type, QString id )
     : PushBase( parent, type, id )
 {
     m_area =  QRectF( -11, -9, 22, 11 );

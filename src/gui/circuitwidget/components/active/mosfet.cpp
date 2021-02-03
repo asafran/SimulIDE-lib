@@ -31,7 +31,7 @@ static const char* Mosfet_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Depletion")
 };
 
-Component* Mosfet::construct( QObject* parent, QString type, QString id )
+Component* Mosfet::construct( Circuit* parent, QString type, QString id )
 { return new Mosfet( parent, type, id ); }
 
 LibraryItem* Mosfet::libraryItem()
@@ -44,9 +44,9 @@ LibraryItem* Mosfet::libraryItem()
             Mosfet::construct);
 }
 
-Mosfet::Mosfet( QObject* parent, QString type, QString id )
+Mosfet::Mosfet( Circuit* parent, QString type, QString id )
       : Component( parent, type, id )
-      , eMosfet( id.toStdString() )
+      , eMosfet(  parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( Mosfet_properties );
     
@@ -75,7 +75,7 @@ Mosfet::Mosfet( QObject* parent, QString type, QString id )
     newPin->setLabelColor( QColor( 0, 0, 0 ) );
     m_ePin[1] = newPin;
     
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
 }
 Mosfet::~Mosfet(){}
 
@@ -98,7 +98,7 @@ void Mosfet::setDepletion( bool dep )
 
 void Mosfet::remove()
 {
-    Simulator::self()->remFromUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this );
     
     if( m_ePin[0]->isConnected() ) (static_cast<Pin*>(m_ePin[0]))->connector()->remove();
     if( m_ePin[1]->isConnected() ) (static_cast<Pin*>(m_ePin[1]))->connector()->remove();
@@ -111,7 +111,7 @@ void Mosfet::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget
 {
     Component::paint( p, option, widget );
     
-    if( Circuit::self()->animate() && m_gateV > 0 )  p->setBrush( Qt::yellow );
+    if( m_circ_ptr->animate() && m_gateV > 0 )  p->setBrush( Qt::yellow );
     else                                             p->setBrush( Qt::white );
 
     p->drawEllipse( m_area );

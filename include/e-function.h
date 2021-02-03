@@ -28,7 +28,7 @@ class  eFunction : public eLogicDevice
 {
     public:
 
-        eFunction( std::string id );
+        eFunction( Simulator *sim,  std::string id );
         ~eFunction();
 
         virtual void initialize();

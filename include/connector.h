@@ -21,6 +21,7 @@
 #define CONNECTOR_H
 
 #include "component.h"
+#include "pin.h"
 
 class ConnectorLine;
 class eNode;
@@ -37,7 +38,7 @@ class  Connector : public Component
 
         QRectF boundingRect() const { return QRect( 0, 0, 1, 1 ); }
 
-        Connector( QObject* parent, QString type, QString id, Pin* startpin, Pin* endpin = 0l );
+        Connector( Circuit* parent, QString type, QString id, Pin* startpin, Pin* endpin = 0l );
         ~Connector();
 
         // PROPERTIES-----------------------------------

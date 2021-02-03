@@ -23,7 +23,7 @@
 #include "pin.h"
 
 
-Component* LedBar::construct( QObject* parent, QString type, QString id )
+Component* LedBar::construct( Circuit* parent, QString type, QString id )
 { return new LedBar( parent, type, id ); }
 
 LibraryItem* LedBar::libraryItem()
@@ -36,7 +36,7 @@ LibraryItem* LedBar::libraryItem()
             LedBar::construct);
 }
 
-LedBar::LedBar( QObject* parent, QString type, QString id )
+LedBar::LedBar( Circuit* parent, QString type, QString id )
       : Component( parent, type, id )
 {
     m_area = QRect( -8, -28, 16, 64 );
@@ -65,11 +65,12 @@ void LedBar::createLeds( int c )
         
         /*QString reid = m_id;
         reid.append(QString("-resistor"+QString::number(i)));
-        m_resistor[i] = new eResistor( reid.toStdString() );*/
+        m_resistor[i] = new eResistor( m_circ_ptr->getSimulatorPtr(), reid.toStdString() );*/
         
         QString ledid = m_id;
         ledid.append(QString("-led"+QString::number(i)));
-        m_led[i] = new LedSmd( this, "LEDSMD", ledid, QRectF(0, 0, 4, 4) );
+        m_led[i] = new LedSmd( m_circ_ptr, "LEDSMD", ledid, QRectF(0, 0, 4, 4) );
+        m_led[i]->setParent(this);
         m_led[i]->setParentItem(this);
         m_led[i]->setPos( 0, -28+2+i*8 );
         //m_led[i]->setEnabled( false );
@@ -115,11 +116,11 @@ void LedBar::deleteLeds( int d )
         
         delete pin;
     }
-    for( int i=start; i<m_size; i++ )  Circuit::self()->removeComp( m_led[i] );
+    for( int i=start; i<m_size; i++ )  m_circ_ptr->removeComp( m_led[i] );
     m_size = m_size-d;
     m_led.resize( m_size );
     m_pin.resize( m_size*2 );
-    //Circuit::self()->update();
+    //m_circ_ptr->update();
 }
 
 void LedBar::setColor( LedBase::LedColor color ) 
@@ -140,8 +141,8 @@ int LedBar::size()
 
 void LedBar::setSize( int size )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->pauseSim();
     
     if( size == 0 ) size = 8;
     
@@ -150,8 +151,8 @@ void LedBar::setSize( int size )
     
     m_area = QRect( -8, -28, 16, m_size*8 );
     
-    if( pauseSim ) Simulator::self()->runContinuous();
-    Circuit::self()->update();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->runContinuous();
+    m_circ_ptr->update();
 }
 
 double LedBar::threshold()                     
@@ -195,7 +196,7 @@ void LedBar::setGrounded( bool grounded )
 
 void LedBar::remove()
 {
-    for( int i=0; i<m_size; i++ ) Circuit::self()->removeComp( m_led[i] );
+    for( int i=0; i<m_size; i++ ) m_circ_ptr->removeComp( m_led[i] );
 
     Component::remove();
 }

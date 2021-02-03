@@ -31,10 +31,10 @@ class  Push : public PushBase
     
     public:
     
-        Push( QObject* parent, QString type, QString id );
+        Push( Circuit* parent, QString type, QString id );
         ~Push();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 
         virtual void paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget );

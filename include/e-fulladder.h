@@ -27,7 +27,7 @@ class  eFullAdder : public eLogicDevice
 {
     public:
 
-        eFullAdder( std::string id );
+        eFullAdder( Simulator *sim,  std::string id );
         ~eFullAdder() {};
         
         void initialize();

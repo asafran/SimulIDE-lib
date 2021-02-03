@@ -19,8 +19,8 @@
 
 #include "e-bcdto7s.h"
 
-eBcdTo7S::eBcdTo7S( std::string id )
-        : eLogicDevice( id )
+eBcdTo7S::eBcdTo7S( Simulator *sim,  std::string id )
+        : eLogicDevice( sim, id )
 {
     m_outValue.resize( 7 );
 }

@@ -57,13 +57,13 @@ Pin::Pin( int angle, const QPoint &pos, QString id, int index, Component* parent
     m_label.setText("");
     m_label.setBrush( QColor( 250, 250, 200 ) );
     
-    Circuit::self()->addPin( this, id );
+    m_component->getCircPtr()->addPin( this, id );
 
     connect( parent, SIGNAL( moved() ), this, SLOT( isMoved() ) );
 }
 Pin::~Pin()
 { 
-    Circuit::self()->removePin( QString::fromStdString( m_id ) );
+    m_component->getCircPtr()->removePin( QString::fromStdString( m_id ) );
 }
 
 void Pin::reset()
@@ -72,7 +72,7 @@ void Pin::reset()
     if( my_connector ) setConnector( 0l );
     m_connected = false;
     
-    //if( !Circuit::self()->deleting() )
+    //if( !m_component->getCircPtr()->deleting() )
     {
         //qDebug() << "ePin::reset new:" << m_numConections;
         m_component->inStateChanged( 1 );          // Used by node to remove
@@ -149,8 +149,8 @@ void Pin::isMoved()
                     
                     if( !pin->connector() )
                     {
-                        Circuit::self()->newconnector( this );
-                        Circuit::self()->closeconnector( pin );
+                        m_component->getCircPtr()->newconnector( this );
+                        m_component->getCircPtr()->closeconnector( pin );
                     }
                     //qDebug() << " Pin: Pin found";
                     break;
@@ -168,9 +168,9 @@ void Pin::mousePressEvent(QGraphicsSceneMouseEvent* event)
     {
         if( my_connector==0l )
         {
-            if( Circuit::self()->is_constarted() )
+            if( m_component->getCircPtr()->is_constarted() )
             {
-                Connector* con = Circuit::self()->getNewConnector();
+                Connector* con = m_component->getCircPtr()->getNewConnector();
                 if( con->isBus() != m_isBus ) // Avoid connect Bus with no-Bus
                 {
                     event->ignore();
@@ -178,8 +178,8 @@ void Pin::mousePressEvent(QGraphicsSceneMouseEvent* event)
                 }
             }
             event->accept();
-            if( Circuit::self()->is_constarted() ) Circuit::self()->closeconnector( this );
-            else                                   Circuit::self()->newconnector( this );
+            if( m_component->getCircPtr()->is_constarted() ) m_component->getCircPtr()->closeconnector( this );
+            else                                   m_component->getCircPtr()->newconnector( this );
         }
         else event->ignore();
     }
@@ -247,7 +247,7 @@ void Pin::moveBy( int dx, int dy )
 
 void Pin::setPinId( QString id ) 
 { 
-    m_id = id.toStdString(); 
+    m_id = id.toStdString();
 }
         
 QString Pin::pinId() 

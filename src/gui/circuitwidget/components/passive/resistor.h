@@ -35,10 +35,10 @@ class  Resistor : public Component, public eResistor
     public:
         QRectF boundingRect() const { return QRectF( -11, -4.5, 22, 9 ); }
 
-        Resistor( QObject* parent, QString type, QString id );
+        Resistor( Circuit* parent, QString type, QString id );
         ~Resistor();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 
         double resist();

@@ -30,7 +30,7 @@ class SIMVIEWER_EXPORT SwitchBase : public Component, public eElement
 
     public:
 
-        SwitchBase( QObject* parent, QString type, QString id );
+        SwitchBase( Circuit* parent, QString type, QString id );
         ~SwitchBase();
         
         virtual void initialize();

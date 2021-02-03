@@ -23,6 +23,7 @@
 #include "e-led.h"
 #include "e-source.h"
 #include "component.h"
+#include "circuit.h"
 #include <QWidget>
 #include <QColor>
 #include "simviewer-export.h"
@@ -38,7 +39,7 @@ class SIMVIEWER_EXPORT LedBase : public Component, public eLed
     Q_ENUMS( LedColor )
 
     public:
-        LedBase( QObject* parent, QString type, QString id );
+        LedBase( Circuit* parent, QString type, QString id );
         ~LedBase();
         
         enum LedColor {

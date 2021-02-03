@@ -27,9 +27,9 @@ static const char* LedBase_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Grounded")
 };
 
-LedBase::LedBase( QObject* parent, QString type, QString id )
+LedBase::LedBase( Circuit* parent, QString type, QString id )
        : Component( parent, type, id )
-       , eLed( id.toStdString() )
+       , eLed(  parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( LedBase_properties );
     
@@ -46,7 +46,7 @@ LedBase::LedBase( QObject* parent, QString type, QString id )
     m_valLabel->setEnabled( false );
     m_valLabel->setVisible( false );
 
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
 }
 LedBase::~LedBase()
 { 
@@ -93,8 +93,8 @@ void LedBase::setGrounded( bool grounded )
 {
     if( grounded == m_grounded ) return;
     
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim )  Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim )  m_circ_ptr->getSimulatorPtr()->pauseSim();
 
     if( grounded )
     {
@@ -106,11 +106,11 @@ void LedBase::setGrounded( bool grounded )
         QString nodid = m_id;
         nodid.append(QString("Gnod-eSource"));
         
-        m_ground = new eSource( nodid.toStdString(), m_ePin[1] );
+        m_ground = new eSource( m_circ_ptr->getSimulatorPtr(), nodid.toStdString(), m_ePin[1] );
         
-        m_scrEnode = new eNode( nodid+"scr" );
+        m_scrEnode = new eNode( m_circ_ptr->getSimulatorPtr(), nodid+"scr" );
         m_scrEnode->setNodeNumber(0);
-        Simulator::self()->remFromEnodeList( m_scrEnode, /*delete=*/ false );
+        m_circ_ptr->getSimulatorPtr()->remFromEnodeList( m_scrEnode, /*delete=*/ false );
         
         m_ePin[1]->setEnode( m_scrEnode );
     }
@@ -130,14 +130,14 @@ void LedBase::setGrounded( bool grounded )
     }
     m_grounded = grounded;
 
-    if( pauseSim ) Simulator::self()->runContinuous();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->runContinuous();
 }
 
 void LedBase::remove()
 {
     if( m_ground ) delete m_ground;
     
-    Simulator::self()->remFromUpdateList( this ); 
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this ); 
     
     Component::remove();
 }

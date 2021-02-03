@@ -21,16 +21,18 @@
 #include <QStandardPaths>
 #include "simuapi_apppath.h"
 
-SIMUAPI_AppPath* SIMUAPI_AppPath::m_pSelf = 0l;
-
+//SIMUAPI_AppPath* SIMUAPI_AppPath::m_pSelf = 0l;
+/*
 SIMUAPI_AppPath *SIMUAPI_AppPath::self()
 {
+
     if (!m_pSelf) {
         m_pSelf = new SIMUAPI_AppPath();
     }
     return m_pSelf;
-}
 
+}
+*/
 SIMUAPI_AppPath::SIMUAPI_AppPath()
                : m_ROExamFolder( qApp->applicationDirPath() )
                , m_RODataFolder( qApp->applicationDirPath() )

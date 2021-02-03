@@ -23,8 +23,8 @@
 #include "e-lm555.h"
 #include "e-source.h"
 
-eLm555::eLm555( std::string id )
-      : eElement( id )
+eLm555::eLm555( Simulator *sim,  std::string id )
+      : eElement( sim, id )
 {
     setNumEpins(8);
     resetState();
@@ -121,19 +121,19 @@ void eLm555::initEpins()
     
     std::stringstream ss;
     ss << m_elmId << "-out-eSource";
-    m_output = new eSource( ss.str(), m_ePin[2] );
+    m_output = new eSource( m_sim_ptr, ss.str(), m_ePin[2] );
     m_output->setImp( 10 );
     m_output->setOut( true );
     
     std::stringstream ss1;
     ss1 << m_elmId << "-cv-eSource";
-    m_cv = new eSource( ss1.str(), m_ePin[4] );
+    m_cv = new eSource( m_sim_ptr, ss1.str(), m_ePin[4] );
     m_cv->setImp( 10 );
     m_cv->setOut( true );
     
     std::stringstream ss2;
     ss2 << m_elmId << "-dis-eSource";
-    m_dis = new eSource( ss2.str(), m_ePin[6] );
+    m_dis = new eSource( m_sim_ptr, ss2.str(), m_ePin[6] );
     m_dis->setImp( high_imp );
     m_dis->setOut( false );
 }

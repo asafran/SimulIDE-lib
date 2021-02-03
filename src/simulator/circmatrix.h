@@ -37,7 +37,7 @@ class  CircMatrix
         CircMatrix();
         ~CircMatrix();
 
- static CircMatrix* self() { return m_pSelf; }
+// static CircMatrix* self() { return m_pSelf; }
 
         void printMatrix();
         void createMatrix( QList<eNode*> &eNodeList, QList<eElement*> &elementList  );
@@ -51,7 +51,7 @@ class  CircMatrix
         d_vector_t getCoeffVect(){ return m_coefVect; }
 
     private:
- static CircMatrix* m_pSelf;
+// static CircMatrix* m_pSelf;
         
         void factorMatrix( int n, int group );
         bool luSolve( int n, int group );

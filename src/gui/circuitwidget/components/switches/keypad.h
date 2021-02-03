@@ -33,10 +33,10 @@ class  KeyPad : public Component, public eElement
     Q_PROPERTY( QString  Key_Labels READ keyLabels WRITE setKeyLabels  DESIGNABLE true USER true )
 
     public:
-        KeyPad( QObject* parent, QString type, QString id );
+        KeyPad( Circuit* parent, QString type, QString id );
         ~KeyPad();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 
         double rows();

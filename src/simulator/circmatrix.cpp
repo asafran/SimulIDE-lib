@@ -25,11 +25,8 @@
 #include "circmatrix.h"
 #include "simulator.h"
 
-CircMatrix* CircMatrix::m_pSelf = 0l;
-
 CircMatrix::CircMatrix()
 {
-    m_pSelf = this;
     m_numEnodes = 0;
 }
 CircMatrix::~CircMatrix(){}

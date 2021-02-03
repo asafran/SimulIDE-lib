@@ -25,7 +25,7 @@
 class  ePN : public eResistor
 {
     public:
-        ePN(  std::string id );
+        ePN(  Simulator *sim,  std::string id );
         ~ePN();
 
         virtual double threshold() { return m_threshold; }

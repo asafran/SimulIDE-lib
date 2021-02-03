@@ -21,7 +21,6 @@
 #include "itemlibrary.h"
 #include "mainwindow.h"
 #include "circuitwidget.h"
-#include "propertieswidget.h"
 #include "subpackage.h"
 #include "connectorline.h"
 #include "simuapi_apppath.h"
@@ -29,7 +28,7 @@
 #include "utils.h"
 
 #include "switch.h" // Delete in later versions (0.3.10)
-
+/*
 static const char* Circuit_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Speed"),
     QT_TRANSLATE_NOOP("App::Property","ReactStep"),
@@ -38,14 +37,16 @@ static const char* Circuit_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Draw Grid"),
     QT_TRANSLATE_NOOP("App::Property","Show ScrollBars")
 };
+*/
+//QAtomicPointer<Circuit> Circuit::m_pSelf = 0l;
 
-QAtomicPointer<Circuit> Circuit::m_pSelf = 0l;
-
-Circuit::Circuit( qreal x, qreal y, qreal width, qreal height, QGraphicsView*  parent)
+Circuit::Circuit( qreal x, qreal y, qreal width, qreal height, CircuitView*  parent, MainWindow *mwindow)
        : QGraphicsScene(x, y, width, height, parent)
+       , simulator(this)
        , m_itemLibrary()
+
 {
-    Q_UNUSED( Circuit_properties );
+    //Q_UNUSED( Circuit_properties );
     
     setObjectName( "Circuit" );
     setParent( parent );
@@ -53,7 +54,8 @@ Circuit::Circuit( qreal x, qreal y, qreal width, qreal height, QGraphicsView*  p
     m_scenerect.setRect( x, y, width, height );
     setSceneRect( QRectF(x, y, width, height) );
 
-    m_pSelf.fetchAndStoreOrdered(this);
+    m_widget_ptr = parent->getWidgetPtr();
+//    m_pSelf.fetchAndStoreOrdered(this);
 
     m_changed     = false;
     m_pasting     = false;
@@ -66,6 +68,8 @@ Circuit::Circuit( qreal x, qreal y, qreal width, qreal height, QGraphicsView*  p
     m_hideGrid   = true;//MainWindow::self()->settings()->value( "Circuit/hideGrid" ).toBool();
     m_showScroll = true;//MainWindow::self()->settings()->value( "Circuit/showScroll" ).toBool();
     m_filePath = qApp->applicationDirPath()+"/new.simu";
+
+    m_main_ptr = mwindow;
 
     //connect( &m_bckpTimer, SIGNAL(timeout() ), this, SLOT( saveChanges()) );
     //m_bckpTimer.start( m_autoBck*1000 );
@@ -138,7 +142,7 @@ void Circuit::removeItems()                     // Remove Selected items
     foreach( Component* comp, m_compList )
     {
         bool isNode = comp->objectName().contains( "Node" ); // Don't remove Graphical Nodes
-        if( comp->isSelected() && !isNode )  removeComp( comp );
+        //if( comp->isSelected() && !isNode )  removeComp( comp );
     }
     
     QList<QGraphicsItem*> itemlist = selectedItems();
@@ -196,7 +200,7 @@ void Circuit::remove() // Remove everything
         
         bool isNode = comp->objectName().contains( "Node" );// Don't remove Graphical Nodes
 
-        if( isNumber && !isNode )  removeComp( comp );
+        //if( isNumber && !isNode )  removeComp( comp );
     }
     m_deleting = false;
 }
@@ -221,12 +225,13 @@ void Circuit::saveState()
 
     m_changed = true;
 
-    QString title = MainWindow::self()->windowTitle();
-    if( !title.endsWith('*') ) MainWindow::self()->setWindowTitle(title+'*');
+    //QString title = MainWindow::self()->windowTitle();
+    //if( !title.endsWith('*') ) MainWindow::self()->setWindowTitle(title+'*');
 }
 
 void Circuit::saveChanges()
 {
+/*
     //qDebug() << "Circuit::saveChanges";
     if( !m_changed ) return;
     if( m_con_started ) return;
@@ -248,6 +253,7 @@ void Circuit::saveChanges()
 
     if( saveDom( m_backupPath, &m_domDoc ) )
         MainWindow::self()->settings()->setValue( "backupPath", m_backupPath );
+*/
 }
 
 void Circuit::setChanged()
@@ -261,10 +267,14 @@ bool Circuit::drawGrid()
 }
 void Circuit::setDrawGrid( bool draw )
 {
+
     m_hideGrid = !draw;
+/*
     if( m_hideGrid ) MainWindow::self()->settings()->setValue( "Circuit/hideGrid", "true" );
     else             MainWindow::self()->settings()->setValue( "Circuit/hideGrid", "false" );
+*/
     update();
+
 }
 
 bool Circuit::showScroll()
@@ -274,19 +284,21 @@ bool Circuit::showScroll()
 
 void Circuit::setShowScroll( bool show )
 {
+
     m_showScroll = show;
     if( show )
     {
         m_graphicView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
         m_graphicView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-        MainWindow::self()->settings()->setValue( "Circuit/showScroll", "true" );
+//        MainWindow::self()->settings()->setValue( "Circuit/showScroll", "true" );
     }
     else
     {
         m_graphicView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         m_graphicView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-        MainWindow::self()->settings()->setValue( "Circuit/showScroll", "false" );
+//        MainWindow::self()->settings()->setValue( "Circuit/showScroll", "false" );
     }
+
 }
 
 bool Circuit::animate()
@@ -302,12 +314,12 @@ void Circuit::setAnimate( bool an )
 
 double Circuit::fontScale() 
 { 
-    return MainWindow::self()->fontScale(); 
+    return m_main_ptr->fontScale();
 }
 
 void Circuit::setFontScale( double scale )
 { 
-    MainWindow::self()->setFontScale( scale ); 
+    m_main_ptr->setFontScale( scale );
 }
 /*
 int Circuit::autoBck()
@@ -547,7 +559,7 @@ void Circuit::loadDomDoc( QDomDocument* doc )
                     eNode*  enode   = nodMap[enodeId];
                     if( !enode )                    // Create eNode and add to enodList
                     {
-                        enode = new eNode( "Circ_eNode-"+newSceneId() );
+                        enode = new eNode( &simulator, "Circ_eNode-"+newSceneId() );
                         nodMap[enodeId] = enode;
                     }
                     con->setEnode( enode );
@@ -596,7 +608,7 @@ void Circuit::loadDomDoc( QDomDocument* doc )
                                          // bcos is created inside another component, for example boards
             else if( type == "Plotter")
             {
-                loadObjectProperties( element, PlotterWidget::self() );
+                //loadObjectProperties( element, PlotterWidget::self() );
             }
             else if( type == "SerialPort")
             {
@@ -704,7 +716,7 @@ void Circuit::bom()
     QString fileName = m_filePath; 
     fileName.replace( fileName.lastIndexOf( ".simu" ), 5, "-bom.txt" );
     
-    fileName = QFileDialog::getSaveFileName( MainWindow::self()
+    fileName = QFileDialog::getSaveFileName( m_main_ptr
                             , tr( "Bill Of Materials" )
                             , fileName
                             , "(*.*)"  );
@@ -766,7 +778,7 @@ void Circuit::circuitToDom()
     }
     listToDom( &m_domDoc, &m_conList );
     
-    objectToDom( &m_domDoc, PlotterWidget::self() );
+    //objectToDom( &m_domDoc, PlotterWidget::self() );
     //objectToDom( &m_domDoc, SerialPortWidget::self() );
 
     circuit.appendChild( m_domDoc.createTextNode( "\n \n" ) );
@@ -905,7 +917,7 @@ void Circuit::removePin( QString pinId )
 Component* Circuit::createItem( QString type, QString id )
 {
     //qDebug() << "Circuit::createItem" << type << id;
-    foreach( LibraryItem* libItem, ItemLibrary::self()->items() )
+    foreach( LibraryItem* libItem, m_itemLibrary.items() )
     {
         if( libItem->type()==type )
         {
@@ -1074,7 +1086,7 @@ void Circuit::createSubcircuit()
     
     QString fileName = m_filePath;
     fileName.replace( m_filePath.lastIndexOf( ".simu" ), 5, "" );
-    fileName = QFileDialog::getSaveFileName( MainWindow::self()
+    fileName = QFileDialog::getSaveFileName( m_main_ptr
                             , tr( "Create Subcircuit" )
                             , fileName
                             , "All files (*)"  );
@@ -1447,6 +1459,99 @@ void Circuit::contextMenuEvent( QGraphicsSceneContextMenuEvent* event )
 
         menu.exec( event->screenPos() );
     }*/
+}
+
+
+void Circuit::LoadCompSetAt( QDir compSetDir )
+{
+    compSetDir.setNameFilters( QStringList( "*.xml" ) );
+
+    QStringList xmlList = compSetDir.entryList( QDir::Files );
+
+    if( xmlList.isEmpty() ) return;                  // No comp sets to load
+
+    qDebug() << "\n" << tr("    Loading Component sets at:")<< "\n" << compSetDir.absolutePath()<<"\n";
+
+    foreach( QString compSetName, xmlList )
+    {
+        QString compSetFilePath = compSetDir.absoluteFilePath( compSetName );
+
+        if( !compSetFilePath.isEmpty( ))  loadXml( compSetFilePath );
+    }
+    qDebug() << "\n";
+}
+
+void Circuit::loadXml( const QString &setFile )
+{
+    QFile file( setFile );
+    if( !file.open(QFile::ReadOnly | QFile::Text) )
+    {
+          QMessageBox::warning(0, "Circuit::loadXml", tr("Cannot read file %1:\n%2.").arg(setFile).arg(file.errorString()));
+          return;
+    }
+    QDomDocument domDoc;
+    if( !domDoc.setContent(&file) )
+    {
+         QMessageBox::warning(0, "Circuit::loadXml", tr("Cannot set file %1\nto DomDocument").arg(setFile));
+         file.close();
+         return;
+    }
+    file.close();
+
+    QDomElement root  = domDoc.documentElement();
+    QDomNode    rNode = root.firstChild();
+
+    while( !rNode.isNull() )
+    {
+        QDomElement element = rNode.toElement();
+        QDomNode    node    = element.firstChild();
+
+        QString category = element.attribute( "category" );
+        //const char* charCat = category.toUtf8().data();
+        std::string stdCat = category.toStdString();
+        const char* charCat = &(stdCat[0]);
+        category = QApplication::translate( "xmlfile", charCat );
+        //qDebug()<<"category = " <<category;
+
+        QString type = element.attribute( "type");
+        LibraryItem* parent = m_itemLibrary.libraryItem( type );
+
+        if( parent )
+        {
+            while( !node.isNull() )
+            {
+                element = node.toElement();
+                QString icon = "";
+
+                if( element.hasAttribute("icon") )
+                {
+                    QDir compSetDir( qApp->applicationDirPath() );
+                    compSetDir.cd( "../share/simulide/data/images" );
+                    icon = compSetDir.absoluteFilePath( element.attribute("icon") );
+                }
+                QString name = element.attribute( "name" );
+
+                m_xmlFileList[ name ] = setFile;   // Save xml File used to create this item
+
+                if( element.hasAttribute("info") ) name += "???"+element.attribute( "info" );
+
+//                addItem( name, category, icon, type );
+
+                node = node.nextSibling();
+            }
+        }
+        rNode = rNode.nextSibling();
+    }
+    QString compSetName = setFile.split( "/").last();
+
+    qDebug() << tr("        Loaded Component set:           ") << compSetName;
+
+    m_compSetUnique.append( compSetName );
+}
+
+QString Circuit::getXmlFile( QString compName )
+{
+    return m_xmlFileList[ compName ];
 }
 
 #include "moc_circuit.cpp"

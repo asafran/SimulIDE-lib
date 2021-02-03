@@ -24,7 +24,7 @@
 #include "pin.h"
 
 
-Component* SwitchDip::construct( QObject* parent, QString type, QString id )
+Component* SwitchDip::construct( Circuit* parent, QString type, QString id )
 { return new SwitchDip( parent, type, id ); }
 
 LibraryItem* SwitchDip::libraryItem()
@@ -37,9 +37,9 @@ LibraryItem* SwitchDip::libraryItem()
             SwitchDip::construct);
 }
 
-SwitchDip::SwitchDip( QObject* parent, QString type, QString id )
+SwitchDip::SwitchDip( Circuit* parent, QString type, QString id )
          : Component( parent, type, id )
-         , eElement( id.toStdString() )
+         , eElement(parent->getSimulatorPtr(), id.toStdString() )
 {
     m_color = QColor( 50, 50, 70 );
     m_size = 0;
@@ -50,7 +50,7 @@ SwitchDip::SwitchDip( QObject* parent, QString type, QString id )
     
     setShowVal( false );
     
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
 }
 SwitchDip::~SwitchDip(){}
 
@@ -166,7 +166,7 @@ void SwitchDip::createSwitches( int c )
         button->setIcon(QIcon(":/switchbut.png"));
         m_buttons.append( button );
         
-        QGraphicsProxyWidget* proxy = Circuit::self()->addWidget( button );
+        QGraphicsProxyWidget* proxy = m_circ_ptr->addWidget( button );
         proxy->setParentItem( this );
         proxy->setPos( QPoint( 3, -27+i*8 ) );
         m_proxys.append( proxy );
@@ -209,7 +209,7 @@ void SwitchDip::deleteSwitches( int d )
 
     m_pin.resize( m_size*2 );
     
-    Circuit::self()->update();
+    m_circ_ptr->update();
 }
 
 int SwitchDip::size()
@@ -219,8 +219,8 @@ int SwitchDip::size()
 
 void SwitchDip::setSize( int size )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->pauseSim();
     
     if( size == 0 ) size = 8;
     
@@ -229,13 +229,13 @@ void SwitchDip::setSize( int size )
     
     m_area = QRect( -1, -26, 10, m_size*8-4 );
     
-    if( pauseSim ) Simulator::self()->runContinuous();
-    Circuit::self()->update();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->runContinuous();
+    m_circ_ptr->update();
 }
 
 void SwitchDip::remove()
 {
-    Simulator::self()->remFromUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this );
     
     deleteSwitches( m_size );
 

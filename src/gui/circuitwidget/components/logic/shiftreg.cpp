@@ -21,7 +21,7 @@
 #include "pin.h"
 
 
-Component* ShiftReg::construct( QObject* parent, QString type, QString id )
+Component* ShiftReg::construct( Circuit* parent, QString type, QString id )
 {
         return new ShiftReg( parent, type, id );
 }
@@ -36,9 +36,9 @@ LibraryItem* ShiftReg::libraryItem()
         ShiftReg::construct );
 }
 
-ShiftReg::ShiftReg( QObject* parent, QString type, QString id )
+ShiftReg::ShiftReg( Circuit* parent, QString type, QString id )
         : LogicComponent( parent, type, id )
-        , eShiftReg( id.toStdString() )
+        , eShiftReg(  parent->getSimulatorPtr(), id.toStdString() )
 {
     m_width  = 4;
     m_height = 9;

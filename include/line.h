@@ -29,10 +29,10 @@ class  Line : public Shape
 
     public:
 
-        Line( QObject* parent, QString type, QString id );
+        Line( Circuit* parent, QString type, QString id );
         ~Line();
 
- static Component* construct( QObject* parent, QString type, QString id );
+ static Component* construct( Circuit* parent, QString type, QString id );
  static LibraryItem *libraryItem();
 
         virtual QPainterPath shape() const;

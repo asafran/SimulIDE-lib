@@ -24,7 +24,7 @@ static const char* BinCounter_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Max Value")
 };
 
-Component *BinCounter::construct(QObject *parent, QString type, QString id)
+Component *BinCounter::construct(Circuit *parent, QString type, QString id)
 {
     return new BinCounter(parent, type, id);
 }
@@ -39,9 +39,9 @@ LibraryItem* BinCounter::libraryItem()
         BinCounter::construct );
 }
 
-BinCounter::BinCounter(QObject *parent, QString type, QString id) 
+BinCounter::BinCounter(Circuit *parent, QString type, QString id)
           : LogicComponent( parent, type, id )
-          , eBinCounter( id.toStdString() )
+          , eBinCounter(  parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( BinCounter_properties );
     

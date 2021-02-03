@@ -22,8 +22,8 @@
 #include "e-source.h"
 #include "simulator.h"
 
-eSource::eSource( std::string id, ePin* epin )
-       : eElement( id )
+eSource::eSource( Simulator *sim,  std::string id, ePin* epin )
+       : eElement( sim, id )
 {
     m_ePin.resize(1);
     m_ePin[0] = epin;
@@ -38,10 +38,10 @@ eSource::eSource( std::string id, ePin* epin )
 
     QString nodId = QString::fromStdString(id);
 
-    m_scrEnode = new eNode( nodId+"scr" );
+    m_scrEnode = new eNode( sim, nodId+"scr" );
     m_scrEnode->setNodeNumber(0);
 
-    Simulator::self()->remFromEnodeList( m_scrEnode, /*delete=*/ false );
+    m_sim_ptr->remFromEnodeList( m_scrEnode, /*delete=*/ false );
 }
 eSource::~eSource()
 {
@@ -57,7 +57,7 @@ void eSource::createPin()
 {
     std::stringstream sspin;
     sspin << m_elmId << "-ePin0";
-    m_ePin[0] = new ePin( sspin.str(), 0 );
+    m_ePin[0] = new ePin(  sspin.str(), 0 );
 }
 
 void eSource::initialize()

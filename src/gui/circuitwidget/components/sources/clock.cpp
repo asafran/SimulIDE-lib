@@ -21,7 +21,7 @@
 #include "pin.h"
 #include "simulator.h"
 
-Component* Clock::construct( QObject* parent, QString type, QString id )
+Component* Clock::construct( Circuit* parent, QString type, QString id )
 {
     return new Clock( parent, type, id );
 }
@@ -36,7 +36,7 @@ LibraryItem* Clock::libraryItem()
         Clock::construct );
 }
 
-Clock::Clock( QObject* parent, QString type, QString id )
+Clock::Clock( Circuit* parent, QString type, QString id )
      : ClockBase( parent, type, id )
 {
 }

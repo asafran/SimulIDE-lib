@@ -37,10 +37,10 @@ class  LedMatrix : public Component, public eElement
     Q_PROPERTY( double Resistance READ res        WRITE setRes        DESIGNABLE true USER true )
 
     public:
-        LedMatrix( QObject* parent, QString type, QString id );
+        LedMatrix( Circuit* parent, QString type, QString id );
         ~LedMatrix();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         void setColor( LedBase::LedColor color );

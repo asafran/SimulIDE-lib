@@ -26,7 +26,7 @@ static const char* Resistor_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Show res")
 };
 
-Component* Resistor::construct( QObject* parent, QString type, QString id )
+Component* Resistor::construct( Circuit* parent, QString type, QString id )
 { return new Resistor( parent, type, id ); }
 
 LibraryItem* Resistor::libraryItem()
@@ -39,9 +39,9 @@ LibraryItem* Resistor::libraryItem()
             Resistor::construct);
 }
 
-Resistor::Resistor( QObject* parent, QString type, QString id )
+Resistor::Resistor( Circuit* parent, QString type, QString id )
         : Component( parent, type, id )
-        , eResistor( id.toStdString() )
+        , eResistor(  parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( Resistor_properties );
     

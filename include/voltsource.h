@@ -38,10 +38,10 @@ class SIMVIEWER_EXPORT VoltSource : public Component, public eElement
     public:
         QRectF boundingRect() const { return QRect( -44, -68, 56, 80 ); }
 
-        VoltSource( QObject* parent, QString type, QString id );
+        VoltSource( Circuit* parent, QString type, QString id );
         ~VoltSource();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem* libraryItem();
         
         virtual void updateStep();

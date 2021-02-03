@@ -22,7 +22,7 @@
 #include "itemlibrary.h"
 
 
-Component* Ground::construct( QObject* parent, QString type, QString id )
+Component* Ground::construct( Circuit* parent, QString type, QString id )
 { return new Ground( parent, type, id ); }
 
 LibraryItem* Ground::libraryItem()
@@ -35,7 +35,7 @@ LibraryItem* Ground::libraryItem()
         Ground::construct );
 }
 
-Ground::Ground( QObject* parent, QString type, QString id )
+Ground::Ground( Circuit* parent, QString type, QString id )
       : Component( parent, type, id )
 {
     QString nodid = id;
@@ -44,7 +44,7 @@ Ground::Ground( QObject* parent, QString type, QString id )
     groundpin = new Pin( 90, nodpos, nodid, 0, this);
 
     nodid.append(QString("-eSource"));
-    m_out = new eSource( nodid.toStdString(), groundpin );
+    m_out = new eSource( parent->getSimulatorPtr(), nodid.toStdString(), groundpin );
     
     setLabelPos(-16, 8, 0);
 }

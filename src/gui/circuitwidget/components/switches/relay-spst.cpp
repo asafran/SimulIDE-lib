@@ -20,7 +20,7 @@
 #include "relay-spst.h"
 #include "pin.h"
 
-Component* RelaySPST::construct( QObject* parent, QString type, QString id )
+Component* RelaySPST::construct( Circuit* parent, QString type, QString id )
 { return new RelaySPST( parent, type, id ); }
 
 LibraryItem* RelaySPST::libraryItem()
@@ -33,7 +33,7 @@ LibraryItem* RelaySPST::libraryItem()
             RelaySPST::construct);
 }
 
-RelaySPST::RelaySPST( QObject* parent, QString type, QString id )
+RelaySPST::RelaySPST( Circuit* parent, QString type, QString id )
          : RelayBase( parent, type, id )
 {
     m_area = QRectF( -10, -26, 20, 36 );

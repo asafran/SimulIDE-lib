@@ -30,7 +30,7 @@ static const char* SubPackage_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Height")
 };
 
-Component* SubPackage::construct( QObject* parent, QString type, QString id )
+Component* SubPackage::construct( Circuit* parent, QString type, QString id )
 {
     return new SubPackage( parent, type, id );
 }
@@ -45,7 +45,7 @@ LibraryItem* SubPackage::libraryItem()
         SubPackage::construct );
 }
 
-SubPackage::SubPackage( QObject* parent, QString type, QString id )
+SubPackage::SubPackage( Circuit* parent, QString type, QString id )
           : Chip( parent, type, id )
 {
     Q_UNUSED( SubPackage_properties );
@@ -66,7 +66,7 @@ SubPackage::SubPackage( QObject* parent, QString type, QString id )
     
     setAcceptHoverEvents(true);
     
-    m_pkgeFile = SIMUAPI_AppPath::self()->RODataFolder().absolutePath();
+    //m_pkgeFile = SIMUAPI_AppPath::self()->RODataFolder().absolutePath();
     if( m_lastPkg == "" ) m_lastPkg = m_pkgeFile;
 }
 SubPackage::~SubPackage(){}
@@ -114,7 +114,7 @@ void SubPackage::hoverMoveEvent( QGraphicsSceneHoverEvent* event )
         }
         else m_fakePin = false;
 
-        Circuit::self()->update();
+        m_circ_ptr->update();
         //qDebug() <<"Mouse hovered"<<xPos<<yPos;
     }
     else QGraphicsItem::hoverMoveEvent(event);
@@ -123,7 +123,7 @@ void SubPackage::hoverMoveEvent( QGraphicsSceneHoverEvent* event )
 void SubPackage::hoverLeaveEvent( QGraphicsSceneHoverEvent* event ) 
 {
     m_fakePin = false;
-    Circuit::self()->update();
+    m_circ_ptr->update();
     QGraphicsItem::hoverLeaveEvent(event);
 }
 
@@ -164,7 +164,7 @@ void SubPackage::mousePressEvent( QGraphicsSceneMouseEvent* event )
         }
         m_eventPin = pin;
         editPin();
-        Circuit::self()->update();
+        m_circ_ptr->update();
     }
     else if( m_movePin )
     {
@@ -355,7 +355,7 @@ void SubPackage::remove()
             if( con ) con->remove();
         }
     }
-    Circuit::self()->compRemoved( true );
+    m_circ_ptr->compRemoved( true );
 }
 
 int SubPackage::width()
@@ -385,7 +385,7 @@ void SubPackage::setWidth( int width )
         pin->setX( m_width*8+8 );
         pin->setLabelPos();
     }
-    Circuit::self()->update();
+    m_circ_ptr->update();
 }
 
 int SubPackage::height()
@@ -414,7 +414,7 @@ void SubPackage::setHeight( int height )
         pin->setY( m_height*8+8 );
         pin->setLabelPos();
     }
-    Circuit::self()->update();
+    m_circ_ptr->update();
 }
 
 void SubPackage::movePin()
@@ -442,7 +442,7 @@ void SubPackage::editPin()
 
 void SubPackage::editFinished( int r )
 {
-    if( m_changed ) Circuit::self()->saveState();
+    if( m_changed ) m_circ_ptr->saveState();
 }
 
 void SubPackage::deletePin()
@@ -474,12 +474,12 @@ void SubPackage::deletePin()
     }
        
     if( m_eventPin->isConnected() ) m_eventPin->connector()->remove();
-    if( m_eventPin->scene() ) Circuit::self()->removeItem( m_eventPin );
+    if( m_eventPin->scene() ) m_circ_ptr->removeItem( m_eventPin );
     m_eventPin->reset();
     delete m_eventPin;
     m_eventPin = 0l;
     
-    Circuit::self()->update();
+    m_circ_ptr->update();
 }
 
 
@@ -498,21 +498,21 @@ void SubPackage::setPinName( QString name )
 void SubPackage::invertPin( bool invert )
 {
     m_eventPin->setInverted( invert );
-    Circuit::self()->update();
+    m_circ_ptr->update();
     m_changed = true;
 }
 
 void SubPackage::unusePin( bool unuse )
 {
     m_eventPin->setUnused( unuse );
-    Circuit::self()->update();
+    m_circ_ptr->update();
     m_changed = true;
 }
 
 QString SubPackage::package()
 {
     return m_pkgeFile;
-    Circuit::self()->update();
+    m_circ_ptr->update();
 }
 
 void SubPackage::setPackage( QString package )
@@ -522,7 +522,7 @@ void SubPackage::setPackage( QString package )
     
     setLogicSymbol( m_isLS );
 
-    Circuit::self()->update();
+    m_circ_ptr->update();
 }
 
 void SubPackage::setLogicSymbol( bool ls )
@@ -559,12 +559,12 @@ void SubPackage::setLogicSymbol( bool ls )
         if( !pin ) continue;
         pin->setLabelColor( labelColor );
     }
-    Circuit::self()->update();
+    m_circ_ptr->update();
 }
 
 void SubPackage::slotSave()
 {
-    QDir pdir = QFileInfo( Circuit::self()->getFileName() ).absoluteDir();
+    QDir pdir = QFileInfo( m_circ_ptr->getFileName() ).absoluteDir();
     QString pkgeFile = pdir.absoluteFilePath( m_pkgeFile );
 
     //qDebug() << "SubPackage::slotSave"<<pkgeFile;
@@ -615,12 +615,12 @@ void SubPackage::loadPackage()
     qSort( m_lefPin.begin(), m_lefPin.end(), lessPinY );
     qSort( m_botPin.begin(), m_botPin.end(), lessPinX );
 
-    QDir pdir = QFileInfo( Circuit::self()->getFileName() ).absoluteDir();
+    QDir pdir = QFileInfo( m_circ_ptr->getFileName() ).absoluteDir();
     m_pkgeFile = pdir.relativeFilePath( fileName );
     m_lastPkg = fileName;
 
-    Circuit::self()->saveState();
-    Circuit::self()->update();
+    m_circ_ptr->saveState();
+    m_circ_ptr->update();
 }
 
 void SubPackage::savePackage( QString fileName )
@@ -678,7 +678,7 @@ void SubPackage::savePackage( QString fileName )
     file.close();
     QApplication::restoreOverrideCursor();
 
-    QDir dir = QFileInfo( Circuit::self()->getFileName() ).absoluteDir();
+    QDir dir = QFileInfo( m_circ_ptr->getFileName() ).absoluteDir();
 
     m_pkgeFile = dir.relativeFilePath( fileName );
     m_lastPkg = fileName;

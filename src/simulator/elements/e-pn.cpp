@@ -23,8 +23,8 @@
 #include "e-pn.h"
 #include "simulator.h"
 
-ePN::ePN( std::string id ) 
-   : eResistor(id )
+ePN::ePN( Simulator *sim,  std::string id )
+   : eResistor( sim, id )
 {
     m_threshold = 0.7;
 }
@@ -52,7 +52,7 @@ void ePN::initialize()
 void ePN::resetState()
 {
     eResistor::setRes( 0.6 );
-    m_accuracy = Simulator::self()->NLaccuracy();
+    m_accuracy = m_sim_ptr->NLaccuracy();
     m_voltPN  = 0;
     m_deltaV  = 0;
     m_current = 0;

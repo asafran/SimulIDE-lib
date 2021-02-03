@@ -23,9 +23,6 @@
 #include <QtWidgets>
 
 #include "circuitview.h"
-#include "plotterwidget.h"
-#include "terminalwidget.h"
-#include "serialportwidget.h"
 #include "simviewer-export.h"
 
 class SIMVIEWER_EXPORT CircuitWidget : public QWidget
@@ -33,10 +30,10 @@ class SIMVIEWER_EXPORT CircuitWidget : public QWidget
     Q_OBJECT
 
     public:
-        CircuitWidget( QWidget *parent );
+        CircuitWidget( MainWindow *parent );
         ~CircuitWidget();
 
- static CircuitWidget* self() { return m_pSelf; }
+// static CircuitWidget* self() { return m_pSelf; }
 
         void clear();
         
@@ -49,9 +46,11 @@ class SIMVIEWER_EXPORT CircuitWidget : public QWidget
         void powerCircOn();
         void powerCircOff();
         void powerCircDebug( bool run );
+
+        Circuit* getCircPtr() { return m_circView.getCircPtr(); }
         
     public slots:
-        void openCirc();
+        //void openCirc();
         void loadCirc( QString path );
         void openInfo();
         void about();
@@ -61,7 +60,7 @@ class SIMVIEWER_EXPORT CircuitWidget : public QWidget
         
     private:
 
- static CircuitWidget*  m_pSelf;
+// static CircuitWidget*  m_pSelf;
 
         QVBoxLayout    m_verticalLayout;
 
@@ -70,16 +69,18 @@ class SIMVIEWER_EXPORT CircuitWidget : public QWidget
         QToolBar m_circToolBar;
         QLabel*  m_rateLabel;
 
-        PlotterWidget     m_plotter;
+        //PlotterWidget     m_plotter;
         
 
         QAction* aboutAct;
         QAction* aboutQtAct;
         
         QMenu m_infoMenu;
+
+        MainWindow *m_main_ptr;
         
         QString m_curCirc;
-        QString m_lastCircDir;
+        //QString m_lastCircDir;
 };
 
 #endif

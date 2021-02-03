@@ -22,7 +22,7 @@
 #include "connector.h"
 
 
-Component* SevenSegmentBCD::construct( QObject* parent, QString type, QString id )
+Component* SevenSegmentBCD::construct( Circuit* parent, QString type, QString id )
 {
     return new SevenSegmentBCD( parent, type, id );
 }
@@ -37,9 +37,9 @@ LibraryItem* SevenSegmentBCD::libraryItem()
         SevenSegmentBCD::construct );
 }
 
-SevenSegmentBCD::SevenSegmentBCD( QObject* parent, QString type, QString id )
+SevenSegmentBCD::SevenSegmentBCD( Circuit* parent, QString type, QString id )
                : LogicComponent( parent, type, id )
-               , eBcdTo7S( id.toStdString() )
+               , eBcdTo7S(  parent->getSimulatorPtr(), id.toStdString() )
 {
     m_width  = 4;
     m_height = 6;
@@ -57,7 +57,7 @@ SevenSegmentBCD::SevenSegmentBCD( QObject* parent, QString type, QString id )
     for( int i=0; i<m_numInPins; i++ )
         eLogicDevice::createInput( m_inPin[i] );
         
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
     
     resetState();
 }
@@ -91,7 +91,7 @@ void SevenSegmentBCD::updateStep()
 
 void SevenSegmentBCD::remove()
 {
-    Simulator::self()->remFromUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this );
     LogicComponent::remove();
 }
 

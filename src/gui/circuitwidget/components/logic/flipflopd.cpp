@@ -21,7 +21,7 @@
 #include "pin.h"
 
 
-Component* FlipFlopD::construct( QObject* parent, QString type, QString id )
+Component* FlipFlopD::construct( Circuit* parent, QString type, QString id )
 {
         return new FlipFlopD( parent, type, id );
 }
@@ -36,9 +36,9 @@ LibraryItem* FlipFlopD::libraryItem()
         FlipFlopD::construct );
 }
 
-FlipFlopD::FlipFlopD( QObject* parent, QString type, QString id )
+FlipFlopD::FlipFlopD( Circuit* parent, QString type, QString id )
          : LogicComponent( parent, type, id )
-         , eFlipFlopD( id.toStdString() )
+         , eFlipFlopD(  parent->getSimulatorPtr(), id.toStdString() )
 {
     m_width  = 4;
     m_height = 4;
@@ -66,7 +66,7 @@ FlipFlopD::FlipFlopD( QObject* parent, QString type, QString id )
     eLogicDevice::createOutput( m_outPin[0] );               // Output Q
     eLogicDevice::createOutput( m_outPin[1] );               // Output Q'
 
-    setSrInv( true );                           // Inver Set & Reset pins
+    eFlipFlopD::setSrInv( m_circ_ptr, true );                           // Inver Set & Reset pins
     setClockInv( false );                       //Don't Invert Clock pin
 
 }

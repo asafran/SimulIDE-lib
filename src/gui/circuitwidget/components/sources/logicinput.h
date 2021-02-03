@@ -36,10 +36,10 @@ class  LogicInput : public Component, public eElement
     public:
         QRectF boundingRect() const { return QRect( -10, -10, 20, 20 ); }
 
-        LogicInput( QObject* parent, QString type, QString id );
+        LogicInput( Circuit* parent, QString type, QString id );
         ~LogicInput();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         virtual void updateStep();

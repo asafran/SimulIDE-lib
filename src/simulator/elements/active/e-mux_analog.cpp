@@ -23,8 +23,8 @@
 #include <QDebug>
 #include <sstream>
 
-eMuxAnalog::eMuxAnalog( std::string id )
-          : eElement( id )
+eMuxAnalog::eMuxAnalog( Simulator *sim,  std::string id )
+          : eElement( sim, id )
 {
     m_channels = 0;
     m_addrBits = 0;
@@ -155,7 +155,7 @@ void eMuxAnalog::setBits( int bits )
     {
         std::stringstream ss;
         ss << m_elmId << "-resistor" << i;
-        m_resistor[i] = new eResistor( ss.str() );
+        m_resistor[i] = new eResistor( m_sim_ptr, ss.str() );
         
         m_resistor[i]->setEpin( 0, m_ePin[i] );
         

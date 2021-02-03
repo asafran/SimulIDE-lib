@@ -29,15 +29,16 @@
 class BaseProcessor;
 class eElement;
 class eNode;
+class Circuit;
 
 class SIMVIEWER_EXPORT Simulator : public QObject
 {
     Q_OBJECT
     public:
-        Simulator( QObject* parent=0 );
+        Simulator( Circuit* parent=0 );
         ~Simulator();
 
- static Simulator* self() { return m_pSelf.loadRelaxed(); }
+// static Simulator* self() { return m_pSelf.loadRelaxed(); }
 
         void runContinuous();
         void stopTimer();
@@ -74,6 +75,9 @@ class SIMVIEWER_EXPORT Simulator : public QObject
         uint64_t step();
 
         QList<eNode*> geteNodes() { return m_eNodeList; }
+
+        CircMatrix* getMatrixPtr() { return &m_matrix; }
+        Circuit* getCircPtr() { return m_circ_ptr; }
 
         void addToEnodeBusList( eNode* nod );
         void remFromEnodeBusList( eNode* nod );
@@ -117,7 +121,7 @@ class SIMVIEWER_EXPORT Simulator : public QObject
         void resumeDebug();
         
     private:
- static QAtomicPointer<Simulator> m_pSelf;
+// static QAtomicPointer<Simulator> m_pSelf;
         
         void runCircuit();
         
@@ -128,6 +132,8 @@ class SIMVIEWER_EXPORT Simulator : public QObject
         QFuture<void> m_CircuitFuture;
 
         CircMatrix m_matrix;
+
+        Circuit *m_circ_ptr;
 
         QList<eNode*>    m_eNodeList;
         QList<eNode*>    m_eChangedNodeList;

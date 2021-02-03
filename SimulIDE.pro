@@ -208,7 +208,7 @@ OBJECTS_DIR *= $$_OBJECTS_DIR
 MOC_DIR     *= $$_OBJECTS_DIR
 INCLUDEPATH += $$OBJECTS_DIR
 
-DESTDIR = $$(RRS_ROOT)/bin
+DESTDIR = $$TARGET_PREFIX/bin
 
 TARGET = $$qtLibraryTarget(SimViewer)
 
@@ -234,6 +234,6 @@ $(MOVE)     ../resources/translations/*.qm $$TARGET_PREFIX/share/simulide/transl
 
 message( "-----------------------------" )
 message( "    " $$TARGET_NAME )
-message( "    TARGET_PREFIX=" $$(RRS_ROOT)\bin )
+message( "    TARGET_PREFIX=" $$TARGET_PREFIX\bin )
 message( "-----------------------------" )
 

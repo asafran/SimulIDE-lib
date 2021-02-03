@@ -25,8 +25,8 @@
 #include "e-node.h"
 #include "simulator.h"
 
-eBJT::eBJT( std::string id )
-    : eResistor( id )
+eBJT::eBJT( Simulator *sim,  std::string id )
+    : eResistor( sim, id )
 {
     m_ePin.resize(3);
 
@@ -36,13 +36,13 @@ eBJT::eBJT( std::string id )
 
     std::stringstream ssa;
     ssa << m_elmId << "-BEdiode";
-    m_BEdiode = new ePN( ssa.str() );
+    m_BEdiode = new ePN( sim, ssa.str() );
     m_BEdiode->initEpins();
     setBEthr( 0.7 );
 
     std::stringstream ssb;
     ssb << m_elmId << "-BCdiode";
-    m_BCdiode = new eDiode( ssb.str() );
+    m_BCdiode = new eDiode( sim, ssb.str() );
     m_BCdiode->initEpins();
 }
 eBJT::~eBJT()
@@ -108,7 +108,7 @@ void eBJT::resetState()
     m_BEdiode->resetState();
     if( m_BCdiodeOn ) m_BCdiode->resetState();
 
-    m_accuracy = Simulator::self()->NLaccuracy();
+    m_accuracy = m_sim_ptr->NLaccuracy();
     //m_stage = 0;
     m_lastOut = 0;
     m_baseCurr = 0;
@@ -236,15 +236,15 @@ void eBJT::initEpins()
 {
     std::stringstream sd;
     sd << m_elmId << "-collector";
-    m_ePin[0] = new ePin( sd.str(), 0 );
+    m_ePin[0] = new ePin(  sd.str(), 0 );
 
     std::stringstream ss;
     ss << m_elmId << "-emiter";
-    m_ePin[1] = new ePin( ss.str(), 1 );
+    m_ePin[1] = new ePin(  ss.str(), 1 );
 
     std::stringstream sg;
     sg << m_elmId << "-base";
-    m_ePin[2] = new ePin( sg.str(), 2 );
+    m_ePin[2] = new ePin(  sg.str(), 2 );
 }
 
 ePin* eBJT::getEpin( QString pinName )

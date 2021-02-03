@@ -21,7 +21,7 @@
 #include "pin.h"
 
 
-Component* BcdTo7S::construct( QObject* parent, QString type, QString id )
+Component* BcdTo7S::construct( Circuit* parent, QString type, QString id )
 {
         return new BcdTo7S( parent, type, id );
 }
@@ -36,9 +36,9 @@ LibraryItem* BcdTo7S::libraryItem()
         BcdTo7S::construct );
 }
 
-BcdTo7S::BcdTo7S( QObject* parent, QString type, QString id )
+BcdTo7S::BcdTo7S( Circuit* parent, QString type, QString id )
        : LogicComponent( parent, type, id )
-       , eBcdTo7S( id.toStdString() )
+       , eBcdTo7S(  parent->getSimulatorPtr(), id.toStdString() )
 {
     m_width  = 4;
     m_height = 8;

@@ -37,7 +37,7 @@ class  eI2C : public eLogicDevice
 {
     public:
 
-        eI2C( std::string id );
+        eI2C( Simulator *sim,  std::string id );
         ~eI2C();
 
         virtual void initialize();

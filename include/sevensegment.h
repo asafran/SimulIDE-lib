@@ -40,10 +40,10 @@ class  SevenSegment : public Component, public eElement
 
         //QRectF boundingRect() const { return m_area; }
 
-        SevenSegment( QObject* parent, QString type, QString id );
+        SevenSegment( Circuit* parent, QString type, QString id );
         ~SevenSegment();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         

@@ -26,7 +26,7 @@ class  eFlipFlopD : public eLogicDevice
 {
     public:
 
-        eFlipFlopD( std::string id );
+        eFlipFlopD( Simulator *sim,  std::string id );
         ~eFlipFlopD();
         
         void initialize();
@@ -35,7 +35,7 @@ class  eFlipFlopD : public eLogicDevice
         virtual void setVChanged();
 
         bool srInv() { return m_srInv; }
-        void setSrInv( bool inv );
+        void setSrInv( Circuit *circ, bool inv );
 
     protected:
         bool m_srInv;

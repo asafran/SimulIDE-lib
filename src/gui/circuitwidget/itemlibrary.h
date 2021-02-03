@@ -22,6 +22,7 @@
 
 #include "component.h"
 #include "simviewer-export.h"
+//#include "circuit.h"
 
 //class QStringList;
 class LibraryItem;
@@ -34,7 +35,7 @@ class SIMVIEWER_EXPORT ItemLibrary
         ItemLibrary();
         ~ItemLibrary();
 
- static ItemLibrary* self() { return m_pSelf; }
+// static ItemLibrary* self() { return m_pSelf; }
 
         /**
          * Returns a list of items in the library
@@ -59,7 +60,7 @@ class SIMVIEWER_EXPORT ItemLibrary
 
     
     protected:
- static ItemLibrary* m_pSelf;
+// static ItemLibrary* m_pSelf;
 
         QList<LibraryItem*> m_items;
         //QStringList m_plugins;
@@ -67,6 +68,7 @@ class SIMVIEWER_EXPORT ItemLibrary
         friend ItemLibrary*  itemLibrary();
 };
 
+class Component;
 
 class  LibraryItem
 {

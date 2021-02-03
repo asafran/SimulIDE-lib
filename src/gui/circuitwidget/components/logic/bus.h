@@ -31,10 +31,10 @@ class  Bus : public Component, public eBus
     Q_PROPERTY( int Start_Bit READ startBit    WRITE setStartBit    DESIGNABLE true USER true )
 
     public:
-        Bus( QObject* parent, QString type, QString id );
+        Bus( Circuit* parent, QString type, QString id );
         ~Bus();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         void setNumLines( int lines );

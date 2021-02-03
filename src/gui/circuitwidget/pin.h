@@ -23,6 +23,10 @@
 #include "component.h"
 #include "connector.h"
 #include "e-pin.h"
+#include "circuit.h"
+
+class Connector;
+class Component;
 
 class  Pin : public QObject, public QGraphicsItem, public ePin
 {

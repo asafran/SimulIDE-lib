@@ -27,7 +27,7 @@ static const char* TextComponent_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Margin")
 };
 
-Component* TextComponent::construct( QObject* parent, QString type, QString id )
+Component* TextComponent::construct( Circuit* parent, QString type, QString id )
 {
     return new TextComponent( parent, type, id );
 }
@@ -42,7 +42,7 @@ LibraryItem* TextComponent::libraryItem()
     TextComponent::construct );
 }
 
-TextComponent::TextComponent( QObject* parent, QString type, QString id )
+TextComponent::TextComponent( Circuit* parent, QString type, QString id )
              : Component( parent, type, id )
 {
     Q_UNUSED( TextComponent_properties );
@@ -86,7 +86,7 @@ void TextComponent::updateGeometry(int, int, int)
     
     m_area = QRect( -margin, -margin, m_text->boundingRect().width()+margin*2, m_text->boundingRect().height()+margin*2 );
     
-    Circuit::self()->update();
+    m_circ_ptr->update();
 }
 
 int TextComponent::margin() { return m_margin; }

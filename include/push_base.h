@@ -29,7 +29,7 @@ class  PushBase : public SwitchBase
     
     public:
     
-        PushBase( QObject* parent, QString type, QString id );
+        PushBase( Circuit* parent, QString type, QString id );
         ~PushBase();
 
     public slots:

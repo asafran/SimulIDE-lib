@@ -38,10 +38,10 @@ class  BinCounter : public LogicComponent, public eBinCounter
     Q_PROPERTY( int    Max_Value      READ TopValue  WRITE setTopValue  DESIGNABLE true  USER true )
 
     public:
-        BinCounter( QObject* parent, QString type, QString id );
+        BinCounter( Circuit* parent, QString type, QString id );
         ~BinCounter();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 };
 

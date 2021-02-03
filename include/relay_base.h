@@ -35,7 +35,7 @@ class  RelayBase : public Component, public eInductor
 
     public:
 
-        RelayBase( QObject* parent, QString type, QString id );
+        RelayBase( Circuit* parent, QString type, QString id );
         ~RelayBase();
 
         double rCoil() const;

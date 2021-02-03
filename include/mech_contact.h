@@ -32,7 +32,7 @@ class  MechContact : public Component, public eElement
 
     public:
 
-        MechContact( QObject* parent, QString type, QString id );
+        MechContact( Circuit* parent, QString type, QString id );
         ~MechContact();
 
         int poles() const;

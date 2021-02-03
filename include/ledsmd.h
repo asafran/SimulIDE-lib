@@ -29,7 +29,7 @@ class  LedSmd : public LedBase
     Q_OBJECT
 
     public:
-        LedSmd( QObject* parent, QString type, QString id, QRectF area );
+        LedSmd( Circuit* parent, QString type, QString id, QRectF area );
         ~LedSmd();
 
     protected:

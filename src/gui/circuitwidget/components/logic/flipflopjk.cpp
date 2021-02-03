@@ -21,7 +21,7 @@
 #include "pin.h"
 
 
-Component* FlipFlopJK::construct( QObject* parent, QString type, QString id )
+Component* FlipFlopJK::construct( Circuit* parent, QString type, QString id )
 {
         return new FlipFlopJK( parent, type, id );
 }
@@ -36,9 +36,9 @@ LibraryItem* FlipFlopJK::libraryItem()
         FlipFlopJK::construct );
 }
 
-FlipFlopJK::FlipFlopJK( QObject* parent, QString type, QString id )
+FlipFlopJK::FlipFlopJK( Circuit* parent, QString type, QString id )
           : LogicComponent( parent, type, id )
-          , eFlipFlopJK( id.toStdString() )
+          , eFlipFlopJK(  parent->getSimulatorPtr(), id.toStdString() )
 {
     m_width  = 4;
     m_height = 6;
@@ -72,7 +72,7 @@ FlipFlopJK::FlipFlopJK( QObject* parent, QString type, QString id )
 
     eLogicDevice::createOutput( m_outPin[1] );               // Output Q'
 
-    setSrInv( true );                         // Invert Set & Reset pins
+    setSrInv( m_circ_ptr, true );                         // Invert Set & Reset pins
     setClockInv( false );                       //Don't Invert Clock pin
 
 }

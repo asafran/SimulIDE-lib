@@ -33,10 +33,10 @@ class  Buffer : public Gate
     public:
         QRectF boundingRect() const { return m_area; }
     
-        Buffer( QObject* parent, QString type, QString id );
+        Buffer( Circuit* parent, QString type, QString id );
         ~Buffer();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         void setTristate( bool t );

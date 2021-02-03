@@ -25,8 +25,8 @@
 #include "e-node.h"
 
 
-eMosfet::eMosfet( std::string id )
-       : eResistor( id )
+eMosfet::eMosfet( Simulator *sim,  std::string id )
+       : eResistor( sim, id )
 {
     m_Pchannel  = false;
     m_depletion = false;
@@ -57,7 +57,7 @@ void eMosfet::resetState()
 {
     eResistor::setRes( m_RDSon );
     
-    m_accuracy = Simulator::self()->NLaccuracy();
+    m_accuracy = m_sim_ptr->NLaccuracy();
 
     m_lastCurrent = 0;
     m_Vs = 0;

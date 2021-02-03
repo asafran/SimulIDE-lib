@@ -41,10 +41,10 @@ class  Pcd8544 : public Component, public eElement
     Q_OBJECT
     
     public:
-        Pcd8544( QObject* parent, QString type, QString id );
+        Pcd8544( Circuit* parent, QString type, QString id );
         ~Pcd8544();
         
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem* libraryItem();
         
         void initialize();

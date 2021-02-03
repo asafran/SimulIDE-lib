@@ -22,7 +22,7 @@
 #include "connector.h"
 
 
-Component* Voltimeter::construct( QObject* parent, QString type, QString id )
+Component* Voltimeter::construct( Circuit* parent, QString type, QString id )
 { return new Voltimeter( parent, type, id ); }
 
 LibraryItem* Voltimeter::libraryItem()
@@ -35,7 +35,7 @@ LibraryItem* Voltimeter::libraryItem()
             Voltimeter::construct);
 }
 
-Voltimeter::Voltimeter( QObject* parent, QString type, QString id )
+Voltimeter::Voltimeter( Circuit* parent, QString type, QString id )
           : Meter( parent, type, id )
 {
     m_unit = "V";

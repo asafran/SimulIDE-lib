@@ -27,7 +27,7 @@ static const char* CurrSource_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Show Amp")
 };
 
-Component* CurrSource::construct( QObject* parent, QString type, QString id )
+Component* CurrSource::construct( Circuit* parent, QString type, QString id )
 {
     return new CurrSource( parent, type, id );
 }
@@ -42,9 +42,9 @@ LibraryItem* CurrSource::libraryItem()
         CurrSource::construct );
 }
 
-CurrSource::CurrSource( QObject* parent, QString type, QString id )
+CurrSource::CurrSource( Circuit* parent, QString type, QString id )
           : Component( parent, type, id )
-          , eElement( id.toStdString() )
+          , eElement(parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( CurrSource_properties );
     
@@ -52,7 +52,7 @@ CurrSource::CurrSource( QObject* parent, QString type, QString id )
 
     m_voltw.setFixedSize( 46,70 );
     
-    m_proxy = Circuit::self()->addWidget( &m_voltw );
+    m_proxy = m_circ_ptr->addWidget( &m_voltw );
     m_proxy->setParentItem( this );
     m_proxy->setPos( QPoint(-39, -63) );
 
@@ -77,7 +77,7 @@ CurrSource::CurrSource( QObject* parent, QString type, QString id )
     
     setLabelPos(-40,-80, 0);
     
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
 
     connect( m_button, SIGNAL( clicked()),
              this,     SLOT  ( onbuttonclicked()) );
@@ -156,7 +156,7 @@ void CurrSource::remove()
 {
     if ( outpin->isConnected() ) outpin->connector()->remove();
     
-    Simulator::self()->remFromUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this );
     
     Component::remove();
 }

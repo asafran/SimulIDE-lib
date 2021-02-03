@@ -25,7 +25,7 @@
 #include "utils.h"
 
 
-Connector::Connector( QObject* parent, QString type, QString id, Pin* startpin, Pin* endpin )
+Connector::Connector( Circuit* parent, QString type, QString id, Pin* startpin, Pin* endpin )
          : Component( parent, type, id )
 {
     //m_eNode = 0l;
@@ -102,7 +102,7 @@ void Connector::remConLine( ConnectorLine* line  )
     int index = m_conLineList.indexOf( line );
 
     connectLines( index-1, index+1 );
-    Circuit::self()->removeItem( line );
+    m_circ_ptr->removeItem( line );
     m_conLineList.removeOne( line );
     if( m_actLine > 0 )  m_actLine -= 1;
 }
@@ -138,7 +138,7 @@ void Connector::addConLine( ConnectorLine* line, int index )
 
     m_conLineList.insert( index, line );
 
-    Circuit::self()->addItem(line);
+    m_circ_ptr->addItem(line);
 
     if( index > 0 )
     {
@@ -154,7 +154,7 @@ void Connector::addConLine( ConnectorLine* line, int index )
         m_conLineList.at( index+1 )->sSetP1( line->p2() );
     }
     line->setIsBus( m_isBus );
-    if( Circuit::self()->is_constarted() ) line->setCursor( Qt::ArrowCursor );
+    if( m_circ_ptr->is_constarted() ) line->setCursor( Qt::ArrowCursor );
 }
 
 ConnectorLine* Connector::addConLine( int x1, int y1, int x2, int y2, int index )
@@ -192,7 +192,7 @@ void Connector::disconnectLines( int index1, int index2 )
 
 void Connector::updateConRoute( Pin* pin, QPointF thisPoint )
 {
-    if( Circuit::self()->pasting() ) 
+    if( m_circ_ptr->pasting() ) 
     {
         remNullLines();
         return;
@@ -262,7 +262,7 @@ void Connector::updateConRoute( Pin* pin, QPointF thisPoint )
     {
         //if( preline && preline->isDiagonal() ) return;
         
-        Circuit::self()->removeItem( line );
+        m_circ_ptr->removeItem( line );
         m_conLineList.removeOne( line );
 
         if( m_actLine > 0 )  m_actLine -= 1;
@@ -332,7 +332,7 @@ void Connector::remLines()
     while( !m_conLineList.isEmpty() )
     {
         ConnectorLine* line = m_conLineList.takeLast();
-        Circuit::self()->removeItem( line );
+        m_circ_ptr->removeItem( line );
         delete line;
     }
 }
@@ -340,7 +340,7 @@ void Connector::remLines()
 void Connector::move( QPointF delta )
 {
     //qDebug() << "Connector::move ..........................";
-    if( Circuit::self()->pasting() )
+    if( m_circ_ptr->pasting() )
     {
         foreach( ConnectorLine* line, m_conLineList )
             line->move( delta );
@@ -368,23 +368,23 @@ void Connector::remove()
 {
     //qDebug() << "Connector::remove simulator running: " << Simulator::self()->isRunning();
     //qDebug()<<"Connector::remove" << this->objectName();
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->pauseSim();
 
     if( m_startPin ) m_startPin->reset();
     if( m_endPin )   m_endPin->reset();
 
-    Circuit::self()->conList()->removeOne( this );
-    Circuit::self()->removeItem( this );
+    m_circ_ptr->conList()->removeOne( this );
+    m_circ_ptr->removeItem( this );
     remLines();
 
-    if( pauseSim ) Simulator::self()->runContinuous();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->runContinuous();
 }
 
 void Connector::closeCon( Pin* endpin, bool connect  )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->pauseSim();
 
     m_endPin   = endpin;
     m_endpinid = endpin->objectName();
@@ -394,7 +394,7 @@ void Connector::closeCon( Pin* endpin, bool connect  )
         QString enodid = "enode";
         enodid.append(m_id);
         enodid.remove("Connector");
-        eNode* newEnode = new eNode( enodid );
+        eNode* newEnode = new eNode( m_circ_ptr->getSimulatorPtr(), enodid );
 
         eNode* startPinEnode = m_startPin->getEnode();
         eNode* endPinEnode   = m_endPin->getEnode();
@@ -447,7 +447,7 @@ void Connector::closeCon( Pin* endpin, bool connect  )
     //refreshPointList();
     foreach( ConnectorLine* line, m_conLineList ) line->setCursor( Qt::CrossCursor );
 
-    if( pauseSim ) Simulator::self()->runContinuous();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->runContinuous();
 }
 
 void Connector::splitCon( int index, Pin* pin1, Pin* pin2 )
@@ -462,10 +462,10 @@ void Connector::splitCon( int index, Pin* pin1, Pin* pin2 )
     QString type = QString("Connector");
     QString id = type;
     id.append( "-" );
-    id.append( Circuit::self()->newSceneId() );
+    id.append( m_circ_ptr->newSceneId() );
 
-    Connector* new_connector = new Connector( Circuit::self(), type, id, pin2 );
-    Circuit::self()->addItem(new_connector);
+    Connector* new_connector = new Connector( m_circ_ptr, type, id, pin2 );
+    m_circ_ptr->addItem(new_connector);
 
     int newindex = 0;
     int size = m_conLineList.size();

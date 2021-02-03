@@ -23,7 +23,7 @@
 #include "itemlibrary.h"
 
 
-Component* VoltSource::construct( QObject* parent, QString type, QString id )
+Component* VoltSource::construct( Circuit* parent, QString type, QString id )
 {
     return new VoltSource( parent, type, id );
 }
@@ -38,9 +38,9 @@ LibraryItem* VoltSource::libraryItem()
         VoltSource::construct );
 }
 
-VoltSource::VoltSource( QObject* parent, QString type, QString id )
+VoltSource::VoltSource( Circuit* parent, QString type, QString id )
           : Component( parent, type, id )
-          , eElement( id.toStdString() )
+          , eElement(parent->getSimulatorPtr(), id.toStdString() )
 {
     m_voltHight = 5.0;
     
@@ -48,7 +48,7 @@ VoltSource::VoltSource( QObject* parent, QString type, QString id )
 
     m_voltw.setFixedSize( 46,70 );
     
-    m_proxy = Circuit::self()->addWidget( &m_voltw );
+    m_proxy = m_circ_ptr->addWidget( &m_voltw );
     m_proxy->setParentItem( this );
     m_proxy->setPos( QPoint(-39, -63) );
     //m_proxy->setFlag(QGraphicsItem::ItemNegativeZStacksBehindParent, true );
@@ -65,7 +65,7 @@ VoltSource::VoltSource( QObject* parent, QString type, QString id )
     outpin = new Pin( 0, nodpos, nodid, 0, this );
 
     nodid.append("-eSource");
-    m_out = new eSource( nodid.toStdString(), outpin );
+    m_out = new eSource( parent->getSimulatorPtr(), nodid.toStdString(), outpin );
     
     m_out->setVoltHigh( 0 );
     m_out->setVoltLow( 0 );
@@ -78,7 +78,7 @@ VoltSource::VoltSource( QObject* parent, QString type, QString id )
     
     setLabelPos(-40,-80, 0);
     
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
 
     connect( m_button, SIGNAL( clicked()),
              this,     SLOT  ( onbuttonclicked()) );
@@ -146,7 +146,7 @@ void VoltSource::remove()
 {
     if ( outpin->isConnected() ) outpin->connector()->remove();
     
-    Simulator::self()->remFromUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this );
     delete m_out;
     
     Component::remove();

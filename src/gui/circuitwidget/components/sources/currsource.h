@@ -39,10 +39,10 @@ class  CurrSource : public Component, public eElement
     public:
         QRectF boundingRect() const { return QRect( -44, -68, 56, 80 ); }
 
-        CurrSource( QObject* parent, QString type, QString id );
+        CurrSource( Circuit* parent, QString type, QString id );
         ~CurrSource();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem* libraryItem();
         
         virtual void initialize();

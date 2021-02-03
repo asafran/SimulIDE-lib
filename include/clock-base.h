@@ -33,7 +33,7 @@ class  ClockBase : public LogicInput
     
         QRectF boundingRect() const { return QRectF( m_area.x()-2, m_area.y()-2, m_area.width()+4 ,m_area.height()+4 ); }
 
-        ClockBase( QObject* parent, QString type, QString id );
+        ClockBase( Circuit* parent, QString type, QString id );
         ~ClockBase();
 
         virtual void updateStep();

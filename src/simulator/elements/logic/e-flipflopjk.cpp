@@ -22,8 +22,8 @@
 #include "e-flipflopjk.h"
 #include "circuit.h"
 
-eFlipFlopJK::eFlipFlopJK( std::string id )
-           : eLogicDevice( id )
+eFlipFlopJK::eFlipFlopJK( Simulator *sim,  std::string id )
+           : eLogicDevice( sim, id )
 {
 }
 eFlipFlopJK::~eFlipFlopJK()
@@ -89,11 +89,11 @@ void eFlipFlopJK::setVChanged()
     }
 }
 
-void eFlipFlopJK::setSrInv( bool inv )
+void eFlipFlopJK::setSrInv( Circuit *circ, bool inv )
 {
     m_srInv = inv;
     m_input[2]->setInverted( inv );                           // Set
     m_input[3]->setInverted( inv );                           // Reset
     
-    Circuit::self()->update();
+    circ->update();
 }

@@ -30,10 +30,10 @@ class SIMVIEWER_EXPORT Voltimeter : public Meter
 
     public:
 
-        Voltimeter( QObject* parent, QString type, QString id );
+        Voltimeter( Circuit* parent, QString type, QString id );
         ~Voltimeter();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 
         void updateStep();

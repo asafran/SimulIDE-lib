@@ -26,7 +26,7 @@ static const char* Diode_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Zener Volt")
 };
 
-Component* Diode::construct( QObject* parent, QString type, QString id )
+Component* Diode::construct( Circuit* parent, QString type, QString id )
 { return new Diode( parent, type, id ); }
 
 LibraryItem* Diode::libraryItem()
@@ -39,9 +39,9 @@ LibraryItem* Diode::libraryItem()
             Diode::construct);
 }
 
-Diode::Diode( QObject* parent, QString type, QString id )
+Diode::Diode( Circuit* parent, QString type, QString id )
      : Component( parent, type, id )
-     , eDiode( id.toStdString() )
+     , eDiode(  parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( Diode_properties );
     

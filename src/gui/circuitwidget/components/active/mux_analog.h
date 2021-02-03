@@ -33,10 +33,10 @@ class  MuxAnalog : public Component, public eMuxAnalog
     Q_PROPERTY( double Impedance    READ resist   WRITE setResist   DESIGNABLE true USER true )
 
     public:
-        MuxAnalog( QObject* parent, QString type, QString id );
+        MuxAnalog( Circuit* parent, QString type, QString id );
         ~MuxAnalog();
         
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         int addrBits() { return m_addrBits; }

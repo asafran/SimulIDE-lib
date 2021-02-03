@@ -32,10 +32,10 @@ class  SwitchDip : public Component, public eElement
     Q_PROPERTY( int    State  READ state  WRITE setState  )
 
     public:
-        SwitchDip( QObject* parent, QString type, QString id );
+        SwitchDip( Circuit* parent, QString type, QString id );
         ~SwitchDip();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         virtual void initialize();

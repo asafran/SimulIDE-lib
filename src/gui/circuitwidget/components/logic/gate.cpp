@@ -22,9 +22,9 @@
 #include "gate.h"
 
 
-Gate::Gate( QObject* parent, QString type, QString id, int inputs )
+Gate::Gate( Circuit* parent, QString type, QString id, int inputs )
     : Component( parent, type, id )
-    , eGate( id.toStdString(), 0 )
+    , eGate(  parent->getSimulatorPtr(), id.toStdString(), 0 )
 {
     setNumInps( inputs );                           // Create Input Pins
     
@@ -55,7 +55,7 @@ void Gate::setNumInps( int inputs )
     {
         Pin* pin = m_inputPin[i];
         if( pin->isConnected() ) pin->connector()->remove();
-        if( pin->scene() ) Circuit::self()->removeItem( pin );
+        if( pin->scene() ) m_circ_ptr->removeItem( pin );
         pin->reset();
         delete pin;
     }
@@ -72,13 +72,13 @@ void Gate::setNumInps( int inputs )
     }
     m_area = QRect( -20, -8*m_numInputs, 40, 8*2*m_numInputs );
     
-    Circuit::self()->update();
+    m_circ_ptr->update();
 }
 
 void Gate::setInverted( bool inverted )
 {
     eLogicDevice::setInverted( inverted );
-    Circuit::self()->update();
+    m_circ_ptr->update();
 }
 
 #include "moc_gate.cpp"

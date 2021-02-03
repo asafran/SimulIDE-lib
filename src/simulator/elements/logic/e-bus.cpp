@@ -22,8 +22,8 @@
 
 #include "e-bus.h"
 
-eBus::eBus( std::string id )
-    : eElement( id )
+eBus::eBus( Simulator *sim,  std::string id )
+    : eElement( sim, id )
 {
     m_numLines = 0;
     m_startBit = 0;

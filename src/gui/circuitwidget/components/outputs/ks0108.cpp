@@ -21,13 +21,14 @@
 #include "connector.h"
 #include "simulator.h"
 #include "ks0108.h"
+#include "circuit.h"
 
 static const char* Ks0108_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","CS Active Low")
 };
 
 
-Component* Ks0108::construct( QObject* parent, QString type, QString id )
+Component* Ks0108::construct( Circuit* parent, QString type, QString id )
 {
     return new Ks0108( parent, type, id );
 }
@@ -42,9 +43,9 @@ LibraryItem* Ks0108::libraryItem()
         Ks0108::construct );
 }
 
-Ks0108::Ks0108( QObject* parent, QString type, QString id )
+Ks0108::Ks0108( Circuit* parent, QString type, QString id )
       : Component( parent, type, id )
-      , eElement( (id+"-eElement").toStdString() )
+      , eElement(m_circ_ptr->getSimulatorPtr(), (id+"-eElement").toStdString() )
       , m_pinRst( 270, QPoint(-56, 56), id+"-PinRst" , 0, this )
       , m_pinCs2( 270, QPoint(-48, 56), id+"-PinCs2" , 0, this )
       , m_pinCs1( 270, QPoint(-40, 56), id+"-PinCs1" , 0, this )
@@ -76,7 +77,7 @@ Ks0108::Ks0108( QObject* parent, QString type, QString id )
         m_dataPin[i]->setLabelText( " D"+QString::number(i) );
 
         pinId.append(QString("-eSource"));
-        m_dataeSource[i] = new eSource( pinId.toStdString(), m_dataPin[i] );
+        m_dataeSource[i] = new eSource( m_circ_ptr->getSimulatorPtr(), pinId.toStdString(), m_dataPin[i] );
         m_dataeSource[i]->setVoltHigh( 5 );
         m_dataeSource[i]->setImp( high_imp );
     }
@@ -85,7 +86,7 @@ Ks0108::Ks0108( QObject* parent, QString type, QString id )
     m_pdisplayImg->setColor( 1, qRgb(0,0,0));
     m_pdisplayImg->setColor( 0, qRgb(200,215,180) );
     
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
     
     setLabelPos( -32,-68, 0);
     setShowId( true );
@@ -334,7 +335,7 @@ void Ks0108::remove()
     }
     
     delete m_pdisplayImg;
-    Simulator::self()->remFromUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this );
     
     Component::remove();
 }

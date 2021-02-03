@@ -29,7 +29,7 @@ class  eMuxAnalog : public eElement
 {
     public:
 
-        eMuxAnalog( std::string id );
+        eMuxAnalog( Simulator *sim,  std::string id );
         ~eMuxAnalog();
 
         virtual void initialize();

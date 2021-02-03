@@ -22,7 +22,7 @@
 #include "e-element.h"
 
 
-eNode::eNode( QString id )
+eNode::eNode( Simulator *sim, QString id )
 {
     m_id = id;
     m_nodeNum = 0;
@@ -33,9 +33,10 @@ eNode::eNode( QString id )
     initialize();
     //qDebug() << "+eNode" << m_id;
 
-    Simulator::self()->addToEnodeList( this );
+    sim->addToEnodeList( this );
+    m_sim_ptr = sim;
 }
-eNode::~eNode(){ /*qDebug() << "~eNode" << m_id;Simulator::self()->remFromEnodeList( this );*/ }
+eNode::~eNode(){ /*qDebug() << "~eNode" << m_id;m_sim_ptr->remFromEnodeList( this );*/ }
 
 void eNode::pinChanged( ePin* epin, int enodeComp ) // Add node at other side of pin
 {
@@ -85,7 +86,7 @@ void eNode::stampCurrent( ePin* epin, double data )
     if( !m_changed ) 
     {
         m_changed = true;
-        Simulator::self()->addToChangedNodeList( this );
+        m_sim_ptr->addToChangedNodeList( this );
     }
 }
 
@@ -100,7 +101,7 @@ void eNode::stampAdmitance( ePin* epin, double data )
     if( !m_changed ) 
     {
         m_changed = true;
-        Simulator::self()->addToChangedNodeList( this );
+        m_sim_ptr->addToChangedNodeList( this );
     }
 }
 
@@ -156,7 +157,7 @@ void eNode::stampAdmit()
         ai.next();
         int enode = ai.key();
         double admit = ai.value();
-        if( enode>0 ) CircMatrix::self()->stampMatrix( m_nodeNum, enode, -admit );
+        if( enode>0 ) m_sim_ptr->getMatrixPtr()->stampMatrix( m_nodeNum, enode, -admit );
         
         if( m_switched )                       // Find open/close events
         {
@@ -164,7 +165,7 @@ void eNode::stampAdmit()
             double admitP = m_admitPrev[enode];
 
             if(( admit != admitP )
-              &&((admit==0)||(admitP==0))) CircMatrix::self()->setCircChanged();
+              &&((admit==0)||(admitP==0))) m_sim_ptr->getMatrixPtr()->setCircChanged();
         }
     }
     if( m_switched )
@@ -172,12 +173,12 @@ void eNode::stampAdmit()
         m_admitPrev = m_admit;
         if( nonCero < 2 ) m_totalAdmit += 1e-12; //pnpBias example error
     }
-    CircMatrix::self()->stampMatrix( m_nodeNum, m_nodeNum, m_totalAdmit );
+    m_sim_ptr->getMatrixPtr()->stampMatrix( m_nodeNum, m_nodeNum, m_totalAdmit );
 }
 
 void eNode::stampCurr()
 {
-    CircMatrix::self()->stampCoef( m_nodeNum, m_totalCurr );
+    m_sim_ptr->getMatrixPtr()->stampCoef( m_nodeNum, m_totalCurr );
 }
 
 void eNode::solveSingle()
@@ -207,13 +208,13 @@ void  eNode::setVolt( double v )
         m_volt = v;
         
         foreach( eElement* el, m_changedFast ) 
-            Simulator::self()->addToChangedFast( el ); // el->setVChanged();
+            m_sim_ptr->addToChangedFast( el ); // el->setVChanged();
             
         foreach( eElement* el, m_reactiveList )
-            Simulator::self()->addToReactiveList( el );
+            m_sim_ptr->addToReactiveList( el );
             
         foreach( eElement* el, m_nonLinear ) 
-            Simulator::self()->addToNoLinList( el );
+            m_sim_ptr->addToNoLinList( el );
     }
 }
 double eNode::getVolt() { return m_volt; }
@@ -222,8 +223,8 @@ void eNode::setIsBus( bool bus )
 {
     m_isBus = bus;
     
-    Simulator::self()->remFromEnodeList( this, /*delete=*/ false );
-    Simulator::self()->addToEnodeBusList( this );
+    m_sim_ptr->remFromEnodeList( this, /*delete=*/ false );
+    m_sim_ptr->addToEnodeBusList( this );
 }
 
 void eNode::createBus()
@@ -248,7 +249,7 @@ void eNode::createBus()
         
         if( !pinList.isEmpty() ) 
         {
-            enode = new eNode( m_id+"-eNode-"+QString::number( i ) );
+            enode = new eNode( m_sim_ptr, m_id+"-eNode-"+QString::number( i ) );
             
             foreach( ePin* epin, pinList ) 
             {
@@ -312,8 +313,8 @@ void eNode::remEpin( ePin* epin )
     // If No epins then remove this enode
     if( m_ePinList.size()== 0 ) 
     {
-        if( m_isBus ) Simulator::self()->remFromEnodeBusList( this );
-        else          Simulator::self()->remFromEnodeList( this, true );
+        if( m_isBus ) m_sim_ptr->remFromEnodeBusList( this );
+        else          m_sim_ptr->remFromEnodeList( this, true );
     }
 }
 

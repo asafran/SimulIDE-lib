@@ -19,8 +19,8 @@
 
 #include "e-latch_d.h"
 
-eLatchD::eLatchD( std::string id, int channels )
-       : eLogicDevice( id )
+eLatchD::eLatchD( Simulator *sim,  std::string id, int channels )
+       : eLogicDevice( sim, id )
 {
     //setNumChannels( channels );
 }

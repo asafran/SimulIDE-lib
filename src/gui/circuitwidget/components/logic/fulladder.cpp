@@ -19,7 +19,7 @@
 
 #include "fulladder.h"
 
-Component* FullAdder::construct(QObject *parent, QString type, QString id)
+Component* FullAdder::construct(Circuit *parent, QString type, QString id)
 {
     return new FullAdder(parent, type, id);
 }
@@ -34,8 +34,8 @@ LibraryItem* FullAdder::libraryItem()
         FullAdder::construct );
 }
 
-FullAdder::FullAdder(QObject *parent, QString type, QString id) 
-          : LogicComponent( parent, type, id ), eFullAdder( id.toStdString() )
+FullAdder::FullAdder(Circuit *parent, QString type, QString id)
+          : LogicComponent( parent, type, id ), eFullAdder(  parent->getSimulatorPtr(), id.toStdString() )
 {
     m_width  = 4;
     m_height = 4;

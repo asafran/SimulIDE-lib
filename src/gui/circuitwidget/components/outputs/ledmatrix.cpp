@@ -23,7 +23,7 @@
 #include "pin.h"
 
 
-Component* LedMatrix::construct( QObject* parent, QString type, QString id )
+Component* LedMatrix::construct( Circuit* parent, QString type, QString id )
 { return new LedMatrix( parent, type, id ); }
 
 LibraryItem* LedMatrix::libraryItem()
@@ -36,9 +36,9 @@ LibraryItem* LedMatrix::libraryItem()
             LedMatrix::construct);
 }
 
-LedMatrix::LedMatrix( QObject* parent, QString type, QString id )
+LedMatrix::LedMatrix( Circuit* parent, QString type, QString id )
          : Component( parent, type, id )
-         , eElement( id.toStdString() )
+         , eElement( parent->getSimulatorPtr(), id.toStdString() )
 {
     m_rows = 8;
     m_cols = 8;
@@ -72,17 +72,17 @@ void LedMatrix::initialize()
 
 void LedMatrix::setupMatrix( int rows, int cols )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->pauseSim();
 
     deleteMatrix();
     m_rows = rows;
     m_cols = cols;
     createMatrix();
 
-    Circuit::self()->update();
+    m_circ_ptr->update();
 
-    if( pauseSim ) Simulator::self()->runContinuous();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->runContinuous();
 }
 
 void LedMatrix::createMatrix()
@@ -117,8 +117,8 @@ void LedMatrix::createMatrix()
         {
             QString ledid = m_id;
             ledid.append( QString( "-led"+QString::number(row)+"_"+QString::number(col) ) );
-            LedSmd* lsmd = new LedSmd( this, "LEDSMD", ledid, QRectF(-2, -2, 4, 4) );
-
+            LedSmd* lsmd = new LedSmd( m_circ_ptr, "LEDSMD", ledid, QRectF(-2, -2, 4, 4) );
+            lsmd->setParent(this);
             lsmd->setParentItem(this);
             lsmd->setNumEpins(2);
             lsmd->setMaxCurrent( 0.02 );
@@ -153,7 +153,7 @@ void LedMatrix::deleteMatrix()
         
         for( int col=0; col<m_cols; col++ )
         {
-            Circuit::self()->removeComp( m_led[row][col] );
+            m_circ_ptr->removeComp( m_led[row][col] );
         }
     }
     for( int col=0; col<m_cols; col++ )

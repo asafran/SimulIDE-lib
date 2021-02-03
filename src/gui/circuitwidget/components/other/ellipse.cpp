@@ -20,7 +20,7 @@
 #include "ellipse.h"
 
 
-Component* Ellipse::construct( QObject* parent, QString type, QString id )
+Component* Ellipse::construct( Circuit* parent, QString type, QString id )
 { return new Ellipse( parent, type, id ); }
 
 LibraryItem* Ellipse::libraryItem()
@@ -33,7 +33,7 @@ LibraryItem* Ellipse::libraryItem()
             Ellipse::construct);
 }
 
-Ellipse::Ellipse( QObject* parent, QString type, QString id )
+Ellipse::Ellipse( Circuit* parent, QString type, QString id )
        : Shape( parent, type, id )
 {
 

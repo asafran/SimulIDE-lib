@@ -24,8 +24,8 @@
 #include "e-node.h"
 #include "simulator.h"
 
-eDiode::eDiode( std::string id ) 
-      : eResistor( id )
+eDiode::eDiode( Simulator *sim,  std::string id ) 
+      : eResistor( sim, id )
 {
     m_imped = 0.6;
     m_threshold = 0.7;
@@ -114,14 +114,14 @@ double eDiode::res()
 
 void eDiode::setRes( double resist )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_sim_ptr->isRunning();
+    if( pauseSim ) m_sim_ptr->pauseSim();
 
     if( resist == 0 ) resist = 0.1;
     m_imped = resist;
     setVChanged();
 
-    if( pauseSim ) Simulator::self()->resumeSim();
+    if( pauseSim ) m_sim_ptr->resumeSim();
 }
 
 void  eDiode::setZenerV( double zenerV ) 

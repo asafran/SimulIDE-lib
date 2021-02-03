@@ -29,7 +29,7 @@ static const char* Shape_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Z Value")
 };
 
-Shape::Shape( QObject* parent, QString type, QString id )
+Shape::Shape( Circuit* parent, QString type, QString id )
      : Component( parent, type, id )
 {
     Q_UNUSED( Shape_properties );
@@ -54,7 +54,7 @@ void Shape::setHSize( int size )
 {
     m_hSize = size;
     m_area = QRectF( -m_hSize/2, -m_vSize/2, m_hSize, m_vSize );
-    Circuit::self()->update();
+    m_circ_ptr->update();
 }
 
 int Shape::vSize()
@@ -66,7 +66,7 @@ void Shape::setVSize( int size )
 {
     m_vSize = size;
     m_area = QRectF( -m_hSize/2, -m_vSize/2, m_hSize, m_vSize );
-    Circuit::self()->update();
+    m_circ_ptr->update();
 }
 
 int Shape::border() 

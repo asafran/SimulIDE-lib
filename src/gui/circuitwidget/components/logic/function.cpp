@@ -26,7 +26,7 @@ static const char* Function_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Functions")
 };
 
-Component* Function::construct( QObject* parent, QString type, QString id )
+Component* Function::construct( Circuit* parent, QString type, QString id )
 {
         return new Function( parent, type, id );
 }
@@ -41,9 +41,9 @@ LibraryItem* Function::libraryItem()
         Function::construct );
 }
 
-Function::Function( QObject* parent, QString type, QString id )
+Function::Function( Circuit* parent, QString type, QString id )
         : LogicComponent( parent, type, id )
-        , eFunction( id.toStdString() )
+        , eFunction(  parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( Function_properties );
     
@@ -52,7 +52,7 @@ Function::Function( QObject* parent, QString type, QString id )
     
     setFunctions( "i0 | i1" );
     
-    //Simulator::self()->addToUpdateList( this );
+    //m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
 }
 Function::~Function(){
 }
@@ -99,7 +99,7 @@ void Function::setNumInps( int inputs )
     if( m_numInputs > m_height ) m_height = m_numInputs;
     m_area = QRect( -16, 0, 32, 8*m_height+8 );
     
-    Circuit::self()->update();
+    m_circ_ptr->update();
 }
 
 void Function::setNumOuts( int outs )
@@ -146,7 +146,7 @@ void Function::setNumOuts( int outs )
             button->setCheckable( true );
             m_buttons.append( button );
 
-            QGraphicsProxyWidget* proxy = Circuit::self()->addWidget( button );
+            QGraphicsProxyWidget* proxy = m_circ_ptr->addWidget( button );
             proxy->setParentItem( this );
             proxy->setPos( QPoint( 0, i*8*2+1 ) );
             
@@ -162,7 +162,7 @@ void Function::setNumOuts( int outs )
     
     m_functions = m_funcList.join(",");
     
-    Circuit::self()->update();
+    m_circ_ptr->update();
 }
 
 void Function::onbuttonclicked()

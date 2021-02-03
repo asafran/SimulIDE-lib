@@ -28,7 +28,7 @@ class  LogicComponent : public Component
     Q_OBJECT
     public:
 
-        LogicComponent( QObject* parent, QString type, QString id );
+        LogicComponent( Circuit* parent, QString type, QString id );
         ~LogicComponent();
                 
         virtual void init( QStringList pins );

@@ -28,7 +28,7 @@ static const char* LogicInput_properties[] = {
 };
 
 
-Component* LogicInput::construct( QObject* parent, QString type, QString id )
+Component* LogicInput::construct( Circuit* parent, QString type, QString id )
 { return new LogicInput( parent, type, id ); }
 
 LibraryItem* LogicInput::libraryItem()
@@ -41,9 +41,9 @@ LibraryItem* LogicInput::libraryItem()
         LogicInput::construct );
 }
 
-LogicInput::LogicInput( QObject* parent, QString type, QString id )
+LogicInput::LogicInput( Circuit* parent, QString type, QString id )
           : Component( parent, type, id )
-          , eElement( id.toStdString() )
+          , eElement(parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( LogicInput_properties );
     
@@ -57,7 +57,7 @@ LogicInput::LogicInput( QObject* parent, QString type, QString id )
     m_outpin = new Pin( 0, nodpos, nodid, 0, this);
 
     nodid.append(QString("-eSource"));
-    m_out = new eSource( nodid.toStdString(), m_outpin );
+    m_out = new eSource( m_circ_ptr->getSimulatorPtr(), nodid.toStdString(), m_outpin );
     
     m_unit = "V";
     setVolt(5.0);
@@ -69,11 +69,11 @@ LogicInput::LogicInput( QObject* parent, QString type, QString id )
     m_button->setGeometry(-20,-16,16,16);
     m_button->setCheckable( true );
 
-    m_proxy = Circuit::self()->addWidget( m_button );
+    m_proxy = m_circ_ptr->addWidget( m_button );
     m_proxy->setParentItem( this );
     m_proxy->setPos( QPoint(-32, -8) );
     
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
 
     connect( m_button, SIGNAL( clicked() ),
              this,     SLOT  ( onbuttonclicked() ));
@@ -129,7 +129,7 @@ void LogicInput::remove()
     if( m_outpin->isConnected() ) m_outpin->connector()->remove();
     delete m_out;
     
-    Simulator::self()->remFromUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this );
     
     Component::remove();
 }

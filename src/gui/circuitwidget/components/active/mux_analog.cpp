@@ -26,7 +26,7 @@
 #include "pin.h"
 
 
-Component* MuxAnalog::construct( QObject* parent, QString type, QString id )
+Component* MuxAnalog::construct( Circuit* parent, QString type, QString id )
 {
         return new MuxAnalog( parent, type, id );
 }
@@ -41,9 +41,9 @@ LibraryItem* MuxAnalog::libraryItem()
         MuxAnalog::construct );
 }
 
-MuxAnalog::MuxAnalog( QObject* parent, QString type, QString id )
+MuxAnalog::MuxAnalog( Circuit* parent, QString type, QString id )
          : Component( parent, type, id )
-         , eMuxAnalog( id.toStdString() )
+         , eMuxAnalog(  parent->getSimulatorPtr(), id.toStdString() )
 {
     setLabelPos(-16,-16, 0);
     
@@ -69,8 +69,8 @@ void MuxAnalog::setAddrBits( int bits )
     
     int channels = pow( 2, bits );
     
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->pauseSim();
     
     if( bits < m_addrBits ) deleteAddrBits( m_addrBits-bits );
     else                    createAddrBits( bits-m_addrBits );
@@ -91,8 +91,8 @@ void MuxAnalog::setAddrBits( int bits )
     pin->isMoved();
     pin->setLabelPos();
     
-    if( pauseSim ) Simulator::self()->runContinuous();
-    Circuit::self()->update();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->runContinuous();
+    m_circ_ptr->update();
 }
 
 void MuxAnalog::createAddrBits( int c )
@@ -125,7 +125,7 @@ void MuxAnalog::deleteAddrBits( int d )
     }
     m_addrBits = m_addrBits-d;
     m_addrPin.resize( m_addrBits );
-    //Circuit::self()->update();
+    //m_circ_ptr->update();
 }
 
 void MuxAnalog::createResistors( int c )
@@ -140,7 +140,7 @@ void MuxAnalog::createResistors( int c )
     {
         QString reid = m_id;
         reid.append(QString("-resistor"+QString::number(i)));
-        m_resistor[i] = new eResistor( reid.toStdString() );
+        m_resistor[i] = new eResistor(  m_circ_ptr->getSimulatorPtr(), reid.toStdString() );
         
         QString pinId = reid+"-pinL";
         m_ePin[i] = new ePin( pinId.toStdString(), 0 );
@@ -175,7 +175,7 @@ void MuxAnalog::deleteResistors( int d )
     m_resistor.resize( start );
     m_chanPin.resize( start );
     m_ePin.resize( start );
-    //Circuit::self()->update();
+    //m_circ_ptr->update();
 }
 
 void MuxAnalog::remove()

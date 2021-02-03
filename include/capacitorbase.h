@@ -33,7 +33,7 @@ class  CapacitorBase : public Component, public eCapacitor
     
     public:
 
-        CapacitorBase( QObject* parent, QString type, QString id );
+        CapacitorBase( Circuit* parent, QString type, QString id );
         ~CapacitorBase();
         
         double capac();

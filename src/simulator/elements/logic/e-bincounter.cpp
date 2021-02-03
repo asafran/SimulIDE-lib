@@ -20,8 +20,8 @@
 #include "e-bincounter.h"
 
 
-eBinCounter::eBinCounter( std::string id )
-           : eLogicDevice( id )
+eBinCounter::eBinCounter( Simulator *sim,  std::string id )
+           : eLogicDevice( sim, id )
 {
     m_TopValue = 1;
     resetState();

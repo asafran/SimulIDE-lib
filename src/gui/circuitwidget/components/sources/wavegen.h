@@ -35,7 +35,7 @@ class  WaveGen : public ClockBase
     
     public:
 
-        WaveGen( QObject* parent, QString type, QString id );
+        WaveGen( Circuit* parent, QString type, QString id );
         ~WaveGen();
         
         enum wave_type {
@@ -45,7 +45,7 @@ class  WaveGen : public ClockBase
             Square
         };
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         double voltBase()            { return m_voltBase; }

@@ -38,10 +38,10 @@ class  Potentiometer : public Component, public eElement
 
     public:
 
-        Potentiometer( QObject* parent, QString type, QString id );
+        Potentiometer( Circuit* parent, QString type, QString id );
         ~Potentiometer();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem* libraryItem();
 
         virtual void initialize();

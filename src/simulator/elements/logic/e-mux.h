@@ -26,7 +26,7 @@ class  eMux : public eLogicDevice
 {
     public:
 
-        eMux( std::string id  );
+        eMux( Simulator *sim,  std::string id  );
         ~eMux();
 
         virtual void initialize();

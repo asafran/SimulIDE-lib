@@ -20,9 +20,9 @@
 #include "switch_base.h"
 #include "circuit.h"
 
-SwitchBase::SwitchBase( QObject* parent, QString type, QString id )
+SwitchBase::SwitchBase( Circuit* parent, QString type, QString id )
           : Component( parent, type, id )
-          , eElement( id.toStdString() )
+          , eElement(parent->getSimulatorPtr(), id.toStdString() )
 {
     m_area =  QRectF( 0,0,0,0 );
 
@@ -40,11 +40,11 @@ SwitchBase::SwitchBase( QObject* parent, QString type, QString id )
     m_button->setGeometry(-20,-16,16,16);
     m_button->setCheckable( true );
 
-    m_proxy = Circuit::self()->addWidget( m_button );
+    m_proxy = m_circ_ptr->addWidget( m_button );
     m_proxy->setParentItem( this );
     //m_proxy->setPos( QPoint(-8, 4) );
 
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
 }
 SwitchBase::~SwitchBase()
 {
@@ -126,7 +126,7 @@ void SwitchBase::setButtonText( QString text )
 
 void SwitchBase::remove()
 {
-    Simulator::self()->remFromUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this );
 
     Component::remove();
 }

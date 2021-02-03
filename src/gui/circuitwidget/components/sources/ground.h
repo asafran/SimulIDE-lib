@@ -32,10 +32,10 @@ class  Ground : public Component
     public:
         QRectF boundingRect() const { return QRect( -10, -10, 20, 20 ); }
 
-        Ground( QObject* parent, QString type, QString id );
+        Ground( Circuit* parent, QString type, QString id );
         ~Ground();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 
         virtual void paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget );

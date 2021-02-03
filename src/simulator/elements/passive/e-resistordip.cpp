@@ -22,8 +22,8 @@
 
 #include <sstream>
 
-eResistorDip::eResistorDip( std::string id ) 
-            : eElement( id )
+eResistorDip::eResistorDip( Simulator *sim,  std::string id ) 
+            : eElement( sim, id )
 {
     m_resist = 100;
 }
@@ -45,15 +45,15 @@ void eResistorDip::initEpins()
         int index = i*2;
         QString reid = QString::fromStdString( m_elmId );
         reid.append(QString("-resistor"+QString::number(i)));
-        m_resistor[i] = new eResistor( reid.toStdString() );
+        m_resistor[i] = new eResistor( m_sim_ptr, reid.toStdString() );
         
         QString pinId = reid+"-ePin"+QString::number(index);
-        ePin* epin = new ePin( pinId.toStdString(), 0 );
+        ePin* epin = new ePin(  pinId.toStdString(), 0 );
         m_resistor[i]->setEpin( 0, epin );
         m_ePin[index] = epin;
 
         pinId = reid+"-ePin"+QString::number(index+1);
-        epin = new ePin( pinId.toStdString(), 0 );
+        epin = new ePin(  pinId.toStdString(), 0 );
         m_resistor[i]->setEpin( 1, epin );
         m_ePin[index+1] = epin;
     }

@@ -35,7 +35,7 @@ class  eLogicDevice : public eElement
 {
     public:
 
-        eLogicDevice( std::string id );
+        eLogicDevice( Simulator *sim, std::string id );
         ~eLogicDevice();
 
         int  numInps() const            { return m_numInputs; }

@@ -42,10 +42,10 @@ class  Function : public LogicComponent, public eFunction
 
     public:
         
-        Function( QObject* parent, QString type, QString id );
+        Function( Circuit* parent, QString type, QString id );
         ~Function();
         
- static Component* construct( QObject* parent, QString type, QString id );
+ static Component* construct( Circuit* parent, QString type, QString id );
  static LibraryItem* libraryItem();
         
         void setNumInps( int inputs );

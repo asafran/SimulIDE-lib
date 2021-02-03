@@ -27,7 +27,7 @@ class LibraryItem;
 class  eInductor : public eResistor
 {
     public:
-        eInductor( std::string id );
+        eInductor( Simulator *sim,  std::string id );
         ~eInductor();
 
         virtual void initialize();

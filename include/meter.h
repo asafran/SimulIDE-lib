@@ -32,7 +32,7 @@ class  Meter : public Component, public eResistor
 
     public:
 
-        Meter( QObject* parent, QString type, QString id );
+        Meter( Circuit* parent, QString type, QString id );
         ~Meter();
 
         void updateStep();

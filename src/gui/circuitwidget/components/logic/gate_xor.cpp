@@ -21,7 +21,7 @@
 #include "itemlibrary.h"
 
 
-Component* XorGate::construct( QObject* parent, QString type, QString id )
+Component* XorGate::construct( Circuit* parent, QString type, QString id )
 {
         return new XorGate( parent, type, id );
 }
@@ -36,7 +36,7 @@ LibraryItem* XorGate::libraryItem()
         XorGate::construct );
 }
 
-XorGate::XorGate( QObject* parent, QString type, QString id )
+XorGate::XorGate( Circuit* parent, QString type, QString id )
         : Gate( parent, type, id, 2 )
 {
 }

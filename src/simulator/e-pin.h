@@ -24,6 +24,8 @@
 #include <string>
 
 class eNode;
+class Simulator;
+class Circuit;
 
 class  ePin
 {
@@ -51,7 +53,7 @@ class  ePin
         void reset();
         
         std::string getId();
-        void setId( std::string id );
+        void setId( Circuit *circ,  std::string id );
 
     protected:
         eNode* m_enode;

@@ -21,7 +21,7 @@
 #include "pin.h"
 
 
-Component* Mux::construct( QObject* parent, QString type, QString id )
+Component* Mux::construct( Circuit* parent, QString type, QString id )
 {
         return new Mux( parent, type, id );
 }
@@ -36,9 +36,9 @@ LibraryItem* Mux::libraryItem()
         Mux::construct );
 }
 
-Mux::Mux( QObject* parent, QString type, QString id )
+Mux::Mux( Circuit* parent, QString type, QString id )
    : LogicComponent( parent, type, id )
-   , eMux( id.toStdString() )
+   , eMux(  parent->getSimulatorPtr(), id.toStdString() )
 {
     m_width  = 4;
     m_height = 10;

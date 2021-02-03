@@ -27,7 +27,7 @@ class eSource;
 class  eClock : public eElement
 {
     public:
-        eClock( std::string id );
+        eClock( Simulator *sim,  std::string id );
         ~eClock();
 
         virtual void resetState();

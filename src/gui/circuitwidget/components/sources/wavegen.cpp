@@ -28,7 +28,7 @@ static const char* WaveGen_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Wave Type")
 };
 
-Component* WaveGen::construct( QObject* parent, QString type, QString id )
+Component* WaveGen::construct( Circuit* parent, QString type, QString id )
 {
     return new WaveGen( parent, type, id );
 }
@@ -43,7 +43,7 @@ LibraryItem* WaveGen::libraryItem()
         WaveGen::construct );
 }
 
-WaveGen::WaveGen( QObject* parent, QString type, QString id )
+WaveGen::WaveGen( Circuit* parent, QString type, QString id )
        : ClockBase( parent, type, id )
 {
     Q_UNUSED( WaveGen_properties );
@@ -86,7 +86,7 @@ void WaveGen::simuClockStep()
 
 void WaveGen::genSine()
 {
-    double time = Simulator::self()->step();
+    double time = m_circ_ptr->getSimulatorPtr()->step();
     time = remainder( time, m_stepsPC );
     time = qDegreesToRadians( time*360/m_stepsPC );
 

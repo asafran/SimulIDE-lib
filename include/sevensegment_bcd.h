@@ -30,10 +30,10 @@ class  SevenSegmentBCD : public LogicComponent, public eBcdTo7S
     Q_OBJECT
 
     public:
-        SevenSegmentBCD( QObject* parent, QString type, QString id );
+        SevenSegmentBCD( Circuit* parent, QString type, QString id );
         ~SevenSegmentBCD();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 
         void resetState();

@@ -35,10 +35,10 @@ class  Rail : public Component, public eElement
     public:
         QRectF boundingRect() const { return QRect( -10, -10, 20, 20 ); }
 
-        Rail( QObject* parent, QString type, QString id );
+        Rail( Circuit* parent, QString type, QString id );
         ~Rail();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 
         double volt() const      { return m_voltHight; }

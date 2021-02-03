@@ -35,10 +35,10 @@ class  FullAdder : public LogicComponent, public eFullAdder
     Q_PROPERTY( double Out_Imped    READ outImp     WRITE setOutImp     DESIGNABLE true USER true )
 
     public:
-        FullAdder( QObject* parent, QString type, QString id );
+        FullAdder( Circuit* parent, QString type, QString id );
         ~FullAdder();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 };
 

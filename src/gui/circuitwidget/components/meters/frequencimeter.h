@@ -30,10 +30,10 @@ class  Frequencimeter : public Component, public eElement
 
     public:
 
-        Frequencimeter( QObject* parent, QString type, QString id );
+        Frequencimeter( Circuit* parent, QString type, QString id );
         ~Frequencimeter();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 
         void simuClockStep();

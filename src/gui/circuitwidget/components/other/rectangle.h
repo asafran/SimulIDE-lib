@@ -29,10 +29,10 @@ class  Rectangle : public Shape
 
     public:
 
-        Rectangle( QObject* parent, QString type, QString id );
+        Rectangle( Circuit* parent, QString type, QString id );
         ~Rectangle();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 
         virtual void paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget );

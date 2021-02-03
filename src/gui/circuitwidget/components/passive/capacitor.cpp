@@ -20,7 +20,7 @@
 #include "capacitor.h"
 
 
-Component* Capacitor::construct( QObject* parent, QString type, QString id )
+Component* Capacitor::construct( Circuit* parent, QString type, QString id )
 { return new Capacitor( parent, type, id ); }
 
 LibraryItem* Capacitor::libraryItem()
@@ -33,7 +33,7 @@ LibraryItem* Capacitor::libraryItem()
             Capacitor::construct);
 }
 
-Capacitor::Capacitor( QObject* parent, QString type, QString id )
+Capacitor::Capacitor( Circuit* parent, QString type, QString id )
          : CapacitorBase( parent, type, id )
 {
 }

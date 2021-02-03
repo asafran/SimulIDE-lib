@@ -27,7 +27,7 @@ class  eVoltReg : public eResistor
 {
     public:
 
-        eVoltReg( std::string id );
+        eVoltReg( Simulator *sim,  std::string id );
         virtual ~eVoltReg();
 
         virtual void initialize();

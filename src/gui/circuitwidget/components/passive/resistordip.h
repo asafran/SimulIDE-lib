@@ -34,10 +34,10 @@ class  ResistorDip : public Component, public eResistorDip
     Q_PROPERTY( bool     Show_res READ showVal  WRITE setShowVal DESIGNABLE true USER true )
 
     public:
-        ResistorDip( QObject* parent, QString type, QString id );
+        ResistorDip( Circuit* parent, QString type, QString id );
         ~ResistorDip();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         int  size();

@@ -20,7 +20,7 @@
 #include "dectobcd.h"
 
 
-Component* DecToBcd::construct( QObject* parent, QString type, QString id )
+Component* DecToBcd::construct( Circuit* parent, QString type, QString id )
 {
         return new DecToBcd( parent, type, id );
 }
@@ -35,8 +35,8 @@ LibraryItem* DecToBcd::libraryItem()
         DecToBcd::construct );
 }
 
-DecToBcd::DecToBcd( QObject* parent, QString type, QString id )
-        : LogicComponent( parent, type, id ), eDecToBcd( id.toStdString() )
+DecToBcd::DecToBcd( Circuit* parent, QString type, QString id )
+        : LogicComponent( parent, type, id ), eDecToBcd(  parent->getSimulatorPtr(), id.toStdString() )
 {
     m_width  = 4;
     m_height = 10;

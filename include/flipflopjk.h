@@ -35,13 +35,13 @@ class  FlipFlopJK : public LogicComponent, public eFlipFlopJK
     Q_PROPERTY( double Out_Imped    READ outImp     WRITE setOutImp     DESIGNABLE true USER true )
 
     Q_PROPERTY( bool   Clock_Inverted READ clockInv  WRITE setClockInv  DESIGNABLE true USER true )
-    Q_PROPERTY( bool   S_R_Inverted   READ srInv     WRITE setSrInv     DESIGNABLE true USER true )
+//    Q_PROPERTY( bool   S_R_Inverted   READ srInv     WRITE setSrInv     DESIGNABLE true USER true )
 
     public:
-        FlipFlopJK( QObject* parent, QString type, QString id );
+        FlipFlopJK( Circuit* parent, QString type, QString id );
         ~FlipFlopJK();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 };
 

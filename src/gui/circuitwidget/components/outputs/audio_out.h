@@ -32,10 +32,10 @@ class AudioOut : public Component, public eResistor
     Q_PROPERTY( double Impedance READ res   WRITE setResSafe  DESIGNABLE true USER true )
     
     public:
-        AudioOut( QObject* parent, QString type, QString id );
+        AudioOut( Circuit* parent, QString type, QString id );
         ~AudioOut();
     
-    static Component* construct( QObject* parent, QString type, QString id );
+    static Component* construct( Circuit* parent, QString type, QString id );
     static LibraryItem *libraryItem();
 
         virtual void initialize();

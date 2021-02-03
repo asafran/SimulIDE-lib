@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 #include "subcircuit.h"
-#include "componentselector.h"
+#include "component.h"
 #include "circuit.h"
 #include "utils.h"
 #include "pin.h"
@@ -26,7 +26,6 @@
 #include "mainwindow.h"
 #include "itemlibrary.h"
 #include "simuapi_apppath.h"
-
 #include "ledsmd.h"
 #include "e-bcdto7s.h"
 #include "e-bcdtodec.h"
@@ -58,12 +57,12 @@
 #include "e-source.h"
 #include "e-volt_reg.h"
 
-Component* SubCircuit::construct( QObject* parent, QString type, QString id )
+Component* SubCircuit::construct( Circuit* parent, QString type, QString id )
 { 
     SubCircuit* subCircuit = new SubCircuit( parent, type,  id ); 
     if( m_error > 0 )
     {
-        Circuit::self()->compList()->removeOne( subCircuit );
+        //m_circ_ptr->compList()->removeOne( subCircuit );
         subCircuit->deleteLater();
         subCircuit = 0l;
         m_error = 0;
@@ -81,20 +80,20 @@ LibraryItem* SubCircuit::libraryItem()
         SubCircuit::construct );
 }
 
-SubCircuit::SubCircuit( QObject* parent, QString type, QString id )
+SubCircuit::SubCircuit( Circuit* parent, QString type, QString id )
           : Chip( parent, type, id )
 {
     m_numItems = 0;
 
     QString compName = m_id.split("-").first(); // for example: "atmega328-1" to: "atmega328"
-    QString dataFile = ComponentSelector::self()->getXmlFile( compName );
+    QString dataFile = m_circ_ptr->getXmlFile( compName );
 
     if( dataFile == "" )
     {
         if     ( compName.startsWith( "74XX") ) compName.replace( "XX", "HC" );
         else if( compName.startsWith( "74HC") ) compName.replace( "HC", "XX" );
 
-        dataFile = ComponentSelector::self()->getXmlFile( compName );
+        dataFile = m_circ_ptr->getXmlFile( compName );
     }
     if( dataFile == "" )
     {
@@ -203,7 +202,7 @@ void SubCircuit::initSubcircuit()
         {
             QString eNodeid = m_id;
             eNodeid.append( "-eNode_" ).append( QString::number(i));
-            m_internal_eNode.append( new eNode(eNodeid) );
+            m_internal_eNode.append( new eNode( m_circ_ptr->getSimulatorPtr(), eNodeid) );
         }
     }
     m_pinConections.resize( m_numpins );
@@ -225,14 +224,14 @@ void SubCircuit::initSubcircuit()
 
             if( type == "eResistor" )  
             {
-                eResistor* eresistor = new eResistor( id.toStdString() );
+                eResistor* eresistor = new eResistor(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 if( element.hasAttribute("resistance") ) eresistor->setRes( element.attribute( "resistance" ).toDouble() );
                 ecomponent = eresistor;
             }
             else if( type == "eResistorDip" )  
             {
                 int size = 8;
-                eResistorDip* eresistordip = new eResistorDip( id.toStdString() );
+                eResistorDip* eresistordip = new eResistorDip(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 if( element.hasAttribute("size") ) size = element.attribute( "size" ).toInt();
                 eresistordip->setSize( size );
                 if( element.hasAttribute("resistance") ) eresistordip->setRes( element.attribute( "resistance" ).toDouble() );
@@ -240,11 +239,11 @@ void SubCircuit::initSubcircuit()
             }
             else if( type == "eCapacitor" ) 
             {
-                ecomponent = new eCapacitor( id.toStdString() );
+                ecomponent = new eCapacitor(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
             }
             else if( type == "eDiode" )     
             {
-                eDiode* ediode = new eDiode( id.toStdString() );
+                eDiode* ediode = new eDiode(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 if( element.hasAttribute("threshold") )
                 {
                     ediode->setThreshold( element.attribute( "threshold" ).toDouble() );
@@ -255,13 +254,13 @@ void SubCircuit::initSubcircuit()
             {
                 int numInputs = 2;
                 if( element.hasAttribute("numInputs") ) numInputs  = element.attribute( "numInputs" ).toInt();
-                eGate* egate = new eGate( id.toStdString(), numInputs );
+                eGate* egate = new eGate(  m_circ_ptr->getSimulatorPtr(), id.toStdString(), numInputs );
                 egate->createPins( numInputs, 1 );
                 ecomponent = egate;
             }
             else if( type == "eBuffer" )
             {
-                eGate* egate = new eGate( id.toStdString(), 1 );
+                eGate* egate = new eGate(  m_circ_ptr->getSimulatorPtr(), id.toStdString(), 1 );
                 egate->createPins( 1, 1 );
                 ecomponent = egate;
                 
@@ -272,7 +271,7 @@ void SubCircuit::initSubcircuit()
             {
                 int numInputs = 2;
                 if( element.hasAttribute("numInputs") ) numInputs  = element.attribute( "numInputs" ).toInt();
-                eOrGate* egate = new eOrGate( id.toStdString(), numInputs );
+                eOrGate* egate = new eOrGate(  m_circ_ptr->getSimulatorPtr(), id.toStdString(), numInputs );
                 egate->createPins( numInputs, 1 );
                 ecomponent = egate;
             }
@@ -280,13 +279,13 @@ void SubCircuit::initSubcircuit()
             {
                 int numInputs = 2;
                 if( element.hasAttribute("numInputs") ) numInputs  = element.attribute( "numInputs" ).toInt();
-                eXorGate* egate = new eXorGate( id.toStdString(), numInputs );
+                eXorGate* egate = new eXorGate(  m_circ_ptr->getSimulatorPtr(), id.toStdString(), numInputs );
                 egate->createPins( numInputs, 1 );
                 ecomponent = egate;
             }
             else if( type == "eFunction" )
             {
-                eFunction* efunction = new eFunction( id.toStdString() );
+                eFunction* efunction = new eFunction(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 ecomponent = efunction;
                 
                 int inputs  = 0;
@@ -301,7 +300,7 @@ void SubCircuit::initSubcircuit()
             {
                 int channels = 1;
                 if( element.hasAttribute("channels") ) channels = element.attribute( "channels" ).toInt();
-                eLatchD* elatchd = new eLatchD( id.toStdString() );
+                eLatchD* elatchd = new eLatchD(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 elatchd->setNumChannels( channels );
                 
                 if( element.hasAttribute("trigger") )
@@ -316,20 +315,20 @@ void SubCircuit::initSubcircuit()
             {
                 int maxValue = 1;
                 if( element.hasAttribute("maxValue") ) maxValue  = element.attribute( "maxValue" ).toInt();
-                eBinCounter* ecounter = new eBinCounter( id.toStdString() );
+                eBinCounter* ecounter = new eBinCounter(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 ecounter->setTopValue( maxValue );
                 ecounter->createPins();
                 ecomponent = ecounter;
             }
             else if( type == "eFullAdder" )
             {
-                eFullAdder* efulladder = new eFullAdder( id.toStdString() );
+                eFullAdder* efulladder = new eFullAdder(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 efulladder->createPins();
                 ecomponent = efulladder;
             }
             else if( type == "eFlipFlopD" )
             {
-                eFlipFlopD* eFFD = new eFlipFlopD( id.toStdString() );
+                eFlipFlopD* eFFD = new eFlipFlopD(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 eFFD->createPins();
                 ecomponent = eFFD;
                 
@@ -338,11 +337,11 @@ void SubCircuit::initSubcircuit()
                 {
                     if( element.attribute( "sRInverted" ) == "false" ) srInv = false;
                 }
-                eFFD->setSrInv( srInv );
+                eFFD->setSrInv( m_circ_ptr, srInv );
             }
             else if( type == "eFlipFlopJK" )
             {
-                eFlipFlopJK* eFFJK = new eFlipFlopJK( id.toStdString() );
+                eFlipFlopJK* eFFJK = new eFlipFlopJK(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 eFFJK->createPins();
                 ecomponent = eFFJK;
                 
@@ -351,7 +350,7 @@ void SubCircuit::initSubcircuit()
                 {
                     if( element.attribute( "sRInverted" ) == "false" ) srInv = false;
                 }
-                eFFJK->setSrInv( srInv );
+                eFFJK->setSrInv( m_circ_ptr, srInv );
             }
             else if( type == "eShiftReg" )  
             {
@@ -359,35 +358,35 @@ void SubCircuit::initSubcircuit()
                 int serOut   = 0;
                 if( element.hasAttribute("latchClock") ) latchClk = element.attribute( "latchClock" ).toInt();
                 if( element.hasAttribute("serialOut") )  serOut   = element.attribute( "serialOut" ).toInt();
-                ecomponent = new eShiftReg( id.toStdString(), latchClk, serOut );
+                ecomponent = new eShiftReg(  m_circ_ptr->getSimulatorPtr(), id.toStdString(), latchClk, serOut );
             }
             else if( type == "eMux" )
             {
-                eMux* emux = new eMux( id.toStdString() );
+                eMux* emux = new eMux(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 emux->createPins();
                 ecomponent = emux;
             }
             else if( type == "eDemux" )
             {
-                eDemux* edemux = new eDemux( id.toStdString() );
+                eDemux* edemux = new eDemux(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 edemux->createPins();
                 ecomponent = edemux;
             }
             else if( type == "eBcdTo7S" )
             {
-                eBcdTo7S* ebcdto7s = new eBcdTo7S( id.toStdString() );
+                eBcdTo7S* ebcdto7s = new eBcdTo7S(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 ebcdto7s->createPins();
                 ecomponent = ebcdto7s;
             }
             else if( type == "eBcdToDec" )
             {
-                eBcdToDec* ebcdtodec = new eBcdToDec( id.toStdString() );
+                eBcdToDec* ebcdtodec = new eBcdToDec(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 ebcdtodec->createPins();
                 ecomponent = ebcdtodec;
             }
             else if( type == "eDecToBcd" )
             {
-                eDecToBcd* edectobcd = new eDecToBcd( id.toStdString() );
+                eDecToBcd* edectobcd = new eDecToBcd(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 edectobcd->createPins();
                 ecomponent = edectobcd;
             }
@@ -397,7 +396,7 @@ void SubCircuit::initSubcircuit()
                 double volt = 5;
                 if( element.hasAttribute("freq") ) freq = element.attribute( "freq" ).toDouble();
                 if( element.hasAttribute("voltage") ) volt = element.attribute( "voltage" ).toDouble();
-                eClock* eclock = new eClock( id.toStdString() );
+                eClock* eclock = new eClock(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 eclock->setFreq( freq );
                 eclock->setVolt( volt );
                 ecomponent = eclock;
@@ -410,7 +409,7 @@ void SubCircuit::initSubcircuit()
                 //int startBit = 0;
                 if( element.hasAttribute("numBits") )  numbits = element.attribute( "numBits" ).toInt();
                 //if( element.hasAttribute("startBit") ) startBit = element.attribute( "startBit" ).toInt();
-                eBus* ebus = new eBus( id.toStdString() );
+                eBus* ebus = new eBus(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 ebus->setNumLines( numbits );
                 //ebus->setStartBit( startBit );
                 ecomponent = ebus;
@@ -419,7 +418,7 @@ void SubCircuit::initSubcircuit()
             {
                 double volt = 0;
                 if( element.hasAttribute("voltage") ) volt = element.attribute( "voltage" ).toDouble();
-                eSource* esource = new eSource( id.toStdString(), 0l );
+                eSource* esource = new eSource(  m_circ_ptr->getSimulatorPtr(), id.toStdString(), 0l );
                 esource->createPin();
                 esource->setVoltHigh( volt );
                 esource->setOut( true );
@@ -431,7 +430,7 @@ void SubCircuit::initSubcircuit()
                 double rDSon     = 1;
                 if( element.hasAttribute("threshold") ) threshold = element.attribute( "threshold" ).toDouble();
                 if( element.hasAttribute("rDSon") )     rDSon = element.attribute( "rDSon" ).toDouble();
-                eMosfet* emosfet = new eMosfet( id.toStdString() );
+                eMosfet* emosfet = new eMosfet(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 emosfet->setThreshold( threshold );
                 emosfet->setRDSon( rDSon );
                 if( element.hasAttribute("pChannel") )
@@ -450,7 +449,7 @@ void SubCircuit::initSubcircuit()
                 double gain     = 100;
                 if( element.hasAttribute("threshold") ) threshold = element.attribute( "threshold" ).toDouble();
                 if( element.hasAttribute("gain") )      gain      = element.attribute( "gain" ).toDouble();
-                eBJT* ebjt = new eBJT( id.toStdString() );
+                eBJT* ebjt = new eBJT(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 ebjt->setBEthr( threshold );
                 ebjt->setGain( gain );
                 if( element.hasAttribute("pNP") )
@@ -467,7 +466,7 @@ void SubCircuit::initSubcircuit()
             {
                 double volts = 1.2;
                 if( element.hasAttribute("Volts") ) volts = element.attribute( "Volts" ).toDouble();
-                eVoltReg* evoltreg = new eVoltReg( id.toStdString() );
+                eVoltReg* evoltreg = new eVoltReg(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 evoltreg->setNumEpins(3);
                 evoltreg->setVRef( volts );
                 ecomponent = evoltreg;
@@ -481,14 +480,14 @@ void SubCircuit::initSubcircuit()
                 {
                     if( element.attribute( "Power_Pins" ) == "true" ) powerPins = true;
                 }
-                eOpAmp* eopamp = new eOpAmp( id.toStdString() );
+                eOpAmp* eopamp = new eOpAmp(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 eopamp->setGain( gain );
                 eopamp->setPowerPins( powerPins );
                 ecomponent = eopamp;
             }
             else if( type == "eMuxAnalog" )
             {
-                eMuxAnalog* muxAn = new eMuxAnalog( id.toStdString() );
+                eMuxAnalog* muxAn = new eMuxAnalog(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
                 double imp = 1;
                 if( element.hasAttribute("impedance") ) imp = element.attribute( "impedance" ).toDouble();
                 muxAn->setResist( imp );
@@ -503,11 +502,12 @@ void SubCircuit::initSubcircuit()
                 int height = 8;
                 if( element.hasAttribute("width") )  width  = element.attribute( "width" ).toDouble();
                 if( element.hasAttribute("height") ) height = element.attribute( "height" ).toDouble();
-                ecomponent = new LedSmd( this, "LEDSMD", id, QRectF( 0, 0, width, height )  );
+                ecomponent = new LedSmd( m_circ_ptr, "LEDSMD", id, QRectF( 0, 0, width, height )  );
+
             }
             else if( type == "eLm555" )
             {
-                ecomponent = new eLm555( id.toStdString() );
+                ecomponent = new eLm555(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
             }
             
             if( ecomponent )
@@ -698,7 +698,7 @@ void SubCircuit::initialize()
                 {
                     QString eNodeid = m_id;
                     eNodeid.append( "-eNode_I_" ).append( QString::number(i));
-                    enod = new eNode( eNodeid );
+                    enod = new eNode( m_circ_ptr->getSimulatorPtr(), eNodeid );
                 }
             }
         }
@@ -715,10 +715,10 @@ void SubCircuit::setLogicSymbol( bool ls )
 {
     if(m_isLS == ls ) return;
     
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->pauseSim();
     
-    Circuit::self()->saveState();
+    m_circ_ptr->saveState();
     
     clear();
     
@@ -726,7 +726,7 @@ void SubCircuit::setLogicSymbol( bool ls )
     
     initSubcircuit();
     
-    if( pauseSim ) Simulator::self()->runContinuous();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->runContinuous();
 }
 
 void SubCircuit::clear()
@@ -738,7 +738,7 @@ void SubCircuit::clear()
     m_pinConections.clear();
     foreach( eNode* node, m_internal_eNode )
     {
-        Simulator::self()->remFromEnodeList( node, true );
+        m_circ_ptr->getSimulatorPtr()->remFromEnodeList( node, true );
         //delete node;
     }
     m_internal_eNode.clear();

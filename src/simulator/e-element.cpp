@@ -23,18 +23,19 @@
 #include <sstream>
 #include <QDebug>
 
-eElement::eElement( std::string id )
+eElement::eElement( Simulator *sim, std::string id )
 {
     m_elmId = id;
 
-    Simulator::self()->addToElementList( this );
+    sim->addToElementList( this );
     //qDebug() << "eElement::eElement" << QString::fromStdString( m_elmId );
+    m_sim_ptr = sim;
     
 }
 eElement::~eElement()
 {
     //qDebug() << "eElement::~eElement deleting" << QString::fromStdString( m_elmId );
-    Simulator::self()->remFromElementList( this );
+    m_sim_ptr->remFromElementList( this );
     /*foreach (ePin* epin, m_ePin)
     {
         delete epin;

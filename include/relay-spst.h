@@ -30,10 +30,10 @@ class  RelaySPST : public RelayBase
     
     public:
 
-        RelaySPST( QObject* parent, QString type, QString id );
+        RelaySPST( Circuit* parent, QString type, QString id );
         ~RelaySPST();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 
 };

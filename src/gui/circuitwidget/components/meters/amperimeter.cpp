@@ -21,7 +21,7 @@
 #include "simulator.h"
 
 
-Component* Amperimeter::construct( QObject* parent, QString type, QString id )
+Component* Amperimeter::construct( Circuit* parent, QString type, QString id )
 { return new Amperimeter( parent, type, id ); }
 
 LibraryItem* Amperimeter::libraryItem()
@@ -34,7 +34,7 @@ LibraryItem* Amperimeter::libraryItem()
             Amperimeter::construct);
 }
 
-Amperimeter::Amperimeter( QObject* parent, QString type, QString id )
+Amperimeter::Amperimeter( Circuit* parent, QString type, QString id )
            : Meter( parent, type, id )
 {
     m_unit = "A";

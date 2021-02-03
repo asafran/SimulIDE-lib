@@ -21,7 +21,7 @@
 #include "circuit.h"
 #include "bus.h"
 
-Component* Bus::construct( QObject* parent, QString type, QString id )
+Component* Bus::construct( Circuit* parent, QString type, QString id )
 {
         return new Bus( parent, type, id );
 }
@@ -36,9 +36,9 @@ LibraryItem* Bus::libraryItem()
         Bus::construct );
 }
 
-Bus::Bus( QObject* parent, QString type, QString id )
+Bus::Bus( Circuit* parent, QString type, QString id )
    : Component( parent, type, id )
-   , eBus( id.toStdString() )
+   , eBus(  parent->getSimulatorPtr(), id.toStdString() )
 {
     setNumLines( 8 );                           // Create Input Pins
     
@@ -57,7 +57,7 @@ void Bus::setNumLines( int lines )
     for( int i=1; i<=m_numLines; i++ )
     {
         if( m_pin[i]->isConnected() ) m_pin[i]->connector()->remove();
-        if( m_pin[i]->scene() ) Circuit::self()->removeItem( m_pin[i] );
+        if( m_pin[i]->scene() ) m_circ_ptr->removeItem( m_pin[i] );
         delete m_pin[i];
     }
     m_numLines = lines;
@@ -71,7 +71,7 @@ void Bus::setNumLines( int lines )
     }
     m_height = lines-1;
     m_area = QRect( -2, -m_height*8-4, 4, m_height*8+8 );
-    Circuit::self()->update();
+    m_circ_ptr->update();
 }
 
 void Bus::initialize()
@@ -120,7 +120,7 @@ void Bus::inStateChanged( int msg )  // Called by m_busPin when removing
                 pin->findConnectedPins(); // All connected pins will register in eNode 
                 epins = enode->getSubEpins();
                 
-                eNode* enode = new eNode( m_id+"eNode"+QString::number( i ) );
+                eNode* enode = new eNode( m_circ_ptr->getSimulatorPtr(), m_id+"eNode"+QString::number( i ) );
                 foreach( ePin* epin, epins )  epin->setEnode( enode );
             }
         }
@@ -132,7 +132,7 @@ void Bus::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *w
     Component::paint( p, option, widget );
 
     
-    if( Circuit::self()->animate() )
+    if( m_circ_ptr->animate() )
     {
         QPen pen = p->pen();
 

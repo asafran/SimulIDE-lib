@@ -20,7 +20,7 @@
 #include "itemlibrary.h"
 
 
-Component* OrGate::construct( QObject* parent, QString type, QString id )
+Component* OrGate::construct( Circuit* parent, QString type, QString id )
 {
         return new OrGate( parent, type, id );
 }
@@ -35,7 +35,7 @@ LibraryItem* OrGate::libraryItem()
         OrGate::construct );
 }
 
-OrGate::OrGate( QObject* parent, QString type, QString id )
+OrGate::OrGate( Circuit* parent, QString type, QString id )
         : Gate( parent, type, id, 2 )
 {
 }

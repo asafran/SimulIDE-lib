@@ -24,7 +24,7 @@
 #include "pin.h"
 
 
-Component* ResistorDip::construct( QObject* parent, QString type, QString id )
+Component* ResistorDip::construct( Circuit* parent, QString type, QString id )
 { return new ResistorDip( parent, type, id ); }
 
 LibraryItem* ResistorDip::libraryItem()
@@ -37,9 +37,9 @@ LibraryItem* ResistorDip::libraryItem()
             ResistorDip::construct);
 }
 
-ResistorDip::ResistorDip( QObject* parent, QString type, QString id )
+ResistorDip::ResistorDip( Circuit* parent, QString type, QString id )
            : Component( parent, type, id )
-           , eResistorDip( id.toStdString() )
+           , eResistorDip(  parent->getSimulatorPtr(), id.toStdString() )
 {
     m_size = 0;
     setSize( 8 );
@@ -70,7 +70,7 @@ void ResistorDip::createResistors( int c )
         int index = i*2;
         QString reid = m_id;
         reid.append(QString("-resistor"+QString::number(i)));
-        m_resistor[i] = new eResistor( reid.toStdString() );
+        m_resistor[i] = new eResistor( m_circ_ptr->getSimulatorPtr(), reid.toStdString() );
         
         QPoint pinpos = QPoint(-16,-32+8+i*8 );
         Pin* pin = new Pin( 180, pinpos, reid+"-ePin"+QString::number(index), 0, this);
@@ -101,7 +101,7 @@ void ResistorDip::deleteResistors( int d )
     m_size = m_size-d;
     m_resistor.resize( m_size );
     m_pin.resize( m_size*2 );
-    //Circuit::self()->update();
+    //m_circ_ptr->update();
 }
 
 int ResistorDip::size()
@@ -111,8 +111,8 @@ int ResistorDip::size()
 
 void ResistorDip::setSize( int size )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->pauseSim();
     
     if( size == 0 ) size = 8;
     
@@ -122,33 +122,33 @@ void ResistorDip::setSize( int size )
     m_area = QRect( -8, -26, 16, m_size*8-4 );
     setValLabelY(-26 );
     
-    if( pauseSim ) Simulator::self()->runContinuous();
-    Circuit::self()->update();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->runContinuous();
+    m_circ_ptr->update();
 }
 
 double ResistorDip::resist() { return m_value; }
 
 void ResistorDip::setResist( double r )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim )  Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim )  m_circ_ptr->getSimulatorPtr()->pauseSim();
     
     Component::setValue( r );       // Takes care about units multiplier
     
     setRes( m_value*m_unitMult );
     
-    if( pauseSim ) Simulator::self()->resumeSim();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->resumeSim();
 }
 
 void ResistorDip::setUnit( QString un ) 
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim )  Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim )  m_circ_ptr->getSimulatorPtr()->pauseSim();
     
     Component::setUnit( un );
     setRes( m_value*m_unitMult );
     
-    if( pauseSim ) Simulator::self()->resumeSim();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->resumeSim();
 }
 
 void ResistorDip::remove()

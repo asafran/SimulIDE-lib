@@ -26,7 +26,7 @@ class  eBus : public eElement
 {
     public:
 
-        eBus( std::string id  );
+        eBus( Simulator *sim,  std::string id  );
         ~eBus();
 
         virtual void initialize();

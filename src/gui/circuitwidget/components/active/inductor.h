@@ -35,10 +35,10 @@ class  Inductor : public Component, public eInductor
     
     public:
 
-        Inductor( QObject* parent, QString type, QString id );
+        Inductor( Circuit* parent, QString type, QString id );
         ~Inductor();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         double induc();

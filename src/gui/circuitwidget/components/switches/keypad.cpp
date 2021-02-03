@@ -25,7 +25,7 @@ static const char* KeyPad_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Key Labels")
 };
 
-Component* KeyPad::construct( QObject* parent, QString type, QString id )
+Component* KeyPad::construct( Circuit* parent, QString type, QString id )
 { return new KeyPad( parent, type, id ); }
 
 LibraryItem* KeyPad::libraryItem()
@@ -38,9 +38,9 @@ LibraryItem* KeyPad::libraryItem()
             KeyPad::construct);
 }
 
-KeyPad::KeyPad( QObject* parent, QString type, QString id )
+KeyPad::KeyPad( Circuit* parent, QString type, QString id )
       : Component( parent, type, id )
-      , eElement( id.toStdString() )
+      , eElement(parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( KeyPad_properties );
     
@@ -76,21 +76,21 @@ void KeyPad::initialize()
 
 void KeyPad::setupButtons()
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->pauseSim();
     
     m_area = QRectF( -12, -4, 16*m_cols+8, 16*m_rows+8 );
     
     foreach( PushBase* button, m_buttons ) 
     {
        m_buttons.removeOne( button );
-       Circuit::self()->removeComp( button );
+       m_circ_ptr->removeComp( button );
     }
     
     foreach( Pin* pin, m_pin ) 
     {
         if( pin->isConnected() ) pin->connector()->remove();
-        if( pin->scene() ) Circuit::self()->removeItem( pin );
+        if( pin->scene() ) m_circ_ptr->removeItem( pin );
         delete pin;
     }
     m_pin.resize( m_rows + m_cols );
@@ -108,7 +108,8 @@ void KeyPad::setupButtons()
         {
             QString butId = m_id+"button"+QString::number(row)+QString::number(col);
             //qDebug()<<butId;
-            PushBase* button = new PushBase( this, "PushBase", butId );
+            PushBase* button = new PushBase( m_circ_ptr, "PushBase", butId );
+            button->setParent(this);
             button->initEpins();
             button->setParentItem( this );
             button->setPos( QPointF(col*16+12, 16+row*16 ) );
@@ -129,8 +130,8 @@ void KeyPad::setupButtons()
             }
         }
     }
-    if( pauseSim ) Simulator::self()->resumeSim();
-    Circuit::self()->update();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->resumeSim();
+    m_circ_ptr->update();
 }
 
 double KeyPad::rows()
@@ -182,7 +183,7 @@ void KeyPad::setKeyLabels( QString keyLabels )
 void KeyPad::remove()
 {
     foreach( PushBase* button, m_buttons ) 
-        Circuit::self()->removeComp( button );
+        m_circ_ptr->removeComp( button );
 
     Component::remove();
 }

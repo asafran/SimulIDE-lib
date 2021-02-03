@@ -35,10 +35,10 @@ class  Probe : public Component, public eElement
     Q_PROPERTY( int PlotterCh  READ plotter  WRITE setPlotter )
 
     public:
-        Probe( QObject* parent, QString type, QString id );
+        Probe( Circuit* parent, QString type, QString id );
         ~Probe();
 
- static Component* construct( QObject* parent, QString type, QString id );
+ static Component* construct( Circuit* parent, QString type, QString id );
  static LibraryItem* libraryItem();
         
         void setVolt( double volt );

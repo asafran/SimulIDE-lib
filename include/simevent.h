@@ -6,15 +6,14 @@
 class SimEvent : public QEvent
 {
 public:
-    SimEvent(const bool &_data, const QObject *_ptr);
+    SimEvent(const QObject *_ptr);
 
     static QEvent::Type type();
 
-    const bool &getTransferedBool() const;
+
     const QObject &getObject() const;
 
 private:
-    const bool data;
 
     const QObject *ptr;
 

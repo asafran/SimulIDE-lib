@@ -28,7 +28,7 @@ static const char* SevenSegment_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","CommonCathode")
 };
 
-Component* SevenSegment::construct( QObject* parent, QString type, QString id )
+Component* SevenSegment::construct( Circuit* parent, QString type, QString id )
 {
     return new SevenSegment( parent, type, id );
 }
@@ -43,9 +43,9 @@ LibraryItem* SevenSegment::libraryItem()
         SevenSegment::construct );
 }
 
-SevenSegment::SevenSegment( QObject* parent, QString type, QString id )
+SevenSegment::SevenSegment( Circuit* parent, QString type, QString id )
             : Component( parent, type, id )
-            , eElement( id.toStdString() )
+            , eElement(parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( SevenSegment_properties );
     
@@ -114,8 +114,8 @@ void SevenSegment::setNumDisplays( int displays )
     if( m_verticalPins ) m_area = QRect( -18, -24-1, displays*32+4, 48+2 );
     else                 m_area = QRect( -16, -24-1, displays*32, 48+2 );
 
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->pauseSim();
 
     if( displays > m_numDisplays )
     {
@@ -132,8 +132,8 @@ void SevenSegment::setNumDisplays( int displays )
     setThreshold( m_threshold );
     setMaxCurrent( m_maxCurrent );
 
-    if( pauseSim ) Simulator::self()->runContinuous();
-    Circuit::self()->update();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->runContinuous();
+    m_circ_ptr->update();
 }
 
 void SevenSegment::resizeData( int displays )
@@ -151,12 +151,12 @@ bool SevenSegment::isCommonCathode()
 
 void SevenSegment::setCommonCathode( bool isCommonCathode )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->pauseSim();
 
     m_commonCathode = isCommonCathode;
 
-    if( pauseSim ) Simulator::self()->runContinuous();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->runContinuous();
 }
 
 bool SevenSegment::verticalPins()
@@ -196,7 +196,7 @@ void SevenSegment::setVerticalPins( bool v )
     }
     
     for( int i=0; i<8; i++ ) m_pin[i]->isMoved();
-    Circuit::self()->update();
+    m_circ_ptr->update();
 }
         
 void SevenSegment::setResistance( double res )
@@ -279,7 +279,7 @@ void SevenSegment::deleteDisplay( int dispNumber )
     pin->reset();
     delete pin;
 
-    for( int i=0; i<8; i++ ) Circuit::self()->removeComp( m_segment[dispNumber*8+i] );
+    for( int i=0; i<8; i++ ) m_circ_ptr->removeComp( m_segment[dispNumber*8+i] );
 }
 
 void SevenSegment::createDisplay( int dispNumber )
@@ -301,8 +301,9 @@ void SevenSegment::createDisplay( int dispNumber )
         pinid = QString( 97+i );
         nodid.append(QString("-led_")).append( pinid );
         LedSmd* lsmd;
-        if( i<7 ) lsmd = new LedSmd( this, "LEDSMD", nodid, QRectF(0, 0, 13.5, 1.5) ); // Segment
-        else      lsmd = new LedSmd( this, "LEDSMD", nodid, QRectF(0, 0, 1.5, 1.5) );  // Point
+        if( i<7 ) lsmd = new LedSmd( m_circ_ptr, "LEDSMD", nodid, QRectF(0, 0, 13.5, 1.5) ); // Segment
+        else      lsmd = new LedSmd( m_circ_ptr, "LEDSMD", nodid, QRectF(0, 0, 1.5, 1.5) );  // Point
+        lsmd->setParent(this);
         lsmd->setParentItem(this);
         //lsmd->setEnabled(false);
         lsmd->setFlag( QGraphicsItem::ItemIsSelectable, false );

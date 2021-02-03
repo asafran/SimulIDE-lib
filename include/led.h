@@ -29,10 +29,10 @@ class SIMVIEWER_EXPORT Led : public LedBase
     Q_OBJECT
 
     public:
-        Led( QObject* parent, QString type, QString id );
+        Led( Circuit* parent, QString type, QString id );
         ~Led();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 
     protected:

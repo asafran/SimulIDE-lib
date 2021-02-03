@@ -25,7 +25,7 @@
 class  eDiode : public eResistor
 {
     public:
-        eDiode(  std::string id );
+        eDiode(  Simulator *sim,  std::string id );
         ~eDiode();
 
         virtual double threshold() { return m_threshold; }

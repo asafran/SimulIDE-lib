@@ -21,12 +21,13 @@
 #include "connector.h"
 #include "simulator.h"
 #include "pin.h"
+#include "circuit.h"
 
 static const char* VoltReg_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Volts")
 };
 
-Component* VoltReg::construct( QObject* parent, QString type, QString id )
+Component* VoltReg::construct( Circuit* parent, QString type, QString id )
 {
         return new VoltReg( parent, type, id );
 }
@@ -41,9 +42,9 @@ LibraryItem* VoltReg::libraryItem()
         VoltReg::construct );
 }
 
-VoltReg::VoltReg( QObject* parent, QString type, QString id )
+VoltReg::VoltReg( Circuit* parent, QString type, QString id )
        : Component( parent, type, id )
-       , eVoltReg( id.toStdString() )
+       , eVoltReg(  parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( VoltReg_properties );
     
@@ -83,12 +84,12 @@ VoltReg::~VoltReg()
 
 void VoltReg::setVRef( double vref )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim )  Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim )  m_circ_ptr->getSimulatorPtr()->pauseSim();
     
     eVoltReg::setVRef( vref );
     
-    if( pauseSim ) Simulator::self()->runContinuous();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->runContinuous();
 }
 
 void VoltReg::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget )

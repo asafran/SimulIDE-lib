@@ -23,8 +23,8 @@
 #include "e-volt_reg.h"
 #include "simulator.h"
 
-eVoltReg::eVoltReg( std::string id )
-        : eResistor( id )
+eVoltReg::eVoltReg( Simulator *sim,  std::string id )
+        : eResistor( sim, id )
 {
     m_ePin.resize(3);
 }
@@ -45,7 +45,7 @@ void eVoltReg::resetState()
 {
     eResistor::setRes( 1e-6 );
     
-    m_accuracy = Simulator::self()->NLaccuracy();
+    m_accuracy = m_sim_ptr->NLaccuracy();
     
     m_lastOut = 0;
 }

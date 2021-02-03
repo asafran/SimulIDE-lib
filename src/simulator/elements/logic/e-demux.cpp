@@ -21,8 +21,8 @@
 
 #include "e-demux.h"
 
-eDemux::eDemux( std::string id )
-    : eLogicDevice( id )
+eDemux::eDemux( Simulator *sim,  std::string id )
+    : eLogicDevice( sim, id )
 {
 }
 eDemux::~eDemux()

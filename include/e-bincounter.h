@@ -27,7 +27,7 @@ class  eBinCounter : public eLogicDevice
 {
     public:
 
-        eBinCounter( std::string id );
+        eBinCounter( Simulator *sim,  std::string id );
         ~eBinCounter();
 
         int  TopValue() const;

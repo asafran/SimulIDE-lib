@@ -34,10 +34,10 @@ class  Diode : public Component, public eDiode
 
         QRectF boundingRect() const { return QRect( -12, -8, 24, 16 ); }
 
-        Diode( QObject* parent, QString type, QString id );
+        Diode( Circuit* parent, QString type, QString id );
         ~Diode();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 
         virtual void paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget );

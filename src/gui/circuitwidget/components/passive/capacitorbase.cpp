@@ -26,9 +26,9 @@ static const char* CapacitorBase_properties[] = {
 };
 
 
-CapacitorBase::CapacitorBase( QObject* parent, QString type, QString id )
+CapacitorBase::CapacitorBase( Circuit* parent, QString type, QString id )
              : Component( parent, type, id )
-             , eCapacitor( id.toStdString() )
+             , eCapacitor(  parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( CapacitorBase_properties );
     

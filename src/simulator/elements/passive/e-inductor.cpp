@@ -26,10 +26,10 @@
 
 #include <math.h>
 
-eInductor::eInductor( std::string id ) : eResistor( id )
+eInductor::eInductor( Simulator *sim,  std::string id ) : eResistor( sim, id )
 {
     m_ind = 1; // H
-    m_tStep = (double)Simulator::self()->reaClock()/1e6;
+    m_tStep = (double)m_sim_ptr->reaClock()/1e6;
     m_resist = m_ind/m_tStep;
     m_curSource = 0;
     m_volt = 0;
@@ -47,7 +47,7 @@ void eInductor::initialize()
 
 void eInductor::resetState()
 {
-    m_tStep = (double)Simulator::self()->reaClock()/1e6;
+    m_tStep = (double)m_sim_ptr->reaClock()/1e6;
     
     eResistor::setRes( m_ind/m_tStep );
     

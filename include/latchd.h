@@ -40,7 +40,7 @@ class  LatchD : public LogicComponent, public eLatchD
     Q_ENUMS( Trigger )
 
     public:
-        LatchD( QObject* parent, QString type, QString id );
+        LatchD( Circuit* parent, QString type, QString id );
         ~LatchD();
         
         enum Trigger {
@@ -49,7 +49,7 @@ class  LatchD : public LogicComponent, public eLatchD
             InEnable
         };
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 
         int channels() { return m_channels; }

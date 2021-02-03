@@ -21,13 +21,11 @@
 #include "mainwindow.h"
 #include "connector.h"
 #include "connectorline.h"
-#include "propertieswidget.h"
 #include "itemlibrary.h"
-#include "circuit.h"
 #include "utils.h"
 #include "simuapi_apppath.h"
-
 #include <math.h>
+#include "circuit.h"
 
 int Component::m_error = 0;
 
@@ -38,7 +36,7 @@ static const char* Component_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Color")
 };
 
-Component::Component( QObject* parent, QString type, QString id )
+Component::Component( Circuit *parent, QString type, QString id )
          : QObject( parent )
          , QGraphicsItem()
          , multUnits( "TGMk munp" )
@@ -59,13 +57,14 @@ Component::Component( QObject* parent, QString type, QString id )
     m_moving = false;
     m_printable = false;
     m_BackGround = "";
-
+    m_circ_ptr = parent;
+/*
     if( ( type != "Connector" )&&( type != "Node" ) )
     {
         LibraryItem* li= ItemLibrary::self()->libraryItem( type );
         if( li ) m_help = li->help();
     }
-    
+*/
     QFont f;
     f.setPixelSize(10);
     
@@ -91,8 +90,8 @@ Component::Component( QObject* parent, QString type, QString id )
     
     //setTransformOriginPoint( boundingRect().center() );
 
-    if( type == "Connector" ) Circuit::self()->conList()->append( this );
-    else                      Circuit::self()->compList()->prepend( this );
+    if( type == "Connector" ) m_circ_ptr->conList()->append( this );
+    else                      m_circ_ptr->compList()->prepend( this );
 }
 Component::~Component(){}
 
@@ -107,14 +106,14 @@ void Component::mousePressEvent( QGraphicsSceneMouseEvent* event )
         {
             if( !isSelected() )     // Deselecciona los demas
             {
-                QList<QGraphicsItem*> itemlist = Circuit::self()->selectedItems();
+                //QList<QGraphicsItem*> itemlist = m_circ_ptr->selectedItems();
 
-                foreach( QGraphicsItem* item, itemlist ) item->setSelected( false );
+                //foreach( QGraphicsItem* item, itemlist ) item->setSelected( false );
 
                 setSelected( true );
             }
-            QPropertyEditorWidget::self()->setObject( this );
-            PropertiesWidget::self()->setHelpText( m_help );
+            //QPropertyEditorWidget::self()->setObject( this );
+            //PropertiesWidget::self()->setHelpText( m_help );
             
             setCursor( Qt::ClosedHandCursor );
         }
@@ -135,7 +134,7 @@ void Component::mouseMoveEvent( QGraphicsSceneMouseEvent* event )
 {
     event->accept();
     return;
-    
+/*
     QPointF delta = togrid(event->scenePos()) - togrid(event->lastScenePos());
     
     bool deltaH  = fabs( delta.x() )> 0;
@@ -143,12 +142,12 @@ void Component::mouseMoveEvent( QGraphicsSceneMouseEvent* event )
     
     if( !deltaH && !deltaV ) return;
 
-    QList<QGraphicsItem*> itemlist = Circuit::self()->selectedItems();
+    QList<QGraphicsItem*> itemlist = m_circ_ptr->selectedItems();
     if( itemlist.size() > 1 )
     {
         if( !m_moving )
         {
-            Circuit::self()->saveState();
+            m_circ_ptr->saveState();
             m_moving = true;
         }
         foreach( QGraphicsItem* item, itemlist )
@@ -169,7 +168,7 @@ void Component::mouseMoveEvent( QGraphicsSceneMouseEvent* event )
                 comp->move( delta );
             }
         }
-        foreach( Component* comp, *(Circuit::self()->conList()) )
+        foreach( Component* comp, *(m_circ_ptr->conList()) )
         {
             Connector* con = static_cast<Connector*>( comp );
             con->startPin()->isMoved();
@@ -177,6 +176,7 @@ void Component::mouseMoveEvent( QGraphicsSceneMouseEvent* event )
         }
     }
     else this->move( delta );
+*/
 }
 
 void Component::move( QPointF delta )
@@ -197,7 +197,7 @@ void Component::mouseReleaseEvent( QGraphicsSceneMouseEvent* event )
     setCursor( Qt::OpenHandCursor );
 
     m_moving = false;
-    Circuit::self()->update();
+    m_circ_ptr->QGraphicsScene::update();
 }
 
 void Component::contextMenuEvent( QGraphicsSceneContextMenuEvent* event )
@@ -245,76 +245,20 @@ void Component::contextMenu( QGraphicsSceneContextMenuEvent* event, QMenu* menu 
     menu->exec(event->screenPos());
 }
 
-void Component::slotCopy()
-{
-    if( !isSelected() ) Circuit::self()->clearSelection();
-    setSelected( true );
-    Circuit::self()->copy( m_eventpoint );
-}
-
-void Component::slotRemove()
-{
-    if( !isSelected() ) Circuit::self()->clearSelection();
-    setSelected( true );
-    Circuit::self()->removeItems();
-}
-
 void Component::remove()
 {
     for( uint i=0; i<m_pin.size(); i++ )   // Remove connectors attached
     {
         Pin* pin = m_pin[i];
         if( !pin ) continue;
-        
+
         if( pin && pin->isConnected())
         {
             Connector* con = pin->connector();
             if( con ) con->remove();
         }
     }
-    Circuit::self()->compRemoved( true );
-}
-
-void Component::slotProperties()
-{
-    QPropertyEditorWidget::self()->setObject( this );
-    PropertiesWidget::self()->setHelpText( m_help );
-    //MainWindow::self()->m_sidepanel->setCurrentIndex( 2 ); // Open Properties tab
-}
-
-void Component::H_flip()
-{
-    Circuit::self()->saveState();
-    m_Hflip = -m_Hflip;
-    setflip();
-}
-
-void Component::V_flip()
-{
-    Circuit::self()->saveState();
-    m_Vflip = -m_Vflip;
-    setflip();
-}
-
-void Component::rotateCW()
-{
-    Circuit::self()->saveState();
-    setRotation( rotation() + 90 );
-    emit moved();
-}
-
-void Component::rotateCCW()
-{
-    Circuit::self()->saveState();
-    setRotation( rotation() - 90 );
-    emit moved();
-}
-
-void Component::rotateHalf()
-{
-    Circuit::self()->saveState();
-    setRotation( rotation() - 180);
-    emit moved();
+    m_circ_ptr->compRemoved( true );
 }
 
 void Component::updateLabel( Label* label, QString txt )

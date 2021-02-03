@@ -22,7 +22,7 @@
 #include "circuit.h"
 
 
-Node::Node( QObject* parent, QString type, QString id )
+Node::Node( Circuit* parent, QString type, QString id )
     : Component( parent, type, id )
 {
     setZValue(2);
@@ -88,8 +88,8 @@ void Node::remove() // Only remove if there are less than 3 connectors
             if( m_pin[con[0]]->isConnected() ) m_pin[con[0]]->connector()->remove();
         }
         
-        Circuit::self()->compList()->removeOne( this );
-        Circuit::self()->removeItem( this );
+        m_circ_ptr->compList()->removeOne( this );
+        m_circ_ptr->removeItem( this );
     }
 }
 
@@ -103,7 +103,8 @@ void Node::joinConns( int c0, int c1 )
     con0->remNullLines();
     con1->remNullLines();
     
-    Connector* con = new Connector( this, con0->itemType(), con0->itemID(), pin0->conPin() );
+    Connector* con = new Connector( m_circ_ptr, con0->itemType(), con0->itemID(), pin0->conPin() );
+    con->setParent(this);
 
     QStringList list0 = con0->pointList();
     QStringList list1 = con1->pointList();
@@ -164,7 +165,7 @@ void Node::joinConns( int c0, int c1 )
     con->closeCon( pin1->conPin(), true );
     con->remNullLines();
     
-    Circuit::self()->addItem( con );
+    m_circ_ptr->addItem( con );
     if( this->isSelected() ) con->setSelected( true );
 }
 

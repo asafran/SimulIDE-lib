@@ -25,7 +25,7 @@
 class  eResistor : public eElement
 {
     public:
-        eResistor( std::string id );
+        eResistor( Simulator *sim,  std::string id );
         ~eResistor();
 
         virtual double res();

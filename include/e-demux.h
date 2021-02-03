@@ -26,7 +26,7 @@ class  eDemux : public eLogicDevice
 {
     public:
 
-        eDemux( std::string id  );
+        eDemux( Simulator *sim,  std::string id  );
         ~eDemux();
 
         virtual void initialize();

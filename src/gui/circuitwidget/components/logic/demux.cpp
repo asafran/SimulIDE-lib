@@ -20,7 +20,7 @@
 #include "demux.h"
 
 
-Component* Demux::construct( QObject* parent, QString type, QString id )
+Component* Demux::construct( Circuit* parent, QString type, QString id )
 {
         return new Demux( parent, type, id );
 }
@@ -35,8 +35,8 @@ LibraryItem* Demux::libraryItem()
         Demux::construct );
 }
 
-Demux::Demux( QObject* parent, QString type, QString id )
-        : LogicComponent( parent, type, id ), eDemux( id.toStdString() )
+Demux::Demux( Circuit* parent, QString type, QString id )
+        : LogicComponent( parent, type, id ), eDemux(  parent->getSimulatorPtr(), id.toStdString() )
 {
     m_width  = 4;
     m_height = 10;

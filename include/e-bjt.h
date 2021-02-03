@@ -27,7 +27,7 @@ class  eBJT : public eResistor
 {
     public:
 
-        eBJT( std::string id );
+        eBJT( Simulator *sim,  std::string id );
         virtual ~eBJT();
 
         virtual void initialize();

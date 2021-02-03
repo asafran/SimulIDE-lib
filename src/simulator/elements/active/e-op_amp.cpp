@@ -24,8 +24,8 @@
 #include "e-source.h"
 #include "simulator.h"
 
-eOpAmp::eOpAmp( std::string id )
-      : eElement( id )
+eOpAmp::eOpAmp( Simulator *sim,  std::string id )
+      : eElement( sim, id )
 {
     m_ePin.resize(5);
     m_gain = 1000;
@@ -46,7 +46,7 @@ void eOpAmp::initialize()
 
 void eOpAmp::resetState()
 {
-    m_accuracy = Simulator::self()->NLaccuracy();
+    m_accuracy = m_sim_ptr->NLaccuracy();
     
     m_lastOut = 0;
     m_lastIn  = 0;
@@ -138,7 +138,7 @@ void eOpAmp::initEpins()
     
     std::stringstream ss;
     ss << m_elmId << "-eSource";
-    m_output = new eSource( ss.str(), m_ePin[2] );
+    m_output = new eSource( m_sim_ptr, ss.str(), m_ePin[2] );
     //m_output->setImp( 40 );
     m_output->setOut( true );
 }

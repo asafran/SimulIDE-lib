@@ -21,7 +21,7 @@
 #include "pin.h"
 
 
-Component* BcdToDec::construct( QObject* parent, QString type, QString id )
+Component* BcdToDec::construct( Circuit* parent, QString type, QString id )
 {
         return new BcdToDec( parent, type, id );
 }
@@ -36,9 +36,9 @@ LibraryItem* BcdToDec::libraryItem()
         BcdToDec::construct );
 }
 
-BcdToDec::BcdToDec( QObject* parent, QString type, QString id )
+BcdToDec::BcdToDec( Circuit* parent, QString type, QString id )
         : LogicComponent( parent, type, id )
-        , eBcdToDec( id.toStdString() )
+        , eBcdToDec(  parent->getSimulatorPtr(), id.toStdString() )
 {
     m_width  = 4;
     m_height = 11;

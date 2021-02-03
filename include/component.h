@@ -24,15 +24,18 @@
 #include <QtWidgets>
 #include <QPointer>
 
-#include "QPropertyEditorWidget.h"
 #include "simviewer-export.h"
+#include <QGraphicsScene>
+
+//#include "circuit.h"
 
 Q_DECLARE_METATYPE( QList<int> )
 
 class Pin;
 class Label;
+class Circuit;
 
-class SIMVIEWER_EXPORT Component : public QObject, public QGraphicsItem
+class Component : public QObject, public QGraphicsItem
 {
     Q_OBJECT
     Q_INTERFACES(QGraphicsItem)
@@ -55,7 +58,7 @@ class SIMVIEWER_EXPORT Component : public QObject, public QGraphicsItem
     public:
         QRectF boundingRect() const { return QRectF( m_area.x()-2, m_area.y()-2, m_area.width()+4 ,m_area.height()+4 ); }
 
-        Component( QObject* parent, QString type, QString id );
+        Component( Circuit *parent, QString type, QString id );
         ~Component();
 
         enum { Type = UserType + 1 };
@@ -109,6 +112,8 @@ class SIMVIEWER_EXPORT Component : public QObject, public QGraphicsItem
         void updateLabel( Label* label, QString txt );
         
         double getmultValue();
+
+        Circuit* getCircPtr() { return m_circ_ptr; }
         
         //QString getHelp( QString file );
         
@@ -130,16 +135,7 @@ class SIMVIEWER_EXPORT Component : public QObject, public QGraphicsItem
         void moved();
 
     public slots:
-        virtual void slotProperties();
-        virtual void rotateCW();
-        virtual void rotateCCW();
-        virtual void rotateHalf();
-        virtual void H_flip();
-        virtual void V_flip();
-        virtual void slotRemove();
-        void slotCopy();
-
-        virtual void remove();
+        void remove();
 
     protected:
         void mousePressEvent(QGraphicsSceneMouseEvent* event);
@@ -153,6 +149,8 @@ class SIMVIEWER_EXPORT Component : public QObject, public QGraphicsItem
         void setflip();
         
         double m_value;
+
+        Circuit* m_circ_ptr;
 
         const QString multUnits;
         QString m_unit;
@@ -186,7 +184,7 @@ class SIMVIEWER_EXPORT Component : public QObject, public QGraphicsItem
         std::vector<Pin*> m_pin;
 };
 
-typedef Component* (*createItemPtr)( QObject* parent, QString type, QString id );
+typedef Component* (*createItemPtr)( Circuit* parent, QString type, QString id );
 
 
 class Label : public QGraphicsTextItem

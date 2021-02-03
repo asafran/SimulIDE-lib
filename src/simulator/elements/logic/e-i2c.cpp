@@ -21,8 +21,8 @@
 //#include <cstdio>
 //#include <QDebug>
 
-eI2C::eI2C( std::string id )
-    : eLogicDevice( id )
+eI2C::eI2C( Simulator *sim,  std::string id )
+    : eLogicDevice( sim, id )
 {
     m_address = 0x00;
 }

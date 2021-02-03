@@ -25,6 +25,7 @@
 #include <QPointer>
 #include <QDebug>
 #include "e-pin.h"
+class Simulator;
 
 
 // The following provides compatibility with gcc compiler v5 and up
@@ -38,7 +39,7 @@
 class  eElement
 {
     public:
-        eElement( std::string id=0 );
+        eElement( Simulator *sim, std::string id=0 );
         virtual ~eElement();
 
         virtual void initEpins();
@@ -69,6 +70,8 @@ class  eElement
         std::vector<ePin*> m_ePin;
 
         std::string m_elmId;
+
+        Simulator *m_sim_ptr;
 };
 
 #endif

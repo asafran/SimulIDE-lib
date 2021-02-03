@@ -21,8 +21,8 @@
 
 #include "e-shiftreg.h"
 
-eShiftReg::eShiftReg( std::string id, int latchClk, int serOut ) 
-         : eLogicDevice( id )
+eShiftReg::eShiftReg( Simulator *sim,  std::string id, int latchClk, int serOut ) 
+         : eLogicDevice( sim, id )
 {
     // input0: DS    serial data input
     // input1: MR    master reset (active LOW)
@@ -166,11 +166,11 @@ void eShiftReg::createLatchClockPin()
 {
     std::stringstream sspin;
     sspin << m_elmId << "latchClockPin";
-    ePin* epin = new ePin( sspin.str(), 0 );
+    ePin* epin = new ePin(  sspin.str(), 0 );
 
     std::stringstream ssesource;
     ssesource << m_elmId << "eSourceLatchClock";
-    m_latchClockPin = new eSource( ssesource.str(), epin );
+    m_latchClockPin = new eSource( m_sim_ptr, ssesource.str(), epin );
     m_latchClockPin->setImp( m_inputImp );
 }
 
@@ -178,11 +178,11 @@ void eShiftReg::createSerOutPin()
 {
     std::stringstream sspin;
     sspin << m_elmId << "serOutPin";
-    ePin* epin = new ePin( sspin.str(), 0 );
+    ePin* epin = new ePin(  sspin.str(), 0 );
 
     std::stringstream ssesource;
     ssesource << m_elmId << "eSourceSerOutPin";
-    m_serOutPin = new eSource( ssesource.str(), epin );
+    m_serOutPin = new eSource( m_sim_ptr, ssesource.str(), epin );
     m_serOutPin->setVoltHigh( m_outHighV );
     m_serOutPin->setImp( m_outImp );
 }

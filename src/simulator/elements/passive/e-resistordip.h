@@ -25,7 +25,7 @@
 class  eResistorDip : public eElement
 {
     public:
-        eResistorDip( std::string id );
+        eResistorDip( Simulator *sim,  std::string id );
         ~eResistorDip();
 
         virtual void setRes( double resist );

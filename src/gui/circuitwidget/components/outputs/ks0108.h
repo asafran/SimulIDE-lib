@@ -31,10 +31,10 @@ class  Ks0108 : public Component, public eElement
     Q_PROPERTY( bool CS_Active_Low   READ csActLow    WRITE setCsActLow   DESIGNABLE true USER true )
     
     public:
-        Ks0108( QObject* parent, QString type, QString id );
+        Ks0108( Circuit* parent, QString type, QString id );
         ~Ks0108();
         
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem* libraryItem();
         
         void initialize();

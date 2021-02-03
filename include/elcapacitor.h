@@ -29,10 +29,10 @@ class  elCapacitor : public CapacitorBase
     
     public:
 
-        elCapacitor( QObject* parent, QString type, QString id );
+        elCapacitor( Circuit* parent, QString type, QString id );
         ~elCapacitor();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem* libraryItem();
         
         virtual void initialize();

@@ -27,7 +27,7 @@ class  eMosfet : public eResistor
 {
     public:
 
-        eMosfet( std::string id );
+        eMosfet( Simulator *sim,  std::string id );
         ~eMosfet();
 
         virtual void initialize();

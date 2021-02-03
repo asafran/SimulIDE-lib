@@ -24,9 +24,7 @@
 //BEGIN Item includes
 #include "amperimeter.h"
 #include "adc.h"
-#include "arduino.h"
 #include "audio_out.h"
-#include "avrcomponent.h"
 #include "bcdto7s.h"
 #include "bcdtodec.h"
 #include "bincounter.h"
@@ -52,8 +50,6 @@
 #include "gate_xor.h"
 #include "ground.h"
 #include "hd44780.h"
-#include "i2cram.h"
-#include "i2ctoparallel.h"
 //#include "inbus.h"
 #include "inductor.h"
 #include "keypad.h"
@@ -70,9 +66,7 @@
 #include "mux.h"
 #include "mux_analog.h"
 #include "op_amp.h"
-#include "oscope.h"
 //#include "outbus.h"
-#include "piccomponent.h"
 #include "pcd8544.h"
 #include "probe.h"
 #include "potentiometer.h"
@@ -86,7 +80,6 @@
 #include "sevensegment.h"
 #include "sevensegment_bcd.h"
 #include "shiftreg.h"
-#include "sr04.h"
 #include "stepper.h"
 #include "subcircuit.h"
 #include "subpackage.h"
@@ -99,11 +92,11 @@
 #include "wavegen.h"
 //END Item includes
 
-ItemLibrary* ItemLibrary::m_pSelf = 0l;
+//ItemLibrary* ItemLibrary::m_pSelf = 0l;
 
 ItemLibrary::ItemLibrary()
 {
-    m_pSelf = this;
+//    m_pSelf = this;
 
     loadItems();
     //loadPlugins();
@@ -121,7 +114,6 @@ void ItemLibrary::loadItems()
     addItem( Voltimeter::libraryItem() );
     addItem( Amperimeter::libraryItem() );
     addItem( Frequencimeter::libraryItem() );
-    addItem( Oscope::libraryItem() );
     // Sources
     addItem( LogicInput::libraryItem() );
     addItem( Clock::libraryItem() );
@@ -163,11 +155,7 @@ void ItemLibrary::loadItems()
     addItem( Servo::libraryItem() );
     addItem( AudioOut::libraryItem() );
     // Micro
-    addItem( PICComponent::libraryItem() );
-    addItem( AVRComponent::libraryItem() );
-    addItem( Arduino::libraryItem() );
     addItem( new LibraryItem( tr("Sensors"),tr("Micro"), "1to2.png","", 0l ) );
-    addItem( SR04::libraryItem() );
     // Logic
     addItem( new LibraryItem( tr("Gates"),tr("Logic"), "gates.png","", 0l ) );
     addItem( new LibraryItem( tr("Arithmetic"),tr("Logic"), "2to2.png","", 0l ) );
@@ -194,9 +182,6 @@ void ItemLibrary::loadItems()
     addItem( DAC::libraryItem() );
     addItem( Bus::libraryItem() );
     addItem( SevenSegmentBCD::libraryItem() );
-    addItem( Memory::libraryItem() );
-    addItem( I2CRam::libraryItem() );
-    addItem( I2CToParallel::libraryItem() );
     addItem( Lm555::libraryItem() );
     // Subcircuits
     addItem( SubCircuit::libraryItem() );
@@ -305,6 +290,7 @@ LibraryItem::~LibraryItem() { }
 
 QString* LibraryItem::help() 
 {
+    /*
     if( m_help == "Sorry... no Help Available" )
     {
         QString locale   = "_"+QLocale::system().name().split("_").first();
@@ -331,6 +317,8 @@ QString* LibraryItem::help()
             }
         }
     }
-    return &m_help; 
+    */
+    return &m_help;
+
 }
 

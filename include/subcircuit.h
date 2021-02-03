@@ -29,10 +29,10 @@ class  SubCircuit : public Chip
 
     public:
 
-        SubCircuit( QObject* parent, QString type, QString id );
+        SubCircuit( Circuit* parent, QString type, QString id );
         ~SubCircuit();
         
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem * libraryItem();
 
         virtual void initialize();

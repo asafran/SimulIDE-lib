@@ -26,7 +26,7 @@ class  eLatchD : public eLogicDevice
 {
     public:
 
-        eLatchD( std::string id, int channels=0 );
+        eLatchD( Simulator *sim,  std::string id, int channels=0 );
         ~eLatchD();
 
         virtual void initialize();

@@ -20,19 +20,17 @@
 #include "circuitwidget.h"
 #include "mainwindow.h"
 #include "circuit.h"
-#include "filebrowser.h"
 
-CircuitWidget*  CircuitWidget::m_pSelf = 0l;
+//CircuitWidget*  CircuitWidget::m_pSelf = 0l;
 
-CircuitWidget::CircuitWidget( QWidget *parent  )
+CircuitWidget::CircuitWidget( MainWindow *parent  )
              : QWidget( parent )
              , m_verticalLayout(this)
-             , m_circView(this)
+             , m_circView(this, parent)
              , m_circToolBar(this)
-             , m_plotter(this)
              , m_infoMenu(this)
 {
-    m_pSelf = this;
+//    m_pSelf = this;
 
     m_verticalLayout.setObjectName( "verticalLayout" );
     m_verticalLayout.setContentsMargins(0, 0, 0, 0);
@@ -51,7 +49,7 @@ CircuitWidget::CircuitWidget( QWidget *parent  )
     
     m_rateLabel = new QLabel( this );
     QFont font( "Arial", 10, QFont::Normal );
-    double fontScale = MainWindow::self()->fontScale();
+    double fontScale = parent->fontScale();
     font.setPixelSize( int(10*fontScale) );
     m_rateLabel->setFont( font );
     
@@ -60,8 +58,8 @@ CircuitWidget::CircuitWidget( QWidget *parent  )
     
     QString appPath = QCoreApplication::applicationDirPath();
     
-    m_lastCircDir = MainWindow::self()->settings()->value("lastCircDir").toByteArray();
-    if( m_lastCircDir.isEmpty() )  m_lastCircDir = appPath + "..share/simulide/examples";
+    //m_lastCircDir = MainWindow::self()->settings()->value("lastCircDir").toByteArray();
+    //if( m_lastCircDir.isEmpty() )  m_lastCircDir = appPath + "..share/simulide/examples";
     
     //newCircuit();
     setRate(0);
@@ -117,7 +115,7 @@ void CircuitWidget::createToolBars()
     m_circToolBar.addSeparator();//..........................
 }
 
-
+/*
 void CircuitWidget::openCirc()
 {
     const QString dir = m_lastCircDir;
@@ -126,18 +124,18 @@ void CircuitWidget::openCirc()
 
     loadCirc( fileName );
 }
-
+*/
 void CircuitWidget::loadCirc( QString path )
 {
     if( !path.isEmpty() && path.endsWith(".simu") )
     {
         //newCircuit();
-        Circuit::self()->loadCircuit( path );
+        m_circView.getCircPtr()->loadCircuit( path );
    
         m_curCirc = path;
-        m_lastCircDir = path;
-        MainWindow::self()->setTitle(path.split("/").last());
-        MainWindow::self()->settings()->setValue( "lastCircDir", m_lastCircDir );
+        //m_lastCircDir = path;
+        m_main_ptr->setTitle(path.split("/").last());
+        //MainWindow::self()->settings()->setValue( "lastCircDir", m_lastCircDir );
         //FileBrowser::self()->setPath(m_lastCircDir);
         m_circView.setCircTime( 0 );
     }

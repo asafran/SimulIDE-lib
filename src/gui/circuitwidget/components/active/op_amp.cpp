@@ -29,7 +29,7 @@ static const char* OpAmp_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Power Pins")
 };
 
-Component* OpAmp::construct( QObject* parent, QString type, QString id )
+Component* OpAmp::construct( Circuit* parent, QString type, QString id )
 {
         return new OpAmp( parent, type, id );
 }
@@ -44,9 +44,9 @@ LibraryItem* OpAmp::libraryItem()
         OpAmp::construct );
 }
 
-OpAmp::OpAmp( QObject* parent, QString type, QString id )
+OpAmp::OpAmp( Circuit* parent, QString type, QString id )
      : Component( parent, type, id )
-     , eOpAmp( id.toStdString() )
+     , eOpAmp(  parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( OpAmp_properties );
     
@@ -79,7 +79,7 @@ OpAmp::OpAmp( QObject* parent, QString type, QString id )
     m_pin[2] = new Pin( 0, QPoint(16+8,0), newId, 2, this );
     m_ePin[2] = m_pin[2];
     newId.append("-eSource");
-    m_output = new eSource( newId.toStdString(), m_ePin[2] );
+    m_output = new eSource(  parent->getSimulatorPtr(), newId.toStdString(), m_ePin[2] );
     //m_output->setImp( 40 );
     m_output->setOut( true );
     
@@ -88,14 +88,14 @@ OpAmp::OpAmp( QObject* parent, QString type, QString id )
     m_pin[3] = new Pin( 90, QPoint(0,-16), newId, 3, this );
     m_ePin[3] = m_pin[3];
     //newId.append("-eSource");
-    //m_powerPos = new eSource( newId.toStdString(), m_ePin[2] );
+    //m_powerPos = new eSource( new parent->getSimulatorPtr(), id.toStdString(), m_ePin[2] );
     
     newId = id;
     newId.append(QString("powerNeg"));
     m_pin[4] = new Pin( 270, QPoint(0, 16), newId, 4, this );
     m_ePin[4] = m_pin[4];
     //newId.append("-eSource");
-    //m_powerNeg = new eSource( newId.toStdString(), m_ePin[3] );
+    //m_powerNeg = new eSource( new parent->getSimulatorPtr(), id.toStdString(), m_ePin[3] );
     
     setPowerPins( false );
 }

@@ -27,9 +27,9 @@
 #include "simuapi_apppath.h"
 
 
-Chip::Chip( QObject* parent, QString type, QString id )
+Chip::Chip( Circuit* parent, QString type, QString id )
     : Component( parent, type, id )
-    , eElement( id.toStdString() )
+    , eElement( parent->getSimulatorPtr(), id.toStdString() )
 {
     m_numpins = 0;
     m_isLS = false;
@@ -48,7 +48,7 @@ void Chip::initChip()
     //qDebug() << "Chip::initChip"<<m_pkgeFile;
     m_error = 0;
     
-    QDir circuitDir = QFileInfo( Circuit::self()->getFileName() ).absoluteDir();
+    QDir circuitDir = QFileInfo( m_circ_ptr->getFileName() ).absoluteDir();
     QString fileNameAbs = circuitDir.absoluteFilePath( m_pkgeFile );
 
     QFile pfile( fileNameAbs );
@@ -96,7 +96,7 @@ void Chip::initChip()
     foreach( Pin* pin, m_pin )
     {
         if( pin->connector() ) pin->connector()->remove();
-        if( pin->scene() ) Circuit::self()->removeItem( pin );
+        if( pin->scene() ) m_circ_ptr->removeItem( pin );
         pin->reset();
         delete pin;
     }
@@ -255,7 +255,7 @@ void Chip::setLogicSymbol( bool ls )
     m_error = 0;
     Chip::initChip();
     
-    if( m_error == 0 )  Circuit::self()->update();
+    if( m_error == 0 )  m_circ_ptr->update();
 }
 
 void Chip::remove()

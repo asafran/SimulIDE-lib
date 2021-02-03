@@ -26,8 +26,8 @@
 
 #include <math.h>
 
-eCapacitor::eCapacitor( std::string id ) 
-          : eResistor( id )
+eCapacitor::eCapacitor( Simulator *sim,  std::string id ) 
+          : eResistor( sim, id )
 {
     m_cap = 0.00001; // Farads
     m_resist = m_tStep/m_cap;
@@ -47,7 +47,7 @@ void eCapacitor::initialize()
 
 void eCapacitor::resetState()
 {
-    m_tStep = (double)Simulator::self()->reaClock()/1e6;
+    m_tStep = (double)m_sim_ptr->reaClock()/1e6;
     
     eResistor::setRes( m_tStep/m_cap );
 }

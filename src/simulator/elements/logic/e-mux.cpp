@@ -21,8 +21,8 @@
 
 #include "e-mux.h"
 
-eMux::eMux( std::string id )
-    : eLogicDevice( id )
+eMux::eMux( Simulator *sim,  std::string id )
+    : eLogicDevice( sim, id )
 {
 }
 eMux::~eMux()

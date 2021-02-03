@@ -30,7 +30,7 @@ class  Chip : public Component, public eElement
     Q_PROPERTY( bool Logic_Symbol READ logicSymbol WRITE setLogicSymbol DESIGNABLE true USER true )
 
     public:
-        Chip( QObject* parent, QString type, QString id );
+        Chip( Circuit* parent, QString type, QString id );
         ~Chip();
         
         bool logicSymbol();

@@ -37,10 +37,10 @@ class  OpAmp : public Component, public eOpAmp
     
     public:
 
-        OpAmp( QObject* parent, QString type, QString id );
+        OpAmp( Circuit* parent, QString type, QString id );
         ~OpAmp();
         
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         void setPowerPins( bool set );

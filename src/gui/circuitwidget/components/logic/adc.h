@@ -35,10 +35,10 @@ class  ADC : public LogicComponent, public eADC
     Q_PROPERTY( int    Num_Bits    READ numOuts    WRITE setNumOuts    DESIGNABLE true USER true )
 
     public:
-        ADC( QObject* parent, QString type, QString id );
+        ADC( Circuit* parent, QString type, QString id );
         ~ADC();
 
- static Component* construct( QObject* parent, QString type, QString id );
+ static Component* construct( Circuit* parent, QString type, QString id );
  static LibraryItem *libraryItem();
 
         virtual void setNumOuts( int outs );

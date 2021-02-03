@@ -31,9 +31,10 @@
 #include "connector.h"
 #include "simulator.h"
 #include "pcd8544.h"
+#include "circuit.h"
 
 
-Component* Pcd8544::construct( QObject* parent, QString type, QString id )
+Component* Pcd8544::construct( Circuit* parent, QString type, QString id )
 {
     return new Pcd8544( parent, type, id );
 }
@@ -48,9 +49,9 @@ LibraryItem* Pcd8544::libraryItem()
         Pcd8544::construct );
 }
 
-Pcd8544::Pcd8544( QObject* parent, QString type, QString id )
+Pcd8544::Pcd8544( Circuit* parent, QString type, QString id )
        : Component( parent, type, id )
-       , eElement( (id+"-eElement").toStdString() )
+       , eElement(m_circ_ptr->getSimulatorPtr(), (id+"-eElement").toStdString() )
        , m_pRst( 270, QPoint(-32, 40), id+"-PinRst", 0, this )
        , m_pCs ( 270, QPoint(-16, 40), id+"-PinCs" , 0, this )
        , m_pDc ( 270, QPoint(  0, 40), id+"-PinDc" , 0, this )
@@ -70,7 +71,7 @@ Pcd8544::Pcd8544( QObject* parent, QString type, QString id )
     m_pdisplayImg->setColor( 1, qRgb(0,0,0));
     m_pdisplayImg->setColor( 0, qRgb(200,215,180) );
     
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
     
     setLabelPos( -32,-66, 0);
     setShowId( true );
@@ -269,7 +270,7 @@ void Pcd8544::remove()
     if( m_pScl.isConnected() ) m_pScl.connector()->remove();
     
     delete m_pdisplayImg;
-    Simulator::self()->remFromUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this );
     
     Component::remove();
 }

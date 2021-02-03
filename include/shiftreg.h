@@ -39,10 +39,10 @@ class  ShiftReg : public LogicComponent, public eShiftReg
     Q_PROPERTY( bool   Tristate       READ tristate                                     USER true )
 
     public:
-        ShiftReg( QObject* parent, QString type, QString id );
+        ShiftReg( Circuit* parent, QString type, QString id );
         ~ShiftReg();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 
         bool tristate() { return true; }

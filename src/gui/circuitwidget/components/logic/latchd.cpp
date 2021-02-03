@@ -24,7 +24,7 @@
 #include "pin.h"
 
 
-Component* LatchD::construct( QObject* parent, QString type, QString id )
+Component* LatchD::construct( Circuit* parent, QString type, QString id )
 {
         return new LatchD( parent, type, id );
 }
@@ -39,9 +39,9 @@ LibraryItem* LatchD::libraryItem()
         LatchD::construct );
 }
 
-LatchD::LatchD( QObject* parent, QString type, QString id )
+LatchD::LatchD( Circuit* parent, QString type, QString id )
       : LogicComponent( parent, type, id )
-      , eLatchD( id.toStdString() )
+      , eLatchD(  parent->getSimulatorPtr(), id.toStdString() )
 {
     m_width  = 4;
     m_height = 10;
@@ -54,7 +54,7 @@ LatchD::LatchD( QObject* parent, QString type, QString id )
     
     std::stringstream ssesource;
     ssesource << m_elmId << "-eSource-inputEnable";
-    m_inEnSource = new eSource( ssesource.str(), m_inputEnPin );
+    m_inEnSource = new eSource( m_circ_ptr->getSimulatorPtr(), ssesource.str(), m_inputEnPin );
     m_inEnSource->setImp( m_inputImp );
     
     m_outEnPin   = new Pin(   0, QPoint( 0,0 ), m_id+"-Pin-outEnable"  , 0, this );
@@ -111,8 +111,8 @@ void LatchD::setChannels( int channels )
     if( channels == m_channels ) return;
     if( channels < 1 ) return;
     
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->pauseSim();
     
     m_height = channels+2;
     int origY = -(m_height/2)*8;
@@ -142,8 +142,8 @@ void LatchD::setChannels( int channels )
 
     m_area   = QRect( -(m_width/2)*8, origY, m_width*8, m_height*8 );
     
-    if( pauseSim ) Simulator::self()->runContinuous();
-    Circuit::self()->update();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->runContinuous();
+    m_circ_ptr->update();
 }
 
 void LatchD::setTristate( bool t )
@@ -164,8 +164,8 @@ void LatchD::setTrigger( Trigger trigger )
 {
     //if( trigger == m_trigger ) return;
     
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->pauseSim();
     
     m_trigger = trigger;
     
@@ -186,7 +186,7 @@ void LatchD::setTrigger( Trigger trigger )
     {
         std::stringstream sspin;
         sspin << m_elmId << "-ePin-clock";
-        m_inputEnPin->setId( sspin.str() );
+        m_inputEnPin->setId( m_circ_ptr, sspin.str() );
         m_inputEnPin->setLabelText( ">" );
         m_inputEnPin->setVisible( true );
         
@@ -200,7 +200,7 @@ void LatchD::setTrigger( Trigger trigger )
     {
         std::stringstream sspin;
         sspin << m_elmId << "-ePin-inputEnable";
-        m_inputEnPin->setId( sspin.str() );
+        m_inputEnPin->setId( m_circ_ptr, sspin.str() );
         m_inputEnPin->setLabelText( " IE" );
         m_inputEnPin->setVisible( true );
         
@@ -210,8 +210,8 @@ void LatchD::setTrigger( Trigger trigger )
         eLogicDevice::m_inEnable = false;
         eLogicDevice::m_clock = false;
     }
-    if( pauseSim ) Simulator::self()->runContinuous();
-    Circuit::self()->update();
+    if( pauseSim ) m_circ_ptr->getSimulatorPtr()->runContinuous();
+    m_circ_ptr->update();
 }
 
 void LatchD::remove()

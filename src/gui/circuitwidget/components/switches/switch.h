@@ -35,10 +35,10 @@ class SIMVIEWER_EXPORT Switch : public SwitchBase
     
     public:
 
-        Switch( QObject* parent, QString type, QString id );
+        Switch( Circuit* parent, QString type, QString id );
         ~Switch();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
         
         int poles() const;

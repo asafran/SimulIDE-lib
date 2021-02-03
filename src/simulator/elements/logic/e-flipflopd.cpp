@@ -22,8 +22,8 @@
 #include "e-flipflopd.h"
 #include "circuit.h"
 
-eFlipFlopD::eFlipFlopD( std::string id )
-          : eLogicDevice( id )
+eFlipFlopD::eFlipFlopD( Simulator *sim,  std::string id )
+          : eLogicDevice( sim, id )
 {
 }
 eFlipFlopD::~eFlipFlopD()
@@ -91,11 +91,11 @@ void eFlipFlopD::setVChanged()
     }
 }
 
-void eFlipFlopD::setSrInv( bool inv )
+void eFlipFlopD::setSrInv( Circuit *circ, bool inv )
 {
     m_srInv = inv;
     m_input[1]->setInverted( inv );                           // Set
     m_input[2]->setInverted( inv );                           // Reset
     
-    Circuit::self()->update();
+    circ->update();
 }

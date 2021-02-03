@@ -41,7 +41,7 @@ class  Gate : public Component, public eGate
     public:
         QRectF boundingRect() const { return QRect( -20, -8*m_numInputs-2, 40, 8*2*m_numInputs+4 ); }
         
-        Gate( QObject* parent, QString type, QString id, int inputs );
+        Gate( Circuit* parent, QString type, QString id, int inputs );
         ~Gate();
         
         virtual void setNumInps( int inputs );

@@ -23,8 +23,8 @@
 #include "e-logic_device.h"
 #include "circuit.h"
 
-eLogicDevice::eLogicDevice( std::string id )
-            : eElement( id )
+eLogicDevice::eLogicDevice( Simulator *sim, std::string id )
+            : eElement( sim, id )
 {
     m_numInputs  = 0;
     m_numOutputs = 0;
@@ -134,7 +134,7 @@ void eLogicDevice::createClockPin()
 {
     std::stringstream sspin;
     sspin << m_elmId << "-ePin-clock";
-    ePin* epin = new ePin( sspin.str(), 0 );
+    ePin* epin = new ePin(  sspin.str(), 0 );
 
     createClockeSource( epin );
 }
@@ -143,7 +143,7 @@ void eLogicDevice::createClockPin( ePin* epin )
 {
     std::stringstream sspin;
     sspin << m_elmId << "-ePin-clock";
-    epin->setId( sspin.str() );
+    epin->setId( m_sim_ptr->getCircPtr(), sspin.str() );
 
     createClockeSource( epin );
 }
@@ -152,7 +152,7 @@ void eLogicDevice::createClockeSource( ePin* epin )
 {
     std::stringstream ssesource;
     ssesource << m_elmId << "-eSource-clock";
-    m_clockPin = new eSource( ssesource.str(), epin );
+    m_clockPin = new eSource( m_sim_ptr, ssesource.str(), epin );
     m_clockPin->setImp( m_inputImp );
 }
 
@@ -160,7 +160,7 @@ void eLogicDevice::createOutEnablePin()
 {
     std::stringstream sspin;
     sspin << m_elmId << "-ePin-outEnable";
-    ePin* epin = new ePin( sspin.str(), 0 );
+    ePin* epin = new ePin(  sspin.str(), 0 );
 
     createOutEnableeSource( epin );
 }
@@ -169,7 +169,7 @@ void eLogicDevice::createOutEnablePin( ePin* epin )
 {
     std::stringstream sspin;
     sspin << m_elmId << "-ePin-outEnable";
-    epin->setId( sspin.str() );
+    epin->setId( m_sim_ptr->getCircPtr(), sspin.str() );
 
     createOutEnableeSource( epin );
 }
@@ -178,7 +178,7 @@ void eLogicDevice::createOutEnableeSource( ePin* epin )
 {
     std::stringstream ssesource;
     ssesource << m_elmId << "-eSource-outEnable";
-    m_outEnablePin = new eSource( ssesource.str(), epin );
+    m_outEnablePin = new eSource( m_sim_ptr, ssesource.str(), epin );
     m_outEnablePin->setImp( m_inputImp );
     epin->setInverted( true );
 }
@@ -187,7 +187,7 @@ void eLogicDevice::createInEnablePin()
 {
     std::stringstream sspin;
     sspin << m_elmId << "-ePin-inputEnable";
-    ePin* epin = new ePin( sspin.str(), 0 );
+    ePin* epin = new ePin(  sspin.str(), 0 );
 
     createInEnableeSource( epin );
 }
@@ -195,7 +195,7 @@ void eLogicDevice::createInEnablePin( ePin* epin )
 {
     std::stringstream sspin;
     sspin << m_elmId << "-ePin-inputEnable";
-    epin->setId( sspin.str() );
+    epin->setId( m_sim_ptr->getCircPtr(), sspin.str() );
 
     createInEnableeSource( epin );
 }
@@ -204,7 +204,7 @@ void eLogicDevice::createInEnableeSource( ePin* epin )
 {
     std::stringstream ssesource;
     ssesource << m_elmId << "-eSource-inputEnable";
-    m_inEnablePin = new eSource( ssesource.str(), epin );
+    m_inEnablePin = new eSource( m_sim_ptr, ssesource.str(), epin );
     m_inEnablePin->setImp( m_inputImp );
 }
 
@@ -222,11 +222,11 @@ void eLogicDevice::createInput( ePin* epin )
     
     std::stringstream sspin;
     sspin << m_elmId << "-ePin-input" << m_numInputs;
-    epin->setId( sspin.str() );
+    epin->setId( m_sim_ptr->getCircPtr(), sspin.str() );
 
     std::stringstream ssesource;
     ssesource << m_elmId << "-eSource-input" << m_numInputs;
-    m_input[m_numInputs] = new eSource( ssesource.str(), epin );
+    m_input[m_numInputs] = new eSource( m_sim_ptr, ssesource.str(), epin );
     m_input[m_numInputs]->setImp( m_inputImp );
 
     m_inputState.resize( totalInps );
@@ -244,11 +244,11 @@ void eLogicDevice::createInputs( int inputs )
     {
         std::stringstream sspin;
         sspin << m_elmId << "-ePin-input" << i;
-        ePin* epin = new ePin( sspin.str(), i );
+        ePin* epin = new ePin(  sspin.str(), i );
 
         std::stringstream ssesource;
         ssesource << m_elmId << "-eSource-input" << i;
-        m_input[i] = new eSource( ssesource.str(), epin );
+        m_input[i] = new eSource( m_sim_ptr, ssesource.str(), epin );
         m_input[i]->setImp( m_inputImp );
         //m_inputState[i] = false;
     }
@@ -262,11 +262,11 @@ void eLogicDevice::createOutput( ePin* epin )
 
     std::stringstream sspin;
     sspin << m_elmId << "-ePin-output" << m_numOutputs;
-    epin->setId( sspin.str() );
+    epin->setId( m_sim_ptr->getCircPtr(), sspin.str() );
 
     std::stringstream ssesource;
     ssesource << m_elmId << "-eSource-output" << m_numOutputs;
-    m_output[m_numOutputs] = new eSource( ssesource.str(), epin );
+    m_output[m_numOutputs] = new eSource( m_sim_ptr, ssesource.str(), epin );
     m_output[m_numOutputs]->setVoltHigh( m_outHighV );
     m_output[m_numOutputs]->setImp( m_outImp );
 
@@ -282,11 +282,11 @@ void eLogicDevice::createOutputs( int outputs )
     {
         std::stringstream sspin;
         sspin << m_elmId << "-ePin-output" << i;
-        ePin* epin = new ePin( sspin.str(), i );
+        ePin* epin = new ePin(  sspin.str(), i );
 
         std::stringstream ssesource;
         ssesource << m_elmId << "-eSource-output" << i;
-        m_output[i] = new eSource( ssesource.str(), epin );
+        m_output[i] = new eSource( m_sim_ptr, ssesource.str(), epin );
         m_output[i]->setVoltHigh( m_outHighV );
         m_output[i]->setImp( m_outImp );
     }
@@ -339,34 +339,34 @@ void eLogicDevice::setOut( int num, bool out )
 
 void eLogicDevice::setOutHighV( double volt )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_sim_ptr->isRunning();
+    if( pauseSim ) m_sim_ptr->pauseSim();
 
     m_outHighV = volt;
 
     for( int i=0; i<m_numOutputs; i++ )
         m_output[i]->setVoltHigh( volt );
 
-    if( pauseSim ) Simulator::self()->runContinuous();
+    if( pauseSim ) m_sim_ptr->runContinuous();
 }
 
 void eLogicDevice::setOutLowV( double volt )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_sim_ptr->isRunning();
+    if( pauseSim ) m_sim_ptr->pauseSim();
 
     m_outLowV = volt;
 
     for( int i=0; i<m_numOutputs; i++ )
         m_output[i]->setVoltLow( volt );
 
-    if( pauseSim ) Simulator::self()->runContinuous();
+    if( pauseSim ) m_sim_ptr->runContinuous();
 }
 
 void eLogicDevice::setInputImp( double imp )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_sim_ptr->isRunning();
+    if( pauseSim ) m_sim_ptr->pauseSim();
 
     m_inputImp = imp;
 
@@ -374,13 +374,13 @@ void eLogicDevice::setInputImp( double imp )
     {
         m_input[i]->setImp( imp );
     }
-    if( pauseSim ) Simulator::self()->runContinuous();
+    if( pauseSim ) m_sim_ptr->runContinuous();
 }
 
 void eLogicDevice::setOutImp( double imp )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_sim_ptr->isRunning();
+    if( pauseSim ) m_sim_ptr->pauseSim();
 
     if( m_outImp == imp ) return;
 
@@ -390,13 +390,13 @@ void eLogicDevice::setOutImp( double imp )
     {
         m_output[i]->setImp( imp );
     }
-    if( pauseSim ) Simulator::self()->runContinuous();
+    if( pauseSim ) m_sim_ptr->runContinuous();
 }
 
 void eLogicDevice::setInverted( bool inverted )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_sim_ptr->isRunning();
+    if( pauseSim ) m_sim_ptr->pauseSim();
 
     m_inverted = inverted;
     
@@ -404,35 +404,35 @@ void eLogicDevice::setInverted( bool inverted )
     {
         m_output[i]->setInverted( inverted );
     }
-    Circuit::self()->update();
+    m_sim_ptr->getCircPtr()->update();
 
-    if( pauseSim ) Simulator::self()->runContinuous();
+    if( pauseSim ) m_sim_ptr->runContinuous();
 }
 
 void eLogicDevice::setInvertInps( bool invert )
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_sim_ptr->isRunning();
+    if( pauseSim ) m_sim_ptr->pauseSim();
 
     m_invInputs = invert;
     for( int i=0; i<m_numInputs; i++ )
     {
         m_input[i]->setInverted( invert );
     }
-    Circuit::self()->update();
+    m_sim_ptr->getCircPtr()->update();
 
-    if( pauseSim ) Simulator::self()->runContinuous();
+    if( pauseSim ) m_sim_ptr->runContinuous();
 }
 
 void eLogicDevice::setClockInv( bool inv )     
 {
-    bool pauseSim = Simulator::self()->isRunning();
-    if( pauseSim ) Simulator::self()->pauseSim();
+    bool pauseSim = m_sim_ptr->isRunning();
+    if( pauseSim ) m_sim_ptr->pauseSim();
 
     m_clockPin->setInverted(inv);
-    Circuit::self()->update();
+    m_sim_ptr->getCircPtr()->update();
 
-    if( pauseSim ) Simulator::self()->runContinuous();
+    if( pauseSim ) m_sim_ptr->runContinuous();
 }
 
 int eLogicDevice::getClockState()

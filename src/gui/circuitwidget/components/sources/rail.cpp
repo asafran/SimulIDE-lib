@@ -22,7 +22,7 @@
 #include "rail.h"
 
 
-Component* Rail::construct( QObject* parent, QString type, QString id )
+Component* Rail::construct( Circuit* parent, QString type, QString id )
 { return new Rail( parent, type, id ); }
 
 LibraryItem* Rail::libraryItem()
@@ -35,9 +35,9 @@ LibraryItem* Rail::libraryItem()
         Rail::construct );
 }
 
-Rail::Rail( QObject* parent, QString type, QString id )
+Rail::Rail( Circuit* parent, QString type, QString id )
     : Component( parent, type, id )
-    , eElement( id.toStdString() )
+    , eElement(parent->getSimulatorPtr(), id.toStdString() )
 {
     setLabelPos(-64,-24 );
     
@@ -49,7 +49,7 @@ Rail::Rail( QObject* parent, QString type, QString id )
     m_outpin = new Pin( 0, nodpos, nodid, 0, this);
 
     nodid.append(QString("-eSource"));
-    m_out = new eSource( nodid.toStdString(), m_outpin );
+    m_out = new eSource( parent->getSimulatorPtr(), nodid.toStdString(), m_outpin );
     
     m_out->setOut( true );
     m_unit = "V";

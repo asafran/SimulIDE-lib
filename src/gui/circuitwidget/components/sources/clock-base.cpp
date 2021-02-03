@@ -20,12 +20,13 @@
 #include "clock-base.h"
 #include "pin.h"
 #include "simulator.h"
+#include "circuit.h"
 
 static const char* ClockBase_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Freq")
 };
 
-ClockBase::ClockBase( QObject* parent, QString type, QString id )
+ClockBase::ClockBase( Circuit* parent, QString type, QString id )
          : LogicInput( parent, type, id )
 {
     Q_UNUSED( ClockBase_properties );
@@ -38,7 +39,7 @@ ClockBase::ClockBase( QObject* parent, QString type, QString id )
     m_step = 0;
     setFreq( 1000 );
 
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
 }
 ClockBase::~ClockBase(){}
 
@@ -46,11 +47,11 @@ void ClockBase::updateStep()
 {
     if( m_changed )
     {
-        if( m_isRunning ) Simulator::self()->addToSimuClockList( this );
+        if( m_isRunning ) m_circ_ptr->getSimulatorPtr()->addToSimuClockList( this );
         else
         {
             m_out->setOut( false );
-            Simulator::self()->remFromSimuClockList( this );
+            m_circ_ptr->getSimulatorPtr()->remFromSimuClockList( this );
         }
         LogicInput::updateStep();
     }
@@ -89,7 +90,7 @@ void ClockBase::onbuttonclicked()
 
 void ClockBase::remove()
 {
-    Simulator::self()->remFromSimuClockList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromSimuClockList( this );
 
     LogicInput::remove();
 }

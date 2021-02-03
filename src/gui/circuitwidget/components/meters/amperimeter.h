@@ -30,10 +30,10 @@ class SIMVIEWER_EXPORT Amperimeter : public Meter
 
     public:
 
-        Amperimeter( QObject* parent, QString type, QString id );
+        Amperimeter( Circuit* parent, QString type, QString id );
         ~Amperimeter();
 
-        static Component* construct( QObject* parent, QString type, QString id );
+        static Component* construct( Circuit* parent, QString type, QString id );
         static LibraryItem *libraryItem();
 
         void updateStep();

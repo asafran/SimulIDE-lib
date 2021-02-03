@@ -26,7 +26,7 @@
 class  eNode
 {
     public:
-        eNode( QString id );
+        eNode( Simulator *sim, QString id );
         ~eNode();
 
         QString itemId();
@@ -116,6 +116,8 @@ class  eNode
         bool m_single;
         bool m_switched;
         bool m_isBus;
+
+        Simulator *m_sim_ptr;
 };
 #endif
 

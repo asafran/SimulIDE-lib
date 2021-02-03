@@ -27,7 +27,7 @@
 class  eSource : public eElement
 {
     public:
-        eSource( std::string id, ePin* epin );
+        eSource( Simulator *sim,  std::string id, ePin* epin );
         virtual ~eSource();
 
         virtual void initialize();

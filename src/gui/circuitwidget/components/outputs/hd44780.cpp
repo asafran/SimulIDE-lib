@@ -22,13 +22,14 @@
 #include "simulator.h"
 #include "hd44780.h"
 #include "utils.h"
+#include "circuit.h"
 
 static const char* Hd44780_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Cols"),
     QT_TRANSLATE_NOOP("App::Property","Rows")
 };
 
-Component* Hd44780::construct( QObject* parent, QString type, QString id )
+Component* Hd44780::construct( Circuit* parent, QString type, QString id )
 {
     return new Hd44780( parent, type, id );
 }
@@ -43,9 +44,9 @@ LibraryItem* Hd44780::libraryItem()
         Hd44780::construct );
 }
 
-Hd44780::Hd44780( QObject* parent, QString type, QString id )
+Hd44780::Hd44780( Circuit* parent, QString type, QString id )
        : Component( parent, type, id )
-       , eElement( (id+"-eElement").toStdString() )
+       , eElement(m_circ_ptr->getSimulatorPtr(), (id+"-eElement").toStdString() )
        , m_fontImg(":font2.png")
 {
     Q_UNUSED( Hd44780_properties );
@@ -70,7 +71,7 @@ Hd44780::Hd44780( QObject* parent, QString type, QString id )
         m_dataPin[i]->setLabelText( " D"+QString::number(i) );
     }
     
-    Simulator::self()->addToUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->addToUpdateList( this );
     
     setLabelPos( 70,-82, 0);
     setShowId( true );
@@ -342,7 +343,7 @@ void Hd44780::remove()
         if( m_dataPin[i]->isConnected() ) m_dataPin[i]->connector()->remove();
     }
     
-    Simulator::self()->remFromUpdateList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromUpdateList( this );
     
     Component::remove();
 }

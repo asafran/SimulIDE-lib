@@ -22,12 +22,13 @@
 #include "connector.h"
 #include "itemlibrary.h"
 #include "pin.h"
+#include "circuit.h"
 
 static const char* AudioOut_properties[] = {
     QT_TRANSLATE_NOOP("App::Property","Impedance")
 };
 
-Component* AudioOut::construct( QObject* parent, QString type, QString id )
+Component* AudioOut::construct( Circuit* parent, QString type, QString id )
 { return new AudioOut( parent, type, id ); }
 
 LibraryItem* AudioOut::libraryItem()
@@ -40,9 +41,9 @@ LibraryItem* AudioOut::libraryItem()
             AudioOut::construct);
 }
 
-AudioOut::AudioOut( QObject* parent, QString type, QString id )
+AudioOut::AudioOut( Circuit* parent, QString type, QString id )
         : Component( parent, type, id )
-        , eResistor( id.toStdString() )
+        , eResistor(  parent->getSimulatorPtr(), id.toStdString() )
 {
     Q_UNUSED( AudioOut_properties );
     
@@ -120,7 +121,7 @@ void AudioOut::initialize()
     if( m_deviceinfo.isNull() ) return;
     
     if( m_ePin[0]->isConnected() && m_ePin[1]->isConnected() )
-        Simulator::self()->addToSimuClockList( this );
+        m_circ_ptr->getSimulatorPtr()->addToSimuClockList( this );
     
     eResistor::initialize();
 }
@@ -167,7 +168,7 @@ void AudioOut::OnAudioNotify()
 
 void AudioOut::remove()
 {
-    Simulator::self()->remFromSimuClockList( this );
+    m_circ_ptr->getSimulatorPtr()->remFromSimuClockList( this );
     
     if( m_ePin[0]->isConnected() ) (static_cast<Pin*>(m_ePin[0]))->connector()->remove();
     if( m_ePin[1]->isConnected() ) (static_cast<Pin*>(m_ePin[1]))->connector()->remove();

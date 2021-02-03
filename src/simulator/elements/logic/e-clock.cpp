@@ -23,14 +23,14 @@
 #include "simulator.h"
 #include "e-source.h"
 
-eClock::eClock( std::string id ) 
-      : eElement( id )
+eClock::eClock( Simulator *sim,  std::string id ) 
+      : eElement( sim, id )
 {
     setNumEpins(1);
     
     std::stringstream ss;
     ss << m_elmId << "-eSource";
-    m_output = new eSource( ss.str(), m_ePin[0] );
+    m_output = new eSource( m_sim_ptr, ss.str(), m_ePin[0] );
     m_output->setVoltHigh( 5 );
     m_output->setVoltLow( 0 );
     m_output->setOut( false );
@@ -39,7 +39,7 @@ eClock::eClock( std::string id )
     m_step = 0;
     setFreq( 1000 );
     
-    Simulator::self()->addToSimuClockList( this );
+    m_sim_ptr->addToSimuClockList( this );
 }
 eClock::~eClock()
 { 
