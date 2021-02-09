@@ -1,2 +1,12 @@
 
+*.pro.user
 *.o
+*.qmake.stash
+*.dll
+*.exe
+*.a
+!/resources/bin/libglibc_win.a
+/build-SimulIDE_Build-Desktop_Qt_5_15_2_MinGW_64_bit-Debug/*
+/build-SimulIDE_Build-Desktop_Qt_5_15_2_MinGW_64_bit-Release/*
+/build-SimulIDE_Build-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/*
+/build-SimulIDE_Build-Desktop_Qt_5_15_2_MinGW_32_bit-Release/*
