@@ -35,117 +35,117 @@ QT += concurrent
 QT += serialport
 QT += multimedia widgets
 
-SOURCES += $$files(F:/VieverBuilds/NewViewer/src/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/active/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/logic/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/mcu/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/meters/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/other/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/outputs/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/passive/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/sources/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/switches/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/oscopewidget/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/plotterwidget/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/terminalwidget/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/QPropertyEditor/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/componentselector/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/filebrowser/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/editorwidget/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/editorwidget/findreplacedialog/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/serialporwidget/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/simulator/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/simulator/elements/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/simulator/elements/active/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/simulator/elements/logic/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/simulator/elements/outputs/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/simulator/elements/passive/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/simulator/elements/processors/*.cpp) \
-    $$files(F:/VieverBuilds/NewViewer/src/simavr/sim/*.c) \
-    $$files(F:/VieverBuilds/NewViewer/src/simavr/cores/*.c) \
-    $$files(F:/VieverBuilds/NewViewer/src/gpsim/*.cc) \
-    $$files(F:/VieverBuilds/NewViewer/src/gpsim/devices/*.cc) \
-    $$files(F:/VieverBuilds/NewViewer/src/gpsim/modules/*.cc) \
-    $$files(F:/VieverBuilds/NewViewer/src/gpsim/registers/*.cc)
+SOURCES += $$files($$BUILD_DIR/../src/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/active/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/logic/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/mcu/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/meters/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/other/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/outputs/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/passive/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/sources/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/switches/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/oscopewidget/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/plotterwidget/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/terminalwidget/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/QPropertyEditor/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/componentselector/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/filebrowser/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/editorwidget/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/editorwidget/findreplacedialog/*.cpp) \
+    $$files($$BUILD_DIR/../src/gui/serialporwidget/*.cpp) \
+    $$files($$BUILD_DIR/../src/simulator/*.cpp) \
+    $$files($$BUILD_DIR/../src/simulator/elements/*.cpp) \
+    $$files($$BUILD_DIR/../src/simulator/elements/active/*.cpp) \
+    $$files($$BUILD_DIR/../src/simulator/elements/logic/*.cpp) \
+    $$files($$BUILD_DIR/../src/simulator/elements/outputs/*.cpp) \
+    $$files($$BUILD_DIR/../src/simulator/elements/passive/*.cpp) \
+    $$files($$BUILD_DIR/../src/simulator/elements/processors/*.cpp) \
+    $$files($$BUILD_DIR/../src/simavr/sim/*.c) \
+    $$files($$BUILD_DIR/../src/simavr/cores/*.c) \
+    $$files($$BUILD_DIR/../src/gpsim/*.cc) \
+    $$files($$BUILD_DIR/../src/gpsim/devices/*.cc) \
+    $$files($$BUILD_DIR/../src/gpsim/modules/*.cc) \
+    $$files($$BUILD_DIR/../src/gpsim/registers/*.cc)
 
-HEADERS += $$files(F:/VieverBuilds/NewViewer/src/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/active/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/logic/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/mcu/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/meters/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/other/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/outputs/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/passive/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/sources/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/switches/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/oscopewidget/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/plotterwidget/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/terminalwidget/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/QPropertyEditor/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/componentselector/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/filebrowser/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/editorwidget/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/editorwidget/findreplacedialog/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gui/serialporwidget/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/simulator/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/simulator/elements/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/simulator/elements/active/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/simulator/elements/logic/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/simulator/elements/outputs/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/simulator/elements/passive/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/simulator/elements/processors/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/simavr/sim/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/simavr/sim/avr/*.h)  \
-    $$files(F:/VieverBuilds/NewViewer/src/simavr/cores/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/resources/data/*.xml) \
-    $$files(F:/VieverBuilds/NewViewer/src/gpsim/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gpsim/devices/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gpsim/modules/*.h) \
-    $$files(F:/VieverBuilds/NewViewer/src/gpsim/registers/*.h)
+HEADERS += $$files($$BUILD_DIR/../src/*.h) \
+    $$files($$BUILD_DIR/../src/gui/*.h) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/*.h) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/*.h) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/active/*.h) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/logic/*.h) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/mcu/*.h) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/meters/*.h) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/other/*.h) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/outputs/*.h) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/passive/*.h) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/sources/*.h) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/switches/*.h) \
+    $$files($$BUILD_DIR/../src/gui/oscopewidget/*.h) \
+    $$files($$BUILD_DIR/../src/gui/plotterwidget/*.h) \
+    $$files($$BUILD_DIR/../src/gui/terminalwidget/*.h) \
+    $$files($$BUILD_DIR/../src/gui/QPropertyEditor/*.h) \
+    $$files($$BUILD_DIR/../src/gui/componentselector/*.h) \
+    $$files($$BUILD_DIR/../src/gui/filebrowser/*.h) \
+    $$files($$BUILD_DIR/../src/gui/editorwidget/*.h) \
+    $$files($$BUILD_DIR/../src/gui/editorwidget/findreplacedialog/*.h) \
+    $$files($$BUILD_DIR/../src/gui/serialporwidget/*.h) \
+    $$files($$BUILD_DIR/../src/simulator/*.h) \
+    $$files($$BUILD_DIR/../src/simulator/elements/*.h) \
+    $$files($$BUILD_DIR/../src/simulator/elements/active/*.h) \
+    $$files($$BUILD_DIR/../src/simulator/elements/logic/*.h) \
+    $$files($$BUILD_DIR/../src/simulator/elements/outputs/*.h) \
+    $$files($$BUILD_DIR/../src/simulator/elements/passive/*.h) \
+    $$files($$BUILD_DIR/../src/simulator/elements/processors/*.h) \
+    $$files($$BUILD_DIR/../src/simavr/sim/*.h) \
+    $$files($$BUILD_DIR/../src/simavr/sim/avr/*.h)  \
+    $$files($$BUILD_DIR/../src/simavr/cores/*.h) \
+    $$files(../resources/data/*.xml) \
+    $$files($$BUILD_DIR/../src/gpsim/*.h) \
+    $$files($$BUILD_DIR/../src/gpsim/devices/*.h) \
+    $$files($$BUILD_DIR/../src/gpsim/modules/*.h) \
+    $$files($$BUILD_DIR/../src/gpsim/registers/*.h)
 
-INCLUDEPATH += F:/VieverBuilds/NewViewer/src \
-    F:/VieverBuilds/NewViewer/src/gui \
-    F:/VieverBuilds/NewViewer/src/gui/circuitwidget \
-    F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components \
-    F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/active \
-    F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/logic \
-    F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/mcu \
-    F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/meters \
-    F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/other \
-    F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/outputs \
-    F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/passive \
-    F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/sources \
-    F:/VieverBuilds/NewViewer/src/gui/circuitwidget/components/switches \
-    F:/VieverBuilds/NewViewer/src/gui/oscopewidget \
-    F:/VieverBuilds/NewViewer/src/gui/plotterwidget \
-    F:/VieverBuilds/NewViewer/src/gui/terminalwidget \
-    F:/VieverBuilds/NewViewer/src/gui/QPropertyEditor \
-    F:/VieverBuilds/NewViewer/src/gui/componentselector \
-    F:/VieverBuilds/NewViewer/src/gui/filebrowser \
-    F:/VieverBuilds/NewViewer/src/gui/editorwidget \
-    F:/VieverBuilds/NewViewer/src/gui/editorwidget/findreplacedialog \
-    F:/VieverBuilds/NewViewer/src/gui/serialporwidget \
-    F:/VieverBuilds/NewViewer/src/simulator \
-    F:/VieverBuilds/NewViewer/src/simulator/elements \
-    F:/VieverBuilds/NewViewer/src/simulator/elements/active \
-    F:/VieverBuilds/NewViewer/src/simulator/elements/logic \
-    F:/VieverBuilds/NewViewer/src/simulator/elements/outputs \
-    F:/VieverBuilds/NewViewer/src/simulator/elements/passive \
-    F:/VieverBuilds/NewViewer/src/simulator/elements/processors \
-    F:/VieverBuilds/NewViewer/src/simavr \
-    F:/VieverBuilds/NewViewer/src/simavr/sim \
-    F:/VieverBuilds/NewViewer/src/simavr/sim/avr \
-    F:/VieverBuilds/NewViewer/src/simavr/cores \
-    F:/VieverBuilds/NewViewer/src/gpsim \
-    F:/VieverBuilds/NewViewer/src/gpsim/devices \
-    F:/VieverBuilds/NewViewer/src/gpsim/modules \
-    F:/VieverBuilds/NewViewer/src/gpsim/registers
+INCLUDEPATH += $$BUILD_DIR/../src \
+    $$BUILD_DIR/../src/gui \
+    $$BUILD_DIR/../src/gui/circuitwidget \
+    $$BUILD_DIR/../src/gui/circuitwidget/components \
+    $$BUILD_DIR/../src/gui/circuitwidget/components/active \
+    $$BUILD_DIR/../src/gui/circuitwidget/components/logic \
+    $$BUILD_DIR/../src/gui/circuitwidget/components/mcu \
+    $$BUILD_DIR/../src/gui/circuitwidget/components/meters \
+    $$BUILD_DIR/../src/gui/circuitwidget/components/other \
+    $$BUILD_DIR/../src/gui/circuitwidget/components/outputs \
+    $$BUILD_DIR/../src/gui/circuitwidget/components/passive \
+    $$BUILD_DIR/../src/gui/circuitwidget/components/sources \
+    $$BUILD_DIR/../src/gui/circuitwidget/components/switches \
+    $$BUILD_DIR/../src/gui/oscopewidget \
+    $$BUILD_DIR/../src/gui/plotterwidget \
+    $$BUILD_DIR/../src/gui/terminalwidget \
+    $$BUILD_DIR/../src/gui/QPropertyEditor \
+    $$BUILD_DIR/../src/gui/componentselector \
+    $$BUILD_DIR/../src/gui/filebrowser \
+    $$BUILD_DIR/../src/gui/editorwidget \
+    $$BUILD_DIR/../src/gui/editorwidget/findreplacedialog \
+    $$BUILD_DIR/../src/gui/serialporwidget \
+    $$BUILD_DIR/../src/simulator \
+    $$BUILD_DIR/../src/simulator/elements \
+    $$BUILD_DIR/../src/simulator/elements/active \
+    $$BUILD_DIR/../src/simulator/elements/logic \
+    $$BUILD_DIR/../src/simulator/elements/outputs \
+    $$BUILD_DIR/../src/simulator/elements/passive \
+    $$BUILD_DIR/../src/simulator/elements/processors \
+    $$BUILD_DIR/../src/simavr \
+    $$BUILD_DIR/../src/simavr/sim \
+    $$BUILD_DIR/../src/simavr/sim/avr \
+    $$BUILD_DIR/../src/simavr/cores \
+    $$BUILD_DIR/../src/gpsim \
+    $$BUILD_DIR/../src/gpsim/devices \
+    $$BUILD_DIR/../src/gpsim/modules \
+    $$BUILD_DIR/../src/gpsim/registers
 
 TRANSLATIONS +=  \
     ../resources/translations/simulide.ts \
@@ -153,7 +153,7 @@ TRANSLATIONS +=  \
     ../resources/translations/simulide_es.ts \
     ../resources/translations/simulide_ru.ts 
 
-RESOURCES = F:/VieverBuilds/NewViewer/src/application.qrc
+RESOURCES = $$BUILD_DIR/../src/application.qrc
 
 QMAKE_CXXFLAGS += -Wno-unused-parameter
 QMAKE_CXXFLAGS += -Wno-missing-field-initializers
@@ -177,7 +177,7 @@ QMAKE_CFLAGS += -fno-pic
 
 win32 {
     LIBS +=  ../resources/bin/libglibc_win.a
-    RC_ICONS += ../src/icons/simulide.ico
+    RC_ICONS += $$BUILD_DIR/../src/icons/simulide.ico
 }
 unix {
     QMAKE_LIBS += -lelf

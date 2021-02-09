@@ -6,10 +6,9 @@
 class SimEvent : public QEvent
 {
 public:
-    SimEvent(const QObject *_ptr);
+    SimEvent(const QObject &_ptr);
 
     static QEvent::Type type();
-
 
     const QObject &getObject() const;
 

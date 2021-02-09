@@ -2,9 +2,9 @@
 
 QEvent::Type SimEvent::m_eventType = QEvent::None;
 
-SimEvent::SimEvent(const QObject *_ptr):
+SimEvent::SimEvent(const QObject &_ptr):
     QEvent(SimEvent::type()),
-    ptr(_ptr)
+    ptr(&_ptr)
 {
 
 }
