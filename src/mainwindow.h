@@ -36,7 +36,7 @@ class SIMVIEWER_EXPORT MainWindow : public QMainWindow
 
 // static MainWindow* self() { return m_pSelf; }
 
-        CircuitWidget* getCircPtr() { return m_circuit;}
+//        CircuitWidget* getCircPtr() { return m_circuit;}
 //        void loadPlugins();
 
 //        void unLoadPugin( QString pluginName );

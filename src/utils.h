@@ -22,6 +22,7 @@
 
 #include <QString>
 #include <QFile>
+#include <QFileInfo>
 #include <QMessageBox>
 #include <QTextStream>
 #include <qpoint.h>

@@ -40,7 +40,7 @@ static const char* Circuit_properties[] = {
 */
 //QAtomicPointer<Circuit> Circuit::m_pSelf = 0l;
 
-Circuit::Circuit( qreal x, qreal y, qreal width, qreal height, CircuitView*  parent, MainWindow *mwindow)
+Circuit::Circuit(qreal x, qreal y, qreal width, qreal height, CircuitView*  parent)
        : QGraphicsScene(x, y, width, height, parent)
        , simulator(this)
        , m_itemLibrary()
@@ -69,7 +69,7 @@ Circuit::Circuit( qreal x, qreal y, qreal width, qreal height, CircuitView*  par
     m_showScroll = true;//MainWindow::self()->settings()->value( "Circuit/showScroll" ).toBool();
     m_filePath = qApp->applicationDirPath()+"/new.simu";
 
-    m_main_ptr = mwindow;
+//    m_main_ptr = mwindow;
 
     //connect( &m_bckpTimer, SIGNAL(timeout() ), this, SLOT( saveChanges()) );
     //m_bckpTimer.start( m_autoBck*1000 );
@@ -137,7 +137,7 @@ void Circuit::removeItems()                     // Remove Selected items
     bool pauseSim = simulator.isRunning();
     if( pauseSim ) simulator.pauseSim();
 
-    saveState();
+    //saveState();
 
     foreach( Component* comp, m_compList )
     {
@@ -209,7 +209,7 @@ bool Circuit::deleting()
 {
     return m_deleting;
 }
-
+/*
 void Circuit::saveState()
 {
     if( m_con_started ) return;
@@ -231,7 +231,7 @@ void Circuit::saveState()
 
 void Circuit::saveChanges()
 {
-/*
+
     //qDebug() << "Circuit::saveChanges";
     if( !m_changed ) return;
     if( m_con_started ) return;
@@ -253,9 +253,9 @@ void Circuit::saveChanges()
 
     if( saveDom( m_backupPath, &m_domDoc ) )
         MainWindow::self()->settings()->setValue( "backupPath", m_backupPath );
-*/
-}
 
+}
+*/
 void Circuit::setChanged()
 {
     m_changed = true;
@@ -314,12 +314,13 @@ void Circuit::setAnimate( bool an )
 
 double Circuit::fontScale() 
 { 
-    return m_main_ptr->fontScale();
+    //return m_main_ptr->fontScale();
+    return 1.0;
 }
 
 void Circuit::setFontScale( double scale )
 { 
-    m_main_ptr->setFontScale( scale );
+    //m_main_ptr->setFontScale( scale );
 }
 /*
 int Circuit::autoBck()
@@ -401,7 +402,7 @@ Pin* Circuit::findPin( int x, int y, QString id )
     }
     return 0l;
 }
-
+/*
 void Circuit::importCirc(  QPointF eventpoint  )
 {
     if( m_con_started ) return;
@@ -419,7 +420,7 @@ void Circuit::importCirc(  QPointF eventpoint  )
         
     m_pasting = false;
 }
-
+*/
 void Circuit::loadCircuit( QString &fileName )
 {
     if( m_con_started ) return;
@@ -667,7 +668,7 @@ void Circuit::loadDomDoc( QDomDocument* doc )
     
     QApplication::restoreOverrideCursor();
 }
-
+/*
 bool Circuit::saveCircuit( QString &fileName )
 {
     if( m_con_started ) return false;
@@ -837,7 +838,7 @@ void Circuit::objectToDom( QDomDocument* doc, QObject* object )
             elm.setAttribute( name, value.toString() );
             /*if( QString(name)=="Mem" )
             qDebug() << "type" << value.type()<< "typename" << value.typeName()<< "name " << name
-                 << "   value " << value << "saved" << value.toString();*/
+                 << "   value " << value << "saved" << value.toString();
         }
 
     }
@@ -895,7 +896,7 @@ void Circuit::redo()
 
     if( pauseSim ) simulator.runContinuous();
 }
-
+*/
 void Circuit::updatePin(ePin* epin, std::string newId )
 {
     QString pinId = QString::fromStdString( newId );
@@ -999,7 +1000,7 @@ void Circuit::loadObjectProperties( QDomElement element, QObject* Item )
         //else qDebug() << "    ERROR!!! Circuit::loadObjectProperties\n  unknown type:  "<<"name "<<name<<"   value "<<value ;
     }
 }
-
+/*
 void Circuit::copy( QPointF eventpoint )
 {
     if( m_con_started ) return;
@@ -1076,10 +1077,10 @@ void Circuit::paste( QPointF eventpoint )
 
     if( pauseSim ) simulator.runContinuous();
 }
-
+*/
 bool  Circuit::pasting() { return m_pasting; }
 QPointF Circuit::deltaMove(){ return m_deltaMove; }
-
+/*
 void Circuit::createSubcircuit()
 {
     if( m_con_started ) return;
@@ -1303,7 +1304,7 @@ void Circuit::createSubcircuit()
     file.close();
     //qDebug() <<"Circuit::createSubcircuit\n" << subcircuit;
 }
-
+*/
 QString Circuit::newSceneId()
 {
     return QString("%1").arg(++m_seqNumber) ;
@@ -1311,7 +1312,7 @@ QString Circuit::newSceneId()
 
 void Circuit::newconnector( Pin*  startpin )
 {
-    saveState();
+    //saveState();
 
     //if ( m_subcirmode ) return;
     m_con_started = true;
@@ -1334,7 +1335,7 @@ void Circuit::newconnector( Pin*  startpin )
 void Circuit::closeconnector( Pin* endpin )
 {
     m_con_started = false;
-    new_connector->closeCon( endpin, /*connect=*/true );
+    new_connector->closeCon( endpin,/*connect=*/true );
 }
 
 void Circuit::updateConnectors()

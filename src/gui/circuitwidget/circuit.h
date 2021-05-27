@@ -27,9 +27,9 @@
 
 #include "pin.h"
 #include "simviewer-export.h"
-#include "mainwindow.h"
 #include "itemlibrary.h"
 #include "connector.h"
+#include "circuitwidget.h"
 
 class CircuitView;
 class Connector;
@@ -50,7 +50,7 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
     //Q_PROPERTY( int  Auto_Backup_Secs READ autoBck    WRITE setAutoBck    DESIGNABLE true USER true )
 
     public:
-        Circuit( qreal x, qreal y, qreal width, qreal height, CircuitView*  parent , MainWindow *mwindow);
+        Circuit( qreal x, qreal y, qreal width, qreal height, CircuitView*  parent);
         ~Circuit();
 
 // static Circuit* self() { return m_pSelf.loadRelaxed(); }
@@ -92,15 +92,15 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
         void remove();
         bool deleting();
         void compRemoved( bool removed );
-        void saveState();
+        //void saveState();
         void setChanged();
 
         void drawBackground( QPainter* painter, const QRectF &rect );
 
         Pin* findPin( int x, int y, QString id );
 
-        void loadCircuit( QString &fileName );
-        bool saveCircuit( QString &fileName );
+
+        //bool saveCircuit( QString &fileName );
 
         Component* createItem( QString name, QString id );
 
@@ -139,14 +139,15 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
         Amperimeter* getAmpmtrPtr(const QString id) const { return this->findChild<Amperimeter *>(id);}
 */
     public slots:
-        void createSubcircuit();
-        void copy( QPointF eventpoint );
-        void paste( QPointF eventpoint );
-        void undo();
-        void redo();
-        void importCirc( QPointF eventpoint );
-        void bom();
-        void saveChanges();
+        //void createSubcircuit();
+        //void copy( QPointF eventpoint );
+        //void paste( QPointF eventpoint );
+        //void undo();
+        //void redo();
+        //void importCirc( QPointF eventpoint );
+        //void bom();
+        //void saveChanges();
+        void loadCircuit( QString &fileName );
 
     protected:
         void mousePressEvent( QGraphicsSceneMouseEvent* event );
@@ -159,10 +160,10 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
         void loadDomDoc( QDomDocument* doc );
         void loadProperties( QDomElement element, Component* Item );
         void loadObjectProperties( QDomElement element, QObject* Item );
-        void circuitToDom();
-        void listToDom( QDomDocument* doc, QList<Component*>* complist );
-        void objectToDom( QDomDocument* doc, QObject* object );
-        bool saveDom( QString &fileName, QDomDocument* doc );
+        //void circuitToDom();
+        //void listToDom( QDomDocument* doc, QList<Component*>* complist );
+        //void objectToDom( QDomDocument* doc, QObject* object );
+        //bool saveDom( QString &fileName, QDomDocument* doc );
 
         QString getCompId( QString name );
 
@@ -208,8 +209,6 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
         ItemLibrary m_itemLibrary;
 
         QTimer m_bckpTimer;
-
-        MainWindow *m_main_ptr;
 
         CircuitWidget *m_widget_ptr;
 };

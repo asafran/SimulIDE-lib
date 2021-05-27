@@ -34,7 +34,7 @@ MainWindow::MainWindow()
     setWindowIcon( QIcon(":/simulide.png") );
 //    m_pSelf   = this;
     m_circuit = 0l;
-    m_version = "SimulIDE-"+QString( APP_VERSION );
+    m_version = "SimulIDE-lib";
     
     this->setWindowTitle(m_version);
 

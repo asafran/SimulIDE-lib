@@ -18,15 +18,14 @@
  ***************************************************************************/
  
 #include "circuitwidget.h"
-#include "mainwindow.h"
 #include "circuit.h"
 
 //CircuitWidget*  CircuitWidget::m_pSelf = 0l;
 
-CircuitWidget::CircuitWidget( MainWindow *parent  )
+CircuitWidget::CircuitWidget( QWidget *parent  )
              : QWidget( parent )
              , m_verticalLayout(this)
-             , m_circView(this, parent)
+             , m_circView(this)
              , m_circToolBar(this)
              , m_infoMenu(this)
 {
@@ -49,7 +48,7 @@ CircuitWidget::CircuitWidget( MainWindow *parent  )
     
     m_rateLabel = new QLabel( this );
     QFont font( "Arial", 10, QFont::Normal );
-    double fontScale = parent->fontScale();
+    double fontScale = 1.0;//parent->fontScale();
     font.setPixelSize( int(10*fontScale) );
     m_rateLabel->setFont( font );
     
@@ -134,7 +133,7 @@ void CircuitWidget::loadCirc( QString path )
    
         m_curCirc = path;
         //m_lastCircDir = path;
-        m_main_ptr->setTitle(path.split("/").last());
+        //m_main_ptr->setTitle(path.split("/").last());
         //MainWindow::self()->settings()->setValue( "lastCircDir", m_lastCircDir );
         //FileBrowser::self()->setPath(m_lastCircDir);
         m_circView.setCircTime( 0 );

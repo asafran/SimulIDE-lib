@@ -20,7 +20,7 @@
 #ifndef CIRCUITWIDGET_H
 #define CIRCUITWIDGET_H
 
-#include <QtWidgets>
+#include <QWidget>
 
 #include "circuitview.h"
 #include "simviewer-export.h"
@@ -30,7 +30,7 @@ class SIMVIEWER_EXPORT CircuitWidget : public QWidget
     Q_OBJECT
 
     public:
-        CircuitWidget( MainWindow *parent );
+        CircuitWidget(QWidget *parent );
         ~CircuitWidget();
 
 // static CircuitWidget* self() { return m_pSelf; }
@@ -77,7 +77,7 @@ class SIMVIEWER_EXPORT CircuitWidget : public QWidget
         
         QMenu m_infoMenu;
 
-        MainWindow *m_main_ptr;
+        //MainWindow *m_main_ptr;
         
         QString m_curCirc;
         //QString m_lastCircDir;

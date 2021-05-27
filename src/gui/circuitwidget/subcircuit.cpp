@@ -40,7 +40,7 @@
 #include "e-flipflopd.h"
 #include "e-flipflopjk.h"
 #include "e-fulladder.h"
-#include "e-function.h"
+//#include "e-function.h"
 #include "e-gate_or.h"
 #include "e-gate_xor.h"
 #include "e-gate_xor.h"
@@ -283,6 +283,7 @@ void SubCircuit::initSubcircuit()
                 egate->createPins( numInputs, 1 );
                 ecomponent = egate;
             }
+            /*
             else if( type == "eFunction" )
             {
                 eFunction* efunction = new eFunction(  m_circ_ptr->getSimulatorPtr(), id.toStdString() );
@@ -296,6 +297,7 @@ void SubCircuit::initSubcircuit()
                 
                 if( element.hasAttribute("functions") ) efunction->setFunctions( element.attribute( "functions" ) );
             }
+            */
             else if( type.startsWith( "eLatchD" ) )
             {
                 int channels = 1;
@@ -718,7 +720,7 @@ void SubCircuit::setLogicSymbol( bool ls )
     bool pauseSim = m_circ_ptr->getSimulatorPtr()->isRunning();
     if( pauseSim ) m_circ_ptr->getSimulatorPtr()->pauseSim();
     
-    m_circ_ptr->saveState();
+    //m_circ_ptr->saveState();
     
     clear();
     

@@ -25,14 +25,14 @@
 #include "e-element.h"
 #include "mainwindow.h"
 #include "circuitwidget.h"
-#include "simevent.h"
+//#include "simevent.h"
 #include <QMutexLocker>
 
 //QAtomicPointer<Simulator> Simulator::m_pSelf = 0l;
 
 Simulator::Simulator( Circuit* parent )
          : QObject(parent)
-         , mutex()
+
 {
 //    m_pSelf.fetchAndStoreOrdered(this);
 
@@ -85,11 +85,11 @@ void Simulator::timerEvent( QTimerEvent* e )  //update at m_timerTick rate (50 m
     }
     if( !m_CircuitFuture.isFinished() ) // Stop remaining parallel thread 
     {
-        mutex.lock();
+
         m_isrunning = false;
         m_CircuitFuture.waitForFinished();
         m_isrunning = true;
-        mutex.unlock();
+
         //return;
     }
     // Get Real Simulation Speed
@@ -219,7 +219,7 @@ void Simulator::runExtraStep()
 
 void Simulator::runContinuous()
 {
-    QMutexLocker locker(&mutex);
+
     if( m_debugging )
     {
         debug();
@@ -235,7 +235,7 @@ void Simulator::runContinuous()
 
 void Simulator::debug()
 {
-    QMutexLocker locker(&mutex);
+
     startSim();
     m_debugging = true;
     std::cout << "\n    Debugging... \n"<<std::endl;
@@ -294,7 +294,7 @@ void Simulator::stopDebug()
 
 void Simulator::stopSim()
 {
-    QMutexLocker locker(&mutex);
+
     if( !m_isrunning ) return;
     
     if( m_debugging ) emit pauseDebug();
@@ -323,7 +323,7 @@ void Simulator::stopSim()
 
 void Simulator::pauseSim()
 {
-    QMutexLocker locker(&mutex);
+
     if( m_debugging ) emit pauseDebug();
     
     m_isrunning = false;
@@ -336,7 +336,7 @@ void Simulator::pauseSim()
 
 void Simulator::resumeSim()
 {
-    QMutexLocker locker(&mutex);
+
     m_isrunning = true;
     m_paused = false;
     
@@ -408,7 +408,7 @@ int Simulator::simuRateChanged( int rate )
 
 bool Simulator::isRunning()
 {
-    QMutexLocker locker(&mutex);
+
     return m_isrunning;
 }
 

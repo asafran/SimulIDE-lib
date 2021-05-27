@@ -127,8 +127,6 @@ class SIMVIEWER_EXPORT Simulator : public QObject
         
         inline void solveMatrix();
 
-        QRecursiveMutex mutex;
-
         QFuture<void> m_CircuitFuture;
 
         CircMatrix m_matrix;

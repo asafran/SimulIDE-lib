@@ -442,7 +442,7 @@ void SubPackage::editPin()
 
 void SubPackage::editFinished( int r )
 {
-    if( m_changed ) m_circ_ptr->saveState();
+    //if( m_changed ) m_circ_ptr->saveState();
 }
 
 void SubPackage::deletePin()
@@ -619,7 +619,7 @@ void SubPackage::loadPackage()
     m_pkgeFile = pdir.relativeFilePath( fileName );
     m_lastPkg = fileName;
 
-    m_circ_ptr->saveState();
+    //m_circ_ptr->saveState();
     m_circ_ptr->update();
 }
 
