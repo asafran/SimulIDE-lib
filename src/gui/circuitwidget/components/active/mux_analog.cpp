@@ -198,7 +198,7 @@ void MuxAnalog::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWid
 {
     Component::paint( p, option, widget );
     
-    p->drawRoundRect( m_area, 4, 4 );
+    p->drawRoundedRect( m_area, 4, 4 );
 }
-#include "moc_mux_analog.cpp"
+
 

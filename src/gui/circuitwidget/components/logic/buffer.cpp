@@ -100,5 +100,5 @@ void Buffer::paint( QPainter* p, const QStyleOptionGraphicsItem* option, QWidget
     p->drawPolygon( points, 4 );
 }
 
-#include "moc_buffer.cpp"
+
 

@@ -79,4 +79,4 @@ void DAC::setNumInps( int inputs )
     m_area = QRect( -(m_width/2)*8, -m_height*8+8, m_width*8, m_height*8 );
 }
 
-#include "moc_dac.cpp"
+

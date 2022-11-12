@@ -139,5 +139,5 @@ void BJT::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *w
     }
 }
 
-#include "moc_bjt.cpp"
+
 

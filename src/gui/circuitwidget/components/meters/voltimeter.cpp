@@ -57,4 +57,4 @@ void Voltimeter::updateStep()
     }
 }
 
-#include "moc_voltimeter.cpp"
+

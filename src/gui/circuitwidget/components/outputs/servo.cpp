@@ -209,4 +209,4 @@ void Servo::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget 
     p->restore();
 }
 
-#include "moc_servo.cpp"
+

@@ -130,5 +130,3 @@ void SwitchBase::remove()
 
     Component::remove();
 }
-
-#include "moc_switch_base.cpp"

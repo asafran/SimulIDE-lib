@@ -42,4 +42,4 @@ RelaySPST::RelaySPST( Circuit* parent, QString type, QString id )
 }
 RelaySPST::~RelaySPST(){}
 
-#include "moc_relay-spst.cpp"
+

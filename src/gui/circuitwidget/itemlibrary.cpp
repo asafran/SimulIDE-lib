@@ -24,7 +24,7 @@
 //BEGIN Item includes
 #include "amperimeter.h"
 #include "adc.h"
-#include "audio_out.h"
+//#include "audio_out.h"
 #include "bcdto7s.h"
 #include "bcdtodec.h"
 #include "bincounter.h"
@@ -44,16 +44,16 @@
 #include "flipflopjk.h"
 #include "frequencimeter.h"
 #include "fulladder.h"
-#include "function.h"
+//#include "function.h"
 #include "gate_and.h"
 #include "gate_or.h"
 #include "gate_xor.h"
 #include "ground.h"
-#include "hd44780.h"
+//#include "hd44780.h"
 //#include "inbus.h"
 #include "inductor.h"
-#include "keypad.h"
-#include "ks0108.h"
+//#include "keypad.h"
+//#include "ks0108.h"
 #include "latchd.h"
 #include "led.h"
 #include "ledbar.h"
@@ -67,7 +67,7 @@
 #include "mux_analog.h"
 #include "op_amp.h"
 //#include "outbus.h"
-#include "pcd8544.h"
+//#include "pcd8544.h"
 #include "probe.h"
 #include "potentiometer.h"
 #include "push.h"
@@ -84,7 +84,7 @@
 #include "subcircuit.h"
 #include "subpackage.h"
 #include "switch.h"
-#include "switchdip.h"
+//#include "switchdip.h"
 #include "textcomponent.h"
 #include "voltimeter.h"
 #include "volt_reg.h"
@@ -126,7 +126,7 @@ void ItemLibrary::loadItems()
     addItem( Push::libraryItem() );
     addItem( Switch::libraryItem() );
     //addItem( ToggleSwitch::libraryItem() );
-    addItem( SwitchDip::libraryItem() );
+    //addItem( SwitchDip::libraryItem() );
     addItem( RelaySPST::libraryItem() );
     // Passive
     addItem( Potentiometer::libraryItem() );
@@ -147,13 +147,13 @@ void ItemLibrary::loadItems()
     addItem( LedBar::libraryItem() );
     addItem( LedMatrix::libraryItem() );
     addItem( SevenSegment::libraryItem() );
-    addItem( KeyPad::libraryItem() );
-    addItem( Hd44780::libraryItem() );
-    addItem( Pcd8544::libraryItem() );
-    addItem( Ks0108::libraryItem() );
+    //addItem( KeyPad::libraryItem() );
+    //addItem( Hd44780::libraryItem() );
+    //addItem( Pcd8544::libraryItem() );
+    //addItem( Ks0108::libraryItem() );
     addItem( Stepper::libraryItem() );
     addItem( Servo::libraryItem() );
-    addItem( AudioOut::libraryItem() );
+    //addItem( AudioOut::libraryItem() );
     // Micro
     addItem( new LibraryItem( tr("Sensors"),tr("Micro"), "1to2.png","", 0l ) );
     // Logic
@@ -166,7 +166,7 @@ void ItemLibrary::loadItems()
     addItem( AndGate::libraryItem() );
     addItem( OrGate::libraryItem() );
     addItem( XorGate::libraryItem() );
-    addItem( Function::libraryItem() );
+    //addItem( Function::libraryItem() );
     addItem( FlipFlopD::libraryItem() );
     addItem( FlipFlopJK::libraryItem() );
     addItem( BinCounter::libraryItem() );

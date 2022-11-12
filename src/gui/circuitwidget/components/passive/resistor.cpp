@@ -96,4 +96,4 @@ void Resistor::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidg
     p->drawRect( -10.5, -4, 21, 8 );
 }
 
-#include "moc_resistor.cpp"
+

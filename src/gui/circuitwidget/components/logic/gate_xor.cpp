@@ -107,6 +107,6 @@ void XorGate::paint( QPainter* p, const QStyleOptionGraphicsItem* option, QWidge
     p->drawArc( -16, y_orig, 9, height, -1440/*-16*90*/, 2880/*16*180*/ );
 }
 
-#include "moc_gate_xor.cpp"
+
 
 

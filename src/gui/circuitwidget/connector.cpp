@@ -558,5 +558,5 @@ bool Connector::isBus()
     return m_isBus;
 }
 
-#include "moc_connector.cpp"
+
 

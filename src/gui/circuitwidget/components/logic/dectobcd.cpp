@@ -78,4 +78,4 @@ DecToBcd::DecToBcd( Circuit* parent, QString type, QString id )
 }
 DecToBcd::~DecToBcd(){}
 
-#include "moc_dectobcd.cpp"
+

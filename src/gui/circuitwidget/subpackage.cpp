@@ -144,23 +144,23 @@ void SubPackage::mousePressEvent( QGraphicsSceneMouseEvent* event )
         if( m_angle == 0 )
         {
             m_rigPin.append( pin );
-            qSort( m_rigPin.begin(), m_rigPin.end(), lessPinY );
+            std::sort( m_rigPin.begin(), m_rigPin.end(), lessPinY );
             //for( Pin* pin : m_rigPin ) qDebug() << pin->pinId();
         }
         else if( m_angle == 90 )
         {
             m_topPin.append( pin );
-            qSort( m_topPin.begin(), m_topPin.end(), lessPinX );
+            std::sort( m_topPin.begin(), m_topPin.end(), lessPinX );
         }
         else if( m_angle == 180 )
         {
             m_lefPin.append( pin );
-            qSort( m_lefPin.begin(), m_lefPin.end(), lessPinY );
+            std::sort( m_lefPin.begin(), m_lefPin.end(), lessPinY );
         }
         else if( m_angle == 270 )
         {
             m_botPin.append( pin );
-            qSort( m_botPin.begin(), m_botPin.end(), lessPinX );
+            std::sort( m_botPin.begin(), m_botPin.end(), lessPinX );
         }
         m_eventPin = pin;
         editPin();
@@ -172,10 +172,10 @@ void SubPackage::mousePressEvent( QGraphicsSceneMouseEvent* event )
         ungrabMouse();
         setCursor( Qt::OpenHandCursor );
         
-        if     ( m_angle == 0 )   qSort( m_rigPin.begin(), m_rigPin.end(), lessPinY );
-        else if( m_angle == 90 )  qSort( m_topPin.begin(), m_topPin.end(), lessPinX );
-        else if( m_angle == 180 ) qSort( m_lefPin.begin(), m_lefPin.end(), lessPinY );
-        else if( m_angle == 270 ) qSort( m_botPin.begin(), m_botPin.end(), lessPinX );
+        if     ( m_angle == 0 )   std::sort( m_rigPin.begin(), m_rigPin.end(), lessPinY );
+        else if( m_angle == 90 )  std::sort( m_topPin.begin(), m_topPin.end(), lessPinX );
+        else if( m_angle == 180 ) std::sort( m_lefPin.begin(), m_lefPin.end(), lessPinY );
+        else if( m_angle == 270 ) std::sort( m_botPin.begin(), m_botPin.end(), lessPinX );
         
         m_changed = true;
         m_movePin = false;
@@ -442,7 +442,7 @@ void SubPackage::editPin()
 
 void SubPackage::editFinished( int r )
 {
-    if( m_changed ) m_circ_ptr->saveState();
+    //if( m_changed ) m_circ_ptr->saveState();
 }
 
 void SubPackage::deletePin()
@@ -455,22 +455,22 @@ void SubPackage::deletePin()
     if( angle == 0 )   
     {
         m_rigPin.removeOne( m_eventPin );
-        qSort( m_rigPin.begin(), m_rigPin.end(), lessPinY );
+        std::sort( m_rigPin.begin(), m_rigPin.end(), lessPinY );
     }
     else if( angle == 90 )  
     {
         m_topPin.removeOne( m_eventPin );
-        qSort( m_topPin.begin(), m_topPin.end(), lessPinX );
+        std::sort( m_topPin.begin(), m_topPin.end(), lessPinX );
     }
     else if( angle == 180 ) 
     {
         m_lefPin.removeOne( m_eventPin );
-        qSort( m_lefPin.begin(), m_lefPin.end(), lessPinY );
+        std::sort( m_lefPin.begin(), m_lefPin.end(), lessPinY );
     }
     else if( angle == 270 ) 
     {
         m_botPin.removeOne( m_eventPin );
-        qSort( m_botPin.begin(), m_botPin.end(), lessPinX );
+        std::sort( m_botPin.begin(), m_botPin.end(), lessPinX );
     }
        
     if( m_eventPin->isConnected() ) m_eventPin->connector()->remove();
@@ -610,16 +610,16 @@ void SubPackage::loadPackage()
 
     setPackage( fileName );
 
-    qSort( m_rigPin.begin(), m_rigPin.end(), lessPinY );
-    qSort( m_topPin.begin(), m_topPin.end(), lessPinX );
-    qSort( m_lefPin.begin(), m_lefPin.end(), lessPinY );
-    qSort( m_botPin.begin(), m_botPin.end(), lessPinX );
+    std::sort( m_rigPin.begin(), m_rigPin.end(), lessPinY );
+    std::sort( m_topPin.begin(), m_topPin.end(), lessPinX );
+    std::sort( m_lefPin.begin(), m_lefPin.end(), lessPinY );
+    std::sort( m_botPin.begin(), m_botPin.end(), lessPinX );
 
     QDir pdir = QFileInfo( m_circ_ptr->getFileName() ).absoluteDir();
     m_pkgeFile = pdir.relativeFilePath( fileName );
     m_lastPkg = fileName;
 
-    m_circ_ptr->saveState();
+    //m_circ_ptr->saveState();
     m_circ_ptr->update();
 }
 
@@ -637,7 +637,7 @@ void SubPackage::savePackage( QString fileName )
           return;
     }
     QTextStream out(&file);
-    out.setCodec("UTF-8");
+    //out.setCodec("UTF-8");
     
     QApplication::setOverrideCursor(Qt::WaitCursor);
     
@@ -770,4 +770,4 @@ void EditDialog::invertPin( bool invert )
     m_package->invertPin( invert );
 }
 
-#include "moc_subpackage.cpp"
+

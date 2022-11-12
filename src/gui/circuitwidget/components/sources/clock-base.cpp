@@ -95,5 +95,5 @@ void ClockBase::remove()
     LogicInput::remove();
 }
 
-#include "moc_clock-base.cpp"
+
 

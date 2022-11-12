@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2018 by santiago González                               *
+ *   Copyright (C) 2012 by santiago González                               *
  *   santigoro@gmail.com                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -17,49 +17,73 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SHAPE_H
-#define SHAPE_H
+#ifndef MAINCWINDOW_H
+#define MAINCWINDOW_H
 
-#include "component.h"
+#include <QtWidgets>
+#include "simviewer-export.h"
 
-class  Shape : public Component
+
+class CircuitWidget;
+
+class SIMVIEWER_EXPORT MainCircWindow : public QMainWindow
 {
     Q_OBJECT
-    Q_PROPERTY( int    H_size  READ hSize   WRITE setHSize   DESIGNABLE true USER true )
-    Q_PROPERTY( int    V_size  READ vSize   WRITE setVSize   DESIGNABLE true USER true )
-    Q_PROPERTY( int    Border  READ border  WRITE setBorder  DESIGNABLE true USER true )
-    Q_PROPERTY( QColor Color   READ color   WRITE setColor   DESIGNABLE true USER true )
-    Q_PROPERTY( qreal  Opacity READ opacity WRITE setOpacity DESIGNABLE true USER true )
-    Q_PROPERTY( qreal  Z_Value READ zValue  WRITE setZValue  DESIGNABLE true USER true )
 
     public:
+        MainCircWindow();
+        ~MainCircWindow();
 
-        Shape( Circuit* parent, QString type, QString id );
-        ~Shape();
+// static MainWindow* self() { return m_pSelf; }
+
+        CircuitWidget* getCircPtr() { return m_circuit;}
+//        void loadPlugins();
+
+//        void unLoadPugin( QString pluginName );
         
-        QRectF boundingRect() const 
-        { 
-            return QRectF( m_area.x()-m_border/2-1, m_area.y()-m_border/2-1, 
-                           m_area.width()+m_border+2, m_area.height()+m_border+2 ); 
-        }
+        //void readSettings();
         
-        int hSize();
-        void setHSize( int size );
+        void loadXMLS(QDir dir);
+
+        void setTitle( QString title );
         
-        int vSize();
-        void setVSize( int size );
-        
-        int border();
-        void setBorder( int border );
-        
-        QColor color();
-        void setColor( QColor color );
-        
+        //double fontScale() { return m_fontScale; }
+        //void setFontScale( double scale ) { m_fontScale = scale; }
+
+        //int autoBck();
+        //void setAutoBck( int secs );
+
 
     protected:
-        int m_hSize;
-        int m_vSize;
-        int m_border;
+        void closeEvent(QCloseEvent* event);
+
+    private slots:
+        void about();
+
+    private:
+
+// static MainWindow* m_pSelf;
+ 
+        void loadPluginsAt( QDir pluginsDir );
+
+        //void createWidgets();
+        //void createMenus();
+        //void createToolBars();
+        //void writeSettings();
+        void applyStile();
+        
+        //float m_fontScale;
+        
+//        QSettings m_settings;
+        
+        QString m_version;
+        QString m_styleSheet;
+        QString m_circHelp;
+
+        QHash<QString, QPluginLoader*>  m_plugins;
+        
+        CircuitWidget*      m_circuit;
+
 };
 
 #endif

@@ -152,4 +152,4 @@ void Frequencimeter::paint( QPainter *p, const QStyleOptionGraphicsItem *option,
     p->drawRect( m_area );
 }
 
-//#include "moc_frequencimeter.cpp"
+//

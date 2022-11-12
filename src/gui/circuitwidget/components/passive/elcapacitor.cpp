@@ -103,5 +103,5 @@ void elCapacitor::paint( QPainter* p, const QStyleOptionGraphicsItem* option, QW
     p->drawLine(-3,-3,-3, 3 );
 }
 
-#include "moc_elcapacitor.cpp"
+
 

@@ -79,4 +79,4 @@ void CapacitorBase::setUnit( QString un )
 }
 
 
-#include "moc_capacitorbase.cpp"
+

@@ -27,7 +27,7 @@
 
 #include "pin.h"
 #include "simviewer-export.h"
-#include "mainwindow.h"
+#include "maincircwindow.h"
 #include "itemlibrary.h"
 #include "connector.h"
 
@@ -46,11 +46,11 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
     Q_PROPERTY( bool Draw_Grid        READ drawGrid   WRITE setDrawGrid   DESIGNABLE true USER true )
     Q_PROPERTY( bool Show_ScrollBars  READ showScroll WRITE setShowScroll DESIGNABLE true USER true )
     Q_PROPERTY( bool Animate          READ animate    WRITE setAnimate    DESIGNABLE true USER true )
-    Q_PROPERTY( double Font_Scale     READ fontScale  WRITE setFontScale  DESIGNABLE true USER true )
+    //Q_PROPERTY( double Font_Scale     READ fontScale  WRITE setFontScale  DESIGNABLE true USER true )
     //Q_PROPERTY( int  Auto_Backup_Secs READ autoBck    WRITE setAutoBck    DESIGNABLE true USER true )
 
     public:
-        Circuit( qreal x, qreal y, qreal width, qreal height, CircuitView*  parent , MainWindow *mwindow);
+        Circuit(CircuitView*  parent );
         ~Circuit();
 
 // static Circuit* self() { return m_pSelf.loadRelaxed(); }
@@ -76,8 +76,8 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
         bool animate();
         void setAnimate( bool an );
         
-        double fontScale();
-        void   setFontScale( double scale );
+        //double fontScale();
+        //void   setFontScale( double scale );
 
         void LoadCompSetAt( QDir compSetDir );
         void loadXml( const QString &setFile );
@@ -92,23 +92,21 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
         void remove();
         bool deleting();
         void compRemoved( bool removed );
-        void saveState();
+        //void saveState();
         void setChanged();
 
-        void drawBackground( QPainter* painter, const QRectF &rect );
+        //void drawBackground( QPainter* painter, const QRectF &rect );
 
         Pin* findPin( int x, int y, QString id );
 
-        void loadCircuit( QString &fileName );
-        bool saveCircuit( QString &fileName );
+
+        //bool saveCircuit( QString &fileName );
 
         Component* createItem( QString name, QString id );
 
         Simulator* getSimulatorPtr() { return &simulator; }
 
         CircuitView* getViewPtr() { return m_graphicView; }
-
-        CircuitWidget* getWidgetPtr() { return m_widget_ptr; }
 
         QString newSceneId();
 
@@ -139,14 +137,15 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
         Amperimeter* getAmpmtrPtr(const QString id) const { return this->findChild<Amperimeter *>(id);}
 */
     public slots:
-        void createSubcircuit();
+        //void createSubcircuit();
         void copy( QPointF eventpoint );
         void paste( QPointF eventpoint );
-        void undo();
-        void redo();
+        //void undo();
+        //void redo();
         void importCirc( QPointF eventpoint );
-        void bom();
-        void saveChanges();
+        //void bom();
+        //void saveChanges();
+        void loadCircuit( QString &fileName );
 
     protected:
         void mousePressEvent( QGraphicsSceneMouseEvent* event );
@@ -159,7 +158,7 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
         void loadDomDoc( QDomDocument* doc );
         void loadProperties( QDomElement element, Component* Item );
         void loadObjectProperties( QDomElement element, QObject* Item );
-        void circuitToDom();
+        //void circuitToDom();
         void listToDom( QDomDocument* doc, QList<Component*>* complist );
         void objectToDom( QDomDocument* doc, QObject* object );
         bool saveDom( QString &fileName, QDomDocument* doc );
@@ -208,10 +207,6 @@ class SIMVIEWER_EXPORT Circuit : public QGraphicsScene
         ItemLibrary m_itemLibrary;
 
         QTimer m_bckpTimer;
-
-        MainWindow *m_main_ptr;
-
-        CircuitWidget *m_widget_ptr;
 };
 
 #endif

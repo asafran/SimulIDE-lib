@@ -39,4 +39,4 @@ void LedSmd::drawForeground( QPainter *p )
     p->drawRoundedRect( m_area, 0, 0 );
 }
 
-#include "moc_ledsmd.cpp"
+

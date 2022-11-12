@@ -57,4 +57,4 @@ void Amperimeter::updateStep()
     }
 }
 
-#include "moc_amperimeter.cpp"
+

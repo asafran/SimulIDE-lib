@@ -132,4 +132,4 @@ void Meter::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget 
     p->drawPolygon(points, 3);
 }
 
-#include "moc_meter.cpp"
+

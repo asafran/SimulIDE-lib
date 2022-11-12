@@ -221,4 +221,4 @@ void LatchD::remove()
     
     LogicComponent::remove();
 }
-#include "moc_latchd.cpp"
+

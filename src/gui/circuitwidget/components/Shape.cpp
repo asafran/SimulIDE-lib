@@ -92,4 +92,4 @@ void Shape::setColor( QColor color )
     update();
 }
 
-#include "moc_shape.cpp"
+

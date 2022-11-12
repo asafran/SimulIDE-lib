@@ -51,4 +51,4 @@ void Capacitor::paint( QPainter* p, const QStyleOptionGraphicsItem* option, QWid
     p->drawLine( 3,-6, 3, 6 );
 }
 
-#include "moc_capacitor.cpp"
+

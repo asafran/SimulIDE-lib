@@ -51,7 +51,7 @@ ResistorDip::ResistorDip( Circuit* parent, QString type, QString id )
     setValLabRot( 90 );
     setValLabelPos();
     //m_valLabel->setEnabled( false );
-    m_valLabel->setAcceptedMouseButtons( 0 );
+    m_valLabel->setAcceptedMouseButtons( Qt::NoButton );
     setShowVal( true );
     
     setLabelPos(-24,-40, 0);
@@ -163,8 +163,8 @@ void ResistorDip::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QW
     
     //p->setBrush( QColor( 80, 80, 80) );
 
-    p->drawRoundRect( boundingRect(), 2, 2 );
+    p->drawRoundedRect( boundingRect(), 2, 2 );
 }
 
-#include "moc_resistordip.cpp"
+
 

@@ -17,56 +17,34 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "mainwindow.h"
+#include "maincircwindow.h"
 #include "appiface.h"
 #include "circuit.h"
 #include "circuitwidget.h"
 #include "utils.h"
 #include "simuapi_apppath.h"
 
+#include <QApplication>
+
 
 //MainWindow* MainWindow::m_pSelf = 0l;
 
-MainWindow::MainWindow()
+MainCircWindow::MainCircWindow()
           : QMainWindow()
 //          , m_settings( "SimulIDE", "SimulIDE" )
 {
     setWindowIcon( QIcon(":/simulide.png") );
-//    m_pSelf   = this;
-    m_circuit = 0l;
-    m_version = "SimulIDE-"+QString( APP_VERSION );
+
+    m_circuit = new CircuitWidget( this );
+    m_circuit->setObjectName( "circuit" );
+    setCentralWidget(m_circuit);
+    this->showMaximized();
     
     this->setWindowTitle(m_version);
-
-    //QString userAddonPath = SIMUAPI_AppPath::self()->RWDataFolder().absoluteFilePath("addons");
-
-    //QDir pluginsDir( userAddonPath );
-
-    //if( !pluginsDir.exists() ) pluginsDir.mkpath( userAddonPath );
-
-    m_fontScale = 1.0;
-/*
-    if( m_settings.contains( "fontScale" ) )
-    {
-        m_fontScale = m_settings.value( "fontScale" ).toFloat();
-        if( m_fontScale == 0 ) m_fontScale = 1;
-    }   
-    else
-    {*/
-        double dpiX = qApp->desktop()->logicalDpiX();
-        m_fontScale = dpiX/96.0;
-//    }
-    //qDebug()<<dpiX;
-    //loadCircHelp();
-    createWidgets();
-    //readSettings();
-    
-    //loadPlugins();
-
 }
-MainWindow::~MainWindow(){ }
+MainCircWindow::~MainCircWindow(){ }
 
-void MainWindow::closeEvent( QCloseEvent *event )
+void MainCircWindow::closeEvent( QCloseEvent *event )
 {
     //if( !m_editor->close() )      { event->ignore(); return; }
     //if( !m_circuit->newCircuit()) { event->ignore(); return; }
@@ -113,21 +91,21 @@ void MainWindow::setAutoBck( int secs )
     m_autoBck = secs;
 }
 */
-void MainWindow::setTitle( QString title )
+void MainCircWindow::setTitle( QString title )
 {
     setWindowTitle(m_version+"  -  "+title);
 }
 
-void MainWindow::about()
+void MainCircWindow::about()
 {
    /*QMessageBox::about(this, tr("About Application"),
             tr("Circuit simulation"
                "and IDE for mcu development"));*/
 }
-
-void MainWindow::createWidgets()
-{
 /*
+void MainCircWindow::createWidgets()
+{
+
     QWidget *centralWidget = new QWidget( this );
     centralWidget->setObjectName("centralWidget");
     setCentralWidget(centralWidget);
@@ -181,15 +159,12 @@ void MainWindow::createWidgets()
     QList<int> sizes;
     sizes << 150 << 350 << 500;
     m_Centralsplitter->setSizes( sizes );
-*/
 
-    m_circuit = new CircuitWidget( this );
-    m_circuit->setObjectName( "circuit" );
-    setCentralWidget(m_circuit);
-    this->showMaximized();
+
+
 }
-
-void MainWindow::loadXMLS(QDir dir)
+*/
+void MainCircWindow::loadXMLS(QDir dir)
 {
 
 
@@ -329,7 +304,7 @@ void MainWindow::unLoadPugin( QString pluginName )
     }
 }
 */
-void MainWindow::applyStile()
+void MainCircWindow::applyStile()
 {
     QFile file(":/simulide.qss");
     file.open(QFile::ReadOnly);
@@ -340,7 +315,5 @@ void MainWindow::applyStile()
 }
 
 //QSettings* MainWindow::settings() { return &m_settings; }
-
-#include  "moc_mainwindow.cpp"
 
 

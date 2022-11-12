@@ -39,4 +39,4 @@ void DialWidget::setupWidget()
     verticalLayout->addWidget(dial);
 }
 
-#include "moc_dialwidget.cpp"
+

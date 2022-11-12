@@ -75,5 +75,5 @@ void Clock::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget 
     p->drawLine(  1,-3, 4, -3 );
 }
 
-#include "moc_clock.cpp"
+
 

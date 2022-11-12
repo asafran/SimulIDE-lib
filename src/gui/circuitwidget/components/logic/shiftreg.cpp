@@ -79,4 +79,4 @@ ShiftReg::ShiftReg( Circuit* parent, QString type, QString id )
 }
 ShiftReg::~ShiftReg(){}
 
-#include "moc_shiftreg.cpp"
+

@@ -31,4 +31,4 @@ void TopWidget::setupWidget( QWidget* intWidget)
     verticalLayout->setContentsMargins(0, 0, 0, 0);
     verticalLayout->addWidget( intWidget );
 }
-#include "moc_topwidget.cpp"
+

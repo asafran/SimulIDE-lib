@@ -229,10 +229,10 @@ void Stepper::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidge
     Component::paint( p, option, widget );
 
     //p->setBrush( QColor(250, 210, 230) );
-    p->drawRoundRect(-64,-40, 25, 80 );
+    p->drawRoundedRect(QRect(0,0,-64,-40), 25, 80 );
 
     p->setBrush( QColor(50, 70, 100) ); 
-    p->drawRoundRect(-48,-48, 96, 96 );
+    p->drawRoundedRect(QRect(0,0,-48,-48), 96, 96 );
 
     p->setPen( QColor(0, 0, 0) );
     p->setBrush( QColor(255, 255, 255) );
@@ -249,4 +249,4 @@ void Stepper::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidge
     //p->setBrush( QColor(50, 70, 100) );
     p->drawEllipse(-25,-25, 50, 50);
 }
-#include "moc_stepper.cpp"
+

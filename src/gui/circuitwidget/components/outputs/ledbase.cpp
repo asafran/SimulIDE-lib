@@ -191,4 +191,4 @@ void LedBase::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidge
     drawForeground( p );
 }
 
-#include "moc_ledbase.cpp"
+

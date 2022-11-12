@@ -162,4 +162,4 @@ void VoltSource::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWi
     Component::paint( p, option, widget );
 }
 
-#include "moc_voltsource.cpp"
+

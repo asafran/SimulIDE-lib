@@ -72,4 +72,4 @@ void Push::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *
     else           p->drawLine(-9, -8, 9, -8 );
 }
 
-#include "moc_push.cpp"
+

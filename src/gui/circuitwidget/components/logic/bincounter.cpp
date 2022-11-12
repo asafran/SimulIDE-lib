@@ -67,4 +67,4 @@ BinCounter::BinCounter(Circuit *parent, QString type, QString id)
 
 BinCounter::~BinCounter(){}
 
-#include "moc_bincounter.cpp"
+

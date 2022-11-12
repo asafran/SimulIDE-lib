@@ -280,5 +280,5 @@ void Probe::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget 
     }
 }
 
-#include "moc_probe.cpp"
+
 

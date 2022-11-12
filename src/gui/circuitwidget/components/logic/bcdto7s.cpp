@@ -78,4 +78,4 @@ BcdTo7S::BcdTo7S( Circuit* parent, QString type, QString id )
 BcdTo7S::~BcdTo7S(){}
 
 
-#include "moc_bcdto7s.cpp"
+

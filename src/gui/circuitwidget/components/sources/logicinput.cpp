@@ -147,5 +147,5 @@ void LogicInput::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWi
     p->drawRoundedRect( QRectF( -8, -8, 16, 16 ), 2, 2);
 }
 
-#include "moc_logicinput.cpp"
+
 

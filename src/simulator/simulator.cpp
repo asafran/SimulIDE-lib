@@ -23,16 +23,15 @@
 #include "circuit.h"
 #include "matrixsolver.h"
 #include "e-element.h"
-#include "mainwindow.h"
+#include "maincircwindow.h"
 #include "circuitwidget.h"
-#include "simevent.h"
+//#include "simevent.h"
 #include <QMutexLocker>
 
 //QAtomicPointer<Simulator> Simulator::m_pSelf = 0l;
 
 Simulator::Simulator( Circuit* parent )
          : QObject(parent)
-         , mutex()
 {
 //    m_pSelf.fetchAndStoreOrdered(this);
 
@@ -80,17 +79,13 @@ void Simulator::timerEvent( QTimerEvent* e )  //update at m_timerTick rate (50 m
     if( m_error ) 
     {
         this->stopSim();
-        m_circ_ptr->getWidgetPtr()->setRate( -1 );
+        emit rateChanged(-1);
         return;
     }
     if( !m_CircuitFuture.isFinished() ) // Stop remaining parallel thread 
     {
-        mutex.lock();
-        m_isrunning = false;
-        m_CircuitFuture.waitForFinished();
-        m_isrunning = true;
-        mutex.unlock();
-        //return;
+        //m_CircuitFuture.waitForFinished();
+        return;
     }
     // Get Real Simulation Speed
     uint64_t refTime      = m_RefTimer.nsecsElapsed();
@@ -99,14 +94,14 @@ void Simulator::timerEvent( QTimerEvent* e )  //update at m_timerTick rate (50 m
     if( deltaRefTime >= 1e9 )          // We want steps per Sec = 1e9 ns
     {
         stepsPerSec = (m_step-m_lastStep)*1e9/deltaRefTime;
-        m_circ_ptr->getWidgetPtr()->setRate( (stepsPerSec*100)/1e6 /*m_simuRate*/ );
+        emit rateChanged((stepsPerSec*100)/1e6 /*m_simuRate*/ );
         m_lastStep    = m_step;
         m_lastRefTime = refTime;
     }
     runGraphicStep();
     
     // Run Circuit in parallel thread
-    m_CircuitFuture = QtConcurrent::run( this, &Simulator::runCircuit ); // Run Circuit in a parallel thread
+    m_CircuitFuture = QtConcurrent::run( [this] { runCircuit(); } ); // Run Circuit in a parallel thread
 }
 /*
 bool event(QEvent *event)
@@ -219,7 +214,6 @@ void Simulator::runExtraStep()
 
 void Simulator::runContinuous()
 {
-    QMutexLocker locker(&mutex);
     if( m_debugging )
     {
         debug();
@@ -235,7 +229,6 @@ void Simulator::runContinuous()
 
 void Simulator::debug()
 {
-    QMutexLocker locker(&mutex);
     startSim();
     m_debugging = true;
     std::cout << "\n    Debugging... \n"<<std::endl;
@@ -270,7 +263,7 @@ void Simulator::startSim()
         std::cout << "Simulator::startSim, Failed to solve Matrix"
                   <<  std::endl;
         this->stopSim();
-        m_circ_ptr->getWidgetPtr()->setRate( -1 );
+        emit rateChanged(-1);
         return;
     }
     std::cout << "\nCircuit Matrix looks good" <<  std::endl;
@@ -294,7 +287,6 @@ void Simulator::stopDebug()
 
 void Simulator::stopSim()
 {
-    QMutexLocker locker(&mutex);
     if( !m_isrunning ) return;
     
     if( m_debugging ) emit pauseDebug();
@@ -315,7 +307,7 @@ void Simulator::stopSim()
 
     //if( McuComponent::self() ) McuComponent::self()->reset();
 
-    m_circ_ptr->getWidgetPtr()->setRate( 0 );
+    emit rateChanged(0);
     m_circ_ptr->update();
     
     std::cout << "\n    Simulation Stopped \n" << std::endl;
@@ -323,7 +315,6 @@ void Simulator::stopSim()
 
 void Simulator::pauseSim()
 {
-    QMutexLocker locker(&mutex);
     if( m_debugging ) emit pauseDebug();
     
     m_isrunning = false;
@@ -336,7 +327,6 @@ void Simulator::pauseSim()
 
 void Simulator::resumeSim()
 {
-    QMutexLocker locker(&mutex);
     m_isrunning = true;
     m_paused = false;
     
@@ -408,7 +398,6 @@ int Simulator::simuRateChanged( int rate )
 
 bool Simulator::isRunning()
 {
-    QMutexLocker locker(&mutex);
     return m_isrunning;
 }
 
@@ -574,5 +563,5 @@ void Simulator::addToMcuList( BaseProcessor* proc )
 }
 void Simulator::remFromMcuList( BaseProcessor* proc ) { m_mcuList.removeOne( proc ); }
 
-#include "moc_simulator.cpp"
+
 

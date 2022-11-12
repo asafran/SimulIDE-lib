@@ -79,4 +79,4 @@ FlipFlopJK::FlipFlopJK( Circuit* parent, QString type, QString id )
 FlipFlopJK::~FlipFlopJK(){}
 
 
-#include "moc_flipflopjk.cpp"
+

@@ -171,4 +171,4 @@ void CurrSource::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWi
     Component::paint( p, option, widget );
 }
 
-#include "moc_currsource.cpp"
+

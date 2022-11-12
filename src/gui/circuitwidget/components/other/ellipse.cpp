@@ -59,4 +59,4 @@ void Ellipse::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidge
     p->drawEllipse( m_area );
 }
 
-#include "moc_ellipse.cpp"
+

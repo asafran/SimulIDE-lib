@@ -204,7 +204,7 @@ void Pin::setLabelPos()
 
     if( m_angle == 0 )   // Right side
     {
-        xlabelpos -= fm.width(m_label.text())+m_length+1;
+        xlabelpos -= fm.horizontalAdvance(m_label.text())+m_length+1;
         ylabelpos -= 5;
     }
     if( m_angle == 90 )   // Top
@@ -321,4 +321,4 @@ void Pin::paint( QPainter* painter, const QStyleOptionGraphicsItem* option, QWid
         painter->drawEllipse(rect);
     }
 }
-#include "moc_pin.cpp"
+

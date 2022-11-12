@@ -214,6 +214,6 @@ void Potentiometer::paint( QPainter *p, const QStyleOptionGraphicsItem *option, 
     p->drawLine( 0, 6,  3, 9 );
 }
 
-#include "moc_potentiometer.cpp"
+
 
 

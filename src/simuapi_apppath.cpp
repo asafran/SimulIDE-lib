@@ -36,7 +36,7 @@ SIMUAPI_AppPath *SIMUAPI_AppPath::self()
 SIMUAPI_AppPath::SIMUAPI_AppPath()
                : m_ROExamFolder( qApp->applicationDirPath() )
                , m_RODataFolder( qApp->applicationDirPath() )
-               , m_RWDataFolder( QStandardPaths::writableLocation( QStandardPaths::DataLocation ))
+               , m_RWDataFolder( QStandardPaths::writableLocation( QStandardPaths::AppDataLocation ))
 {
     m_ROExamFolder.cd( "../share/simulide/examples" );
     m_RODataFolder.cd( "../share/simulide/data" );

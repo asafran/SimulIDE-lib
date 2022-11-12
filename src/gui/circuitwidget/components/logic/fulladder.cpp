@@ -63,4 +63,4 @@ FullAdder::FullAdder(Circuit *parent, QString type, QString id)
 
 FullAdder::~FullAdder(){}
 
-#include "moc_fulladder.cpp"
+

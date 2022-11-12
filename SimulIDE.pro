@@ -29,11 +29,8 @@ TEMPLATE = lib
 
 QT += svg
 QT += xml
-QT += script
 QT += widgets
 QT += concurrent
-QT += serialport
-QT += multimedia widgets
 
 SOURCES += $$files($$BUILD_DIR/../src/*.cpp) \
     $$files($$BUILD_DIR/../src/gui/*.cpp) \
@@ -48,35 +45,20 @@ SOURCES += $$files($$BUILD_DIR/../src/*.cpp) \
     $$files($$BUILD_DIR/../src/gui/circuitwidget/components/passive/*.cpp) \
     $$files($$BUILD_DIR/../src/gui/circuitwidget/components/sources/*.cpp) \
     $$files($$BUILD_DIR/../src/gui/circuitwidget/components/switches/*.cpp) \
-    $$files($$BUILD_DIR/../src/gui/oscopewidget/*.cpp) \
-    $$files($$BUILD_DIR/../src/gui/plotterwidget/*.cpp) \
-    $$files($$BUILD_DIR/../src/gui/terminalwidget/*.cpp) \
-    $$files($$BUILD_DIR/../src/gui/QPropertyEditor/*.cpp) \
-    $$files($$BUILD_DIR/../src/gui/componentselector/*.cpp) \
-    $$files($$BUILD_DIR/../src/gui/filebrowser/*.cpp) \
-    $$files($$BUILD_DIR/../src/gui/editorwidget/*.cpp) \
-    $$files($$BUILD_DIR/../src/gui/editorwidget/findreplacedialog/*.cpp) \
-    $$files($$BUILD_DIR/../src/gui/serialporwidget/*.cpp) \
     $$files($$BUILD_DIR/../src/simulator/*.cpp) \
     $$files($$BUILD_DIR/../src/simulator/elements/*.cpp) \
     $$files($$BUILD_DIR/../src/simulator/elements/active/*.cpp) \
     $$files($$BUILD_DIR/../src/simulator/elements/logic/*.cpp) \
     $$files($$BUILD_DIR/../src/simulator/elements/outputs/*.cpp) \
-    $$files($$BUILD_DIR/../src/simulator/elements/passive/*.cpp) \
-    $$files($$BUILD_DIR/../src/simulator/elements/processors/*.cpp) \
-    $$files($$BUILD_DIR/../src/simavr/sim/*.c) \
-    $$files($$BUILD_DIR/../src/simavr/cores/*.c) \
-    $$files($$BUILD_DIR/../src/gpsim/*.cc) \
-    $$files($$BUILD_DIR/../src/gpsim/devices/*.cc) \
-    $$files($$BUILD_DIR/../src/gpsim/modules/*.cc) \
-    $$files($$BUILD_DIR/../src/gpsim/registers/*.cc)
+    $$files($$BUILD_DIR/../src/simulator/elements/passive/*.cpp)
 
 HEADERS += $$files($$BUILD_DIR/../src/*.h) \
     $$files($$BUILD_DIR/../src/gui/*.h) \
     $$files($$BUILD_DIR/../src/gui/circuitwidget/*.h) \
     $$files($$BUILD_DIR/../src/gui/circuitwidget/components/*.h) \
     $$files($$BUILD_DIR/../src/gui/circuitwidget/components/active/*.h) \
-    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/logic/*.h) \
+    $$files($$BUILD_DIR/../src/gui/circuitwidget/components/logic/*
+    sr.h) \
     $$files($$BUILD_DIR/../src/gui/circuitwidget/components/mcu/*.h) \
     $$files($$BUILD_DIR/../src/gui/circuitwidget/components/meters/*.h) \
     $$files($$BUILD_DIR/../src/gui/circuitwidget/components/other/*.h) \
@@ -84,30 +66,13 @@ HEADERS += $$files($$BUILD_DIR/../src/*.h) \
     $$files($$BUILD_DIR/../src/gui/circuitwidget/components/passive/*.h) \
     $$files($$BUILD_DIR/../src/gui/circuitwidget/components/sources/*.h) \
     $$files($$BUILD_DIR/../src/gui/circuitwidget/components/switches/*.h) \
-    $$files($$BUILD_DIR/../src/gui/oscopewidget/*.h) \
-    $$files($$BUILD_DIR/../src/gui/plotterwidget/*.h) \
-    $$files($$BUILD_DIR/../src/gui/terminalwidget/*.h) \
-    $$files($$BUILD_DIR/../src/gui/QPropertyEditor/*.h) \
-    $$files($$BUILD_DIR/../src/gui/componentselector/*.h) \
-    $$files($$BUILD_DIR/../src/gui/filebrowser/*.h) \
-    $$files($$BUILD_DIR/../src/gui/editorwidget/*.h) \
-    $$files($$BUILD_DIR/../src/gui/editorwidget/findreplacedialog/*.h) \
-    $$files($$BUILD_DIR/../src/gui/serialporwidget/*.h) \
     $$files($$BUILD_DIR/../src/simulator/*.h) \
     $$files($$BUILD_DIR/../src/simulator/elements/*.h) \
     $$files($$BUILD_DIR/../src/simulator/elements/active/*.h) \
     $$files($$BUILD_DIR/../src/simulator/elements/logic/*.h) \
     $$files($$BUILD_DIR/../src/simulator/elements/outputs/*.h) \
     $$files($$BUILD_DIR/../src/simulator/elements/passive/*.h) \
-    $$files($$BUILD_DIR/../src/simulator/elements/processors/*.h) \
-    $$files($$BUILD_DIR/../src/simavr/sim/*.h) \
-    $$files($$BUILD_DIR/../src/simavr/sim/avr/*.h)  \
-    $$files($$BUILD_DIR/../src/simavr/cores/*.h) \
-    $$files(../resources/data/*.xml) \
-    $$files($$BUILD_DIR/../src/gpsim/*.h) \
-    $$files($$BUILD_DIR/../src/gpsim/devices/*.h) \
-    $$files($$BUILD_DIR/../src/gpsim/modules/*.h) \
-    $$files($$BUILD_DIR/../src/gpsim/registers/*.h)
+    $$files(../resources/data/*.xml)
 
 INCLUDEPATH += $$BUILD_DIR/../src \
     $$BUILD_DIR/../src/gui \
@@ -122,30 +87,12 @@ INCLUDEPATH += $$BUILD_DIR/../src \
     $$BUILD_DIR/../src/gui/circuitwidget/components/passive \
     $$BUILD_DIR/../src/gui/circuitwidget/components/sources \
     $$BUILD_DIR/../src/gui/circuitwidget/components/switches \
-    $$BUILD_DIR/../src/gui/oscopewidget \
-    $$BUILD_DIR/../src/gui/plotterwidget \
-    $$BUILD_DIR/../src/gui/terminalwidget \
-    $$BUILD_DIR/../src/gui/QPropertyEditor \
-    $$BUILD_DIR/../src/gui/componentselector \
-    $$BUILD_DIR/../src/gui/filebrowser \
-    $$BUILD_DIR/../src/gui/editorwidget \
-    $$BUILD_DIR/../src/gui/editorwidget/findreplacedialog \
-    $$BUILD_DIR/../src/gui/serialporwidget \
     $$BUILD_DIR/../src/simulator \
     $$BUILD_DIR/../src/simulator/elements \
     $$BUILD_DIR/../src/simulator/elements/active \
     $$BUILD_DIR/../src/simulator/elements/logic \
     $$BUILD_DIR/../src/simulator/elements/outputs \
-    $$BUILD_DIR/../src/simulator/elements/passive \
-    $$BUILD_DIR/../src/simulator/elements/processors \
-    $$BUILD_DIR/../src/simavr \
-    $$BUILD_DIR/../src/simavr/sim \
-    $$BUILD_DIR/../src/simavr/sim/avr \
-    $$BUILD_DIR/../src/simavr/cores \
-    $$BUILD_DIR/../src/gpsim \
-    $$BUILD_DIR/../src/gpsim/devices \
-    $$BUILD_DIR/../src/gpsim/modules \
-    $$BUILD_DIR/../src/gpsim/registers
+    $$BUILD_DIR/../src/simulator/elements/passive
 
 TRANSLATIONS +=  \
     ../resources/translations/simulide.ts \
@@ -180,7 +127,6 @@ win32 {
     RC_ICONS += $$BUILD_DIR/../src/icons/simulide.ico
 }
 unix {
-    QMAKE_LIBS += -lelf
     QMAKE_LFLAGS += -no-pie
 }
 

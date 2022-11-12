@@ -18,15 +18,13 @@
  ***************************************************************************/
  
 #include "circuitwidget.h"
-#include "mainwindow.h"
+#include "maincircwindow.h"
 #include "circuit.h"
 
-//CircuitWidget*  CircuitWidget::m_pSelf = 0l;
-
-CircuitWidget::CircuitWidget( MainWindow *parent  )
+CircuitWidget::CircuitWidget( MainCircWindow *parent  )
              : QWidget( parent )
              , m_verticalLayout(this)
-             , m_circView(this, parent)
+             , m_circView(this)
              , m_circToolBar(this)
              , m_infoMenu(this)
 {
@@ -48,8 +46,9 @@ CircuitWidget::CircuitWidget( MainWindow *parent  )
     //         &m_serial, &SerialPortWidget::slotWriteData );
     
     m_rateLabel = new QLabel( this );
+    m_rateLabel->setObjectName("Rate");
     QFont font( "Arial", 10, QFont::Normal );
-    double fontScale = parent->fontScale();
+    double fontScale = 1.0;
     font.setPixelSize( int(10*fontScale) );
     m_rateLabel->setFont( font );
     
@@ -68,13 +67,13 @@ CircuitWidget::~CircuitWidget() { }
 
 void CircuitWidget::clear()
 {
-    m_circView.clear();
+    //m_circView.clear();
     m_circView.setCircTime( 0 );
 }
 
 void CircuitWidget::createActions()
 {
-    aboutAct = new QAction( QIcon(":/about.png"),tr("About SimulIDE"), this);
+    aboutAct = new QAction( QIcon(":/about.png"),tr("About        int m_autoBck; SimulIDE"), this);
     aboutAct->setStatusTip(tr("About SimulIDE"));
     connect( aboutAct, SIGNAL( triggered()), this, SLOT(about()));
     
@@ -130,14 +129,21 @@ void CircuitWidget::loadCirc( QString path )
     if( !path.isEmpty() && path.endsWith(".simu") )
     {
         //newCircuit();
-        m_circView.getCircPtr()->loadCircuit( path );
+
+        auto circ = m_circView.getCircPtr();
+        circ->loadCircuit( path );
    
         m_curCirc = path;
         //m_lastCircDir = path;
-        m_main_ptr->setTitle(path.split("/").last());
         //MainWindow::self()->settings()->setValue( "lastCircDir", m_lastCircDir );
         //FileBrowser::self()->setPath(m_lastCircDir);
         m_circView.setCircTime( 0 );
+
+        connect(circ->getSimulatorPtr(), &Simulator::rateChanged, this, &CircuitWidget::setRate);
+        connect(this, &CircuitWidget::powerCircOn, circ->getSimulatorPtr(), &Simulator::runContinuous);
+        connect(this, &CircuitWidget::powerCircOff, circ->getSimulatorPtr(), &Simulator::stopSim);
+
+        emit powerCircOn();
     }
 }
 
@@ -178,7 +184,7 @@ void CircuitWidget::about()
 
 void CircuitWidget::setRate( int rate )
 {
-    if( rate < 0 ) m_rateLabel->setText( tr("Circuit ERROR!!!") );
+    if( rate < 0 ) m_rateLabel->setText( tr("Circuit ERROR") );
     else 
         m_rateLabel->setText( tr("    Real Speed: ")+QString::number(rate) +" %" );
 }
@@ -191,4 +197,4 @@ void CircuitWidget::setRate( int rate )
 
 
 
-#include "moc_circuitwidget.cpp"
+

@@ -222,4 +222,4 @@ void LogicComponent::paint( QPainter *p, const QStyleOptionGraphicsItem *option,
     p->drawRect( m_area );
 }
 
-#include "moc_logiccomponent.cpp"
+

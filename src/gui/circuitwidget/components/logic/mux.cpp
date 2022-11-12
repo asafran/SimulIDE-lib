@@ -117,4 +117,4 @@ void Mux::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *w
     p->drawPolygon(points, 4);
 }
 
-#include "moc_mux.cpp"
+

@@ -30,7 +30,7 @@ class SIMVIEWER_EXPORT CircuitWidget : public QWidget
     Q_OBJECT
 
     public:
-        CircuitWidget( MainWindow *parent );
+        CircuitWidget( MainCircWindow *parent );
         ~CircuitWidget();
 
 // static CircuitWidget* self() { return m_pSelf; }
@@ -40,12 +40,6 @@ class SIMVIEWER_EXPORT CircuitWidget : public QWidget
         void createActions();
         
         void createToolBars();
-        
-        void setRate( int rate );
-        
-        void powerCircOn();
-        void powerCircOff();
-        void powerCircDebug( bool run );
 
         Circuit* getCircPtr() { return m_circView.getCircPtr(); }
         
@@ -54,9 +48,11 @@ class SIMVIEWER_EXPORT CircuitWidget : public QWidget
         void loadCirc( QString path );
         void openInfo();
         void about();
+        void setRate( int rate );
 
     signals:
-        void dataAvailable( const QByteArray &data );
+        void powerCircOn();
+        void powerCircOff();
         
     private:
 
@@ -76,8 +72,6 @@ class SIMVIEWER_EXPORT CircuitWidget : public QWidget
         QAction* aboutQtAct;
         
         QMenu m_infoMenu;
-
-        MainWindow *m_main_ptr;
         
         QString m_curCirc;
         //QString m_lastCircDir;

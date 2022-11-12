@@ -38,7 +38,7 @@ Node::Node( Circuit* parent, QString type, QString id )
     {
         nodid = id;
         nodid.append(QString("-"));
-        nodid.append( uchar(48+i) );
+        nodid.append( QChar(48+i) );
         nodpos = QPoint( 0,0);
         m_pin[i] = new Pin( 90*i, nodpos, nodid, i, this);
         m_pin[i]->setLength( 0 );
@@ -190,6 +190,6 @@ void Node::paint( QPainter* p, const QStyleOptionGraphicsItem* option, QWidget* 
     p->drawEllipse( QRect( a, a, b, b ) );
 }
 
-#include "moc_node.cpp"
+
 
 

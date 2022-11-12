@@ -268,4 +268,4 @@ void Switch::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget
     }
 }
 
-#include "moc_switch.cpp"
+

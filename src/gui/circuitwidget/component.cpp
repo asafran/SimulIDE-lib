@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 #include "component.h"
-#include "mainwindow.h"
+#include "maincircwindow.h"
 #include "connector.h"
 #include "connectorline.h"
 #include "itemlibrary.h"
@@ -616,4 +616,4 @@ void Label::V_flip( int vf )
     QGraphicsTextItem::paint( painter, option, widget );
 }*/
 
-#include "moc_component.cpp"
+

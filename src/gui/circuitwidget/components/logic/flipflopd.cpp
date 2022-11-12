@@ -73,4 +73,4 @@ FlipFlopD::FlipFlopD( Circuit* parent, QString type, QString id )
 FlipFlopD::~FlipFlopD(){}
 
 
-#include "moc_flipflopd.cpp"
+

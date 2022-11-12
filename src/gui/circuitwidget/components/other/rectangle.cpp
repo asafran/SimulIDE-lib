@@ -52,4 +52,4 @@ void Rectangle::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWid
     else               p->fillRect( m_area, p->brush() );
 }
 
-#include "moc_rectangle.cpp"
+

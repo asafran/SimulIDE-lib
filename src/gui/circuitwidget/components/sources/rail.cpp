@@ -96,5 +96,5 @@ void Rail::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *
     p->drawRoundedRect( QRectF( -8, -8, 16, 16 ), 2, 2);
 }
 
-#include "moc_rail.cpp"
+
 

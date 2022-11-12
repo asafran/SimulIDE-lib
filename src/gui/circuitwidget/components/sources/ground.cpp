@@ -69,4 +69,4 @@ void Ground::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget
     p->drawLine( -2, 2, 2, 2 );
 }
 
-#include "moc_ground.cpp"
+

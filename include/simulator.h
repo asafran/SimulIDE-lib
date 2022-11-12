@@ -40,12 +40,16 @@ class SIMVIEWER_EXPORT Simulator : public QObject
 
 // static Simulator* self() { return m_pSelf.loadRelaxed(); }
 
+public slots:
+
         void runContinuous();
-        void stopTimer();
-        void resumeTimer();
         void pauseSim();
         void resumeSim();
         void stopSim();
+
+public:
+        void stopTimer();
+        void resumeTimer();
         void stopDebug();
         void startSim();
         void debug();
@@ -119,6 +123,8 @@ class SIMVIEWER_EXPORT Simulator : public QObject
     signals:
         void pauseDebug();
         void resumeDebug();
+
+        void rateChanged(int rate);
         
     private:
 // static QAtomicPointer<Simulator> m_pSelf;
@@ -126,8 +132,6 @@ class SIMVIEWER_EXPORT Simulator : public QObject
         void runCircuit();
         
         inline void solveMatrix();
-
-        QRecursiveMutex mutex;
 
         QFuture<void> m_CircuitFuture;
 

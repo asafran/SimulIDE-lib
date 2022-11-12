@@ -17,27 +17,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <QSvgGenerator>
+//#include <QSvgGenerator>
 
 #include "circuitwidget.h"
 #include "circuitview.h"
 #include "circuit.h"
-#include "mainwindow.h"
+#include "maincircwindow.h"
 #include "component.h"
 #include "utils.h"
 
 //CircuitView*  CircuitView::m_pSelf = 0l;
 
-CircuitView::CircuitView( CircuitWidget *parent, MainWindow *mainw )
+CircuitView::CircuitView(CircuitWidget *parent)
            : QGraphicsView( parent )
 {
     //m_pSelf = this;
-    m_main_ptr = mainw;
-    m_circuit     = 0l;
+    //m_main_ptr = mainw;
+    m_circuit = new Circuit( this);
+    setScene(m_circuit);
     m_enterItem   = 0l;
-    m_widget_ptr = parent;
+    //m_widget_ptr = parent;
 
-    clear();
+    //clear();
 
     viewport()->setFixedSize( 3200, 3200 );
     bool scrollBars = true;//mainw->settings()->value( "Circuit/showScroll" ).toBool();
@@ -54,7 +55,7 @@ CircuitView::CircuitView( CircuitWidget *parent, MainWindow *mainw )
     //setViewportUpdateMode( QGraphicsView::FullViewportUpdate );
     //setCacheMode( CacheBackground );
     //setRenderHint( QPainter::Antialiasing );
-    setRenderHints( QPainter::HighQualityAntialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
+    setRenderHints( QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
     //setRenderHint( QPainter::SmoothPixmapTransform );
     setTransformationAnchor( AnchorUnderMouse );
     setResizeAnchor( AnchorUnderMouse );
@@ -73,7 +74,7 @@ CircuitView::CircuitView( CircuitWidget *parent, MainWindow *mainw )
     m_info->setStyleSheet( "color: #884433;background-color: rgba(0,0,0,0)" );
     m_info->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff  );
     
-    double fontScale = mainw->fontScale();
+    double fontScale = 1.0;
     QFont font = m_info->font();
     font.setBold( true );
     font.setPixelSize( int(10*fontScale) );
@@ -114,7 +115,7 @@ void CircuitView::setCircTime( uint64_t step)
     */
     m_info->setPlainText( tr("Time: ")+strH+":"+strM+":"+strS+"."+strMS + strMcu );
 }
-
+/*
 void CircuitView::clear()
 {
     if( m_circuit ) 
@@ -129,10 +130,10 @@ void CircuitView::clear()
     centerOn( 900, 600 );
     //setCircTime( 0 );
 }
-
+*/
 void CircuitView::wheelEvent( QWheelEvent *event ) 
 { 
-    zoom( event->delta() );
+    zoom( event->angleDelta().y() );
 }
 
 
@@ -144,7 +145,7 @@ void CircuitView::zoom( double val )
 
 void CircuitView::dragEnterEvent(QDragEnterEvent *event)
 {
-    m_circuit->saveState();
+    //m_circuit->saveState();
 
     event->accept();
     //bool pauseSim = Simulator::self()->isRunning();
@@ -161,7 +162,7 @@ void CircuitView::dragEnterEvent(QDragEnterEvent *event)
     if( m_enterItem )
     {
         //qDebug()<<"CircuitView::dragEnterEvent"<<m_enterItem->itemID()<< type<< id;
-        m_enterItem->setPos( mapToScene( event->pos() ) );
+        m_enterItem->setPos( mapToScene( event->position().toPoint() ) );
         m_circuit->addItem( m_enterItem );
     }
     //if( pauseSim ) Simulator::self()->resumeSim();
@@ -170,7 +171,7 @@ void CircuitView::dragEnterEvent(QDragEnterEvent *event)
 void CircuitView::dragMoveEvent(QDragMoveEvent *event)
 {
     event->accept();
-    if( m_enterItem ) m_enterItem->moveTo( togrid( mapToScene( event->pos() ) ) );
+    if( m_enterItem ) m_enterItem->moveTo( togrid( mapToScene( event->position().toPoint() ) ) );
 }
 
 void CircuitView::dragLeaveEvent(QDragLeaveEvent *event)
@@ -195,7 +196,7 @@ void CircuitView::resizeEvent( QResizeEvent *event )
 
 void CircuitView::mousePressEvent( QMouseEvent* event )
 {
-    if( event->button() == Qt::MidButton )
+    if( event->button() == Qt::MiddleButton )
     {
         event->accept();
         setDragMode( QGraphicsView::ScrollHandDrag );
@@ -214,7 +215,7 @@ void CircuitView::mousePressEvent( QMouseEvent* event )
 
 void CircuitView::mouseReleaseEvent( QMouseEvent* event )
 {
-    if( event->button() == Qt::MidButton )
+    if( event->button() == Qt::MiddleButton )
     {
         event->accept();
         QMouseEvent eve( QEvent::MouseButtonRelease, event->pos(), 
@@ -279,7 +280,7 @@ void CircuitView::slotPaste()
 {
     m_circuit->paste( m_eventpoint );
 }
-
+/*
 void CircuitView::saveImage()
 {
     QString circPath = m_circuit->getFileName();
@@ -310,6 +311,7 @@ void CircuitView::saveImage()
             pixMap.save( fileName );
         }
     }
-}
-#include "moc_circuitview.cpp"
+}*/
+
+
 

@@ -157,4 +157,4 @@ void Mosfet::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget
     }
 }
 
-#include "moc_mosfet.cpp"
+

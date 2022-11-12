@@ -137,4 +137,4 @@ void SevenSegmentBCD::paint( QPainter *p, const QStyleOptionGraphicsItem *option
      }*/
 }
 
-#include "moc_sevensegment_bcd.cpp"
+

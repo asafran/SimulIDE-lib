@@ -19,7 +19,6 @@
 
 #include "circuit.h"
 #include "itemlibrary.h"
-#include "mainwindow.h"
 #include "circuitwidget.h"
 #include "subpackage.h"
 #include "connectorline.h"
@@ -40,8 +39,8 @@ static const char* Circuit_properties[] = {
 */
 //QAtomicPointer<Circuit> Circuit::m_pSelf = 0l;
 
-Circuit::Circuit( qreal x, qreal y, qreal width, qreal height, CircuitView*  parent, MainWindow *mwindow)
-       : QGraphicsScene(x, y, width, height, parent)
+Circuit::Circuit( CircuitView*  parent)
+       : QGraphicsScene(parent)
        , simulator(this)
        , m_itemLibrary()
 
@@ -51,10 +50,7 @@ Circuit::Circuit( qreal x, qreal y, qreal width, qreal height, CircuitView*  par
     setObjectName( "Circuit" );
     setParent( parent );
     m_graphicView = parent;
-    m_scenerect.setRect( x, y, width, height );
-    setSceneRect( QRectF(x, y, width, height) );
 
-    m_widget_ptr = parent->getWidgetPtr();
 //    m_pSelf.fetchAndStoreOrdered(this);
 
     m_changed     = false;
@@ -68,8 +64,6 @@ Circuit::Circuit( qreal x, qreal y, qreal width, qreal height, CircuitView*  par
     m_hideGrid   = true;//MainWindow::self()->settings()->value( "Circuit/hideGrid" ).toBool();
     m_showScroll = true;//MainWindow::self()->settings()->value( "Circuit/showScroll" ).toBool();
     m_filePath = qApp->applicationDirPath()+"/new.simu";
-
-    m_main_ptr = mwindow;
 
     //connect( &m_bckpTimer, SIGNAL(timeout() ), this, SLOT( saveChanges()) );
     //m_bckpTimer.start( m_autoBck*1000 );
@@ -137,7 +131,7 @@ void Circuit::removeItems()                     // Remove Selected items
     bool pauseSim = simulator.isRunning();
     if( pauseSim ) simulator.pauseSim();
 
-    saveState();
+    //saveState();
 
     foreach( Component* comp, m_compList )
     {
@@ -209,7 +203,7 @@ bool Circuit::deleting()
 {
     return m_deleting;
 }
-
+/*
 void Circuit::saveState()
 {
     if( m_con_started ) return;
@@ -231,7 +225,7 @@ void Circuit::saveState()
 
 void Circuit::saveChanges()
 {
-/*
+
     //qDebug() << "Circuit::saveChanges";
     if( !m_changed ) return;
     if( m_con_started ) return;
@@ -253,9 +247,9 @@ void Circuit::saveChanges()
 
     if( saveDom( m_backupPath, &m_domDoc ) )
         MainWindow::self()->settings()->setValue( "backupPath", m_backupPath );
-*/
-}
 
+}
+*/
 void Circuit::setChanged()
 {
     m_changed = true;
@@ -311,7 +305,7 @@ void Circuit::setAnimate( bool an )
     m_animate = an;
     update();
 }
-
+/*
 double Circuit::fontScale() 
 { 
     return m_main_ptr->fontScale();
@@ -321,7 +315,7 @@ void Circuit::setFontScale( double scale )
 { 
     m_main_ptr->setFontScale( scale );
 }
-/*
+
 int Circuit::autoBck()
 {
     return MainWindow::self()->autoBck();
@@ -337,12 +331,12 @@ void Circuit::setAutoBck( int secs )
 
     MainWindow::self()->setAutoBck( secs );
 }
-*/
+
 void Circuit::drawBackground ( QPainter*  painter, const QRectF & rect )
 {
     Q_UNUSED( rect );
-    /*painter->setBrush(QColor( 255, 255, 255 ) );
-    painter->drawRect( m_scenerect );*/
+    painter->setBrush(QColor( 255, 255, 255 ) );
+    painter->drawRect( m_scenerect );
 
     painter->setBrush( QColor( 240, 240, 210 ) );
     painter->drawRect( m_scenerect );
@@ -366,7 +360,7 @@ void Circuit::drawBackground ( QPainter*  painter, const QRectF & rect )
         painter->drawLine( startx,-i, endx,-i);
     }
 }
-
+*/
 QString Circuit::getCompId( QString name )
 {
     QStringList nameSplit = name.split("-");
@@ -667,7 +661,7 @@ void Circuit::loadDomDoc( QDomDocument* doc )
     
     QApplication::restoreOverrideCursor();
 }
-
+/*
 bool Circuit::saveCircuit( QString &fileName )
 {
     if( m_con_started ) return false;
@@ -689,7 +683,7 @@ bool Circuit::saveCircuit( QString &fileName )
     QApplication::restoreOverrideCursor();
     return saved;
 }
-
+*/
 bool Circuit::saveDom( QString &fileName, QDomDocument* doc )
 {
     QFile file( fileName );
@@ -702,13 +696,13 @@ bool Circuit::saveDom( QString &fileName, QDomDocument* doc )
         return false;
     }
     QTextStream out(&file);
-    out.setCodec("UTF-8");
+    //out.setCodec("UTF-8");
     out << doc->toString();
     file.close();
 
     return true;
 }
-
+/*
 void Circuit::bom()
 {
     if( m_con_started ) return;
@@ -743,7 +737,7 @@ void Circuit::bom()
     bom.sort();
     
     QTextStream out(&file);
-    out.setCodec("UTF-8");
+    //out.setCodec("UTF-8");
     out <<  "\nCircuit: ";
     out <<  QFileInfo( m_filePath ).fileName();
     out <<  "\n\n";
@@ -783,7 +777,7 @@ void Circuit::circuitToDom()
 
     circuit.appendChild( m_domDoc.createTextNode( "\n \n" ) );
 }
-
+*/
 void Circuit::listToDom( QDomDocument* doc, QList<Component*>* complist )
 {
     int count = complist->count();
@@ -812,7 +806,7 @@ void Circuit::objectToDom( QDomDocument* doc, QObject* object )
         const char* name = metaproperty.name();
 
         QVariant value = object->property( name );
-        if( metaproperty.type() == QVariant::StringList )
+        if( metaproperty.typeId() == QMetaType::QStringList )
         {
             QStringList list= value.toStringList();
             elm.setAttribute( name, list.join(",") );
@@ -849,7 +843,7 @@ void Circuit::objectToDom( QDomDocument* doc, QObject* object )
     root.appendChild( blank );
     root.appendChild( elm );
 }
-
+/*
 void Circuit::undo()
 {
     if( m_con_started ) return;
@@ -895,7 +889,7 @@ void Circuit::redo()
 
     if( pauseSim ) simulator.runContinuous();
 }
-
+*/
 void Circuit::updatePin(ePin* epin, std::string newId )
 {
     QString pinId = QString::fromStdString( newId );
@@ -969,11 +963,11 @@ void Circuit::loadObjectProperties( QDomElement element, QObject* Item )
         }
         QVariant value( element.attribute( n.toUtf8() ) );
         
-        if     ( metaproperty.type() == QVariant::Int    ) Item->setProperty( chName, value.toInt() );
-        else if( metaproperty.type() == QVariant::Double ) Item->setProperty( chName, value.toDouble() );
-        else if( metaproperty.type() == QVariant::PointF ) Item->setProperty( chName, value.toPointF() );
-        else if( metaproperty.type() == QVariant::Bool   ) Item->setProperty( chName, value.toBool() );
-        else if( metaproperty.type() == QVariant::StringList )
+        if     ( metaproperty.typeId() == QMetaType::Int  ) Item->setProperty( chName, value.toInt() );
+        else if( metaproperty.typeId() == QMetaType::Double ) Item->setProperty( chName, value.toDouble() );
+        else if( metaproperty.typeId() == QMetaType::QPointF ) Item->setProperty( chName, value.toPointF() );
+        else if( metaproperty.typeId() == QMetaType::Bool   ) Item->setProperty( chName, value.toBool() );
+        else if( metaproperty.typeId() == QMetaType::QStringList )
         {
             QStringList list= value.toString().split(",");
             Item->setProperty( chName, list );
@@ -1054,7 +1048,7 @@ void Circuit::paste( QPointF eventpoint )
     if( pauseSim ) simulator.stopSim();
     
     bool animate = m_animate;
-    saveState();
+    //saveState();
     m_pasting = true;
     foreach( QGraphicsItem*item, selectedItems() ) item->setSelected( false );
 
@@ -1079,7 +1073,7 @@ void Circuit::paste( QPointF eventpoint )
 
 bool  Circuit::pasting() { return m_pasting; }
 QPointF Circuit::deltaMove(){ return m_deltaMove; }
-
+/*
 void Circuit::createSubcircuit()
 {
     if( m_con_started ) return;
@@ -1298,12 +1292,12 @@ void Circuit::createSubcircuit()
           tr("Cannot write file %1:\n%2.").arg(fileName).arg(file.errorString()));
     }
     QTextStream out( &file );
-    out.setCodec("UTF-8");
+    //out.setCodec("UTF-8");
     out << subcircuit;
     file.close();
     //qDebug() <<"Circuit::createSubcircuit\n" << subcircuit;
 }
-
+*/
 QString Circuit::newSceneId()
 {
     return QString("%1").arg(++m_seqNumber) ;
@@ -1311,7 +1305,7 @@ QString Circuit::newSceneId()
 
 void Circuit::newconnector( Pin*  startpin )
 {
-    saveState();
+    //saveState();
 
     //if ( m_subcirmode ) return;
     m_con_started = true;
@@ -1553,7 +1547,5 @@ QString Circuit::getXmlFile( QString compName )
 {
     return m_xmlFileList[ compName ];
 }
-
-#include "moc_circuit.cpp"
 
 

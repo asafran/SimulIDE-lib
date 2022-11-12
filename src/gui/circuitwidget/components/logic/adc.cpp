@@ -87,4 +87,4 @@ void ADC::setNumOuts( int outs )
     m_area = QRect( -(m_width/2)*8, -m_height*8+8, m_width*8, m_height*8 );
 }
 
-#include "moc_adc.cpp"
+

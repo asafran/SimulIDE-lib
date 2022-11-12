@@ -74,4 +74,4 @@ void Led::drawForeground( QPainter *p )
     p->drawLine(-6, 0, 10, 0 );
 }
 
-#include "moc_led.cpp"
+

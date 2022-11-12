@@ -161,4 +161,4 @@ void Bus::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *w
     p->drawRect( QRect( 0, -m_height*8, 0, m_height*8 ) );
 }
 
-#include "moc_bus.cpp"
+

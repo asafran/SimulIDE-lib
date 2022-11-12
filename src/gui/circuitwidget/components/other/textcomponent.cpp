@@ -160,4 +160,4 @@ void TextComponent::paint( QPainter *p, const QStyleOptionGraphicsItem *option, 
     else              p->fillRect( m_area, p->brush() );
 }
 
-#include "moc_textcomponent.cpp"
+

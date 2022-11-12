@@ -71,7 +71,7 @@ SevenSegment::SevenSegment( Circuit* parent, QString type, QString id )
     // Create Pins & eNodes for 7 segments
     for( int i=0; i<7; i++ )
     {
-        pinid = QString( 97+i ); // a..g
+        pinid = QString( QChar(97+i) ); // a..g
 
         nodid = m_id;
         nodid.append(QString("-pin_")).append( pinid );
@@ -291,14 +291,14 @@ void SevenSegment::createDisplay( int dispNumber )
 
     // Pin common
     nodid = m_id;
-    nodid.append(QString("-pin_common")).append( QString( 97+dispNumber ) );
+    nodid.append(QString("-pin_common")).append( QString( QChar(97+dispNumber) ) );
     m_commonPin[dispNumber] = new Pin( 270, QPoint( x+8, 24+8 ), nodid, 0, this );
 
     // Create segments
     for( int i=0; i<8; i++ )
     {
         nodid = m_id;
-        pinid = QString( 97+i );
+        pinid = QString( QChar(97+i) );
         nodid.append(QString("-led_")).append( pinid );
         LedSmd* lsmd;
         if( i<7 ) lsmd = new LedSmd( m_circ_ptr, "LEDSMD", nodid, QRectF(0, 0, 13.5, 1.5) ); // Segment
@@ -307,7 +307,7 @@ void SevenSegment::createDisplay( int dispNumber )
         lsmd->setParentItem(this);
         //lsmd->setEnabled(false);
         lsmd->setFlag( QGraphicsItem::ItemIsSelectable, false );
-        lsmd->setAcceptedMouseButtons(0);
+        lsmd->setAcceptedMouseButtons(Qt::NoButton);
         lsmd->setNumEpins(2);
         lsmd->setMaxCurrent( 0.02 );
 
@@ -346,5 +346,5 @@ void SevenSegment::paint( QPainter* p, const QStyleOptionGraphicsItem* option, Q
     p->drawRect( boundingRect() );
 }
 
-#include "moc_sevensegment.cpp"
+
 

@@ -122,4 +122,4 @@ void Inductor::paint( QPainter* p, const QStyleOptionGraphicsItem* option, QWidg
 }
 
 
-#include "moc_inductor.cpp"
+

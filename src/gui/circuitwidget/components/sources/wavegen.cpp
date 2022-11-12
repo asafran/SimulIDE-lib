@@ -195,5 +195,5 @@ void WaveGen::paint( QPainter *p, const QStyleOptionGraphicsItem *option, QWidge
     p->drawLine(  1, 3, 4,  0 );
 }
 
-#include "moc_wavegen.cpp"
+
 

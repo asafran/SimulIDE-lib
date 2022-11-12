@@ -81,4 +81,4 @@ void Gate::setInverted( bool inverted )
     m_circ_ptr->update();
 }
 
-#include "moc_gate.cpp"
+
